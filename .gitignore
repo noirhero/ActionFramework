@@ -22,6 +22,9 @@
 # Visual Studio cache directory
 .vs/
 
+# Unity Rider cache directory
+.idea/
+
 # Gradle cache directory
 .gradle/
 
