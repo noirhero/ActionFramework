@@ -1,0 +1,1 @@
+﻿// [Aseprite2Unity deprecated]
