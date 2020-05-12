@@ -1,0 +1,204 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2657312124070809622
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1040954644038238967}
+  - component: {fileID: 7541887076822729653}
+  - component: {fileID: 7600075217311704326}
+  - component: {fileID: 1567360268456537064}
+  m_Layer: 0
+  m_Name: PlayerPrefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1040954644038238967
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2657312124070809622}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7541887076822729653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2657312124070809622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
+--- !u!114 &7600075217311704326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2657312124070809622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e8071e72b8c8646b6e9545b682ae5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guidSource: Assets/Prefabs/PlayerPrefab.prefab
+--- !u!114 &1567360268456537064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2657312124070809622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d88420319e69943a5edbe0b29c67a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: -7658362113498201793, guid: b79fe9f5991a52e469b2ec895125f6ae, type: 3}
+  - {fileID: 5537076295297980742, guid: b79fe9f5991a52e469b2ec895125f6ae, type: 3}
+  - {fileID: -6830374733136560079, guid: b79fe9f5991a52e469b2ec895125f6ae, type: 3}
+  - {fileID: 3907851517049340800, guid: b79fe9f5991a52e469b2ec895125f6ae, type: 3}
+  datas:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 7e010000350100009c01000058020000
+    _keys: 7e010000350100009c01000058020000
+    _values:
+    - name: Idle
+      length: 0.4
+      timelines:
+      - start: 0
+        end: 0.1
+        sprite: {fileID: -1722777087426869409, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.1
+        end: 0.2
+        sprite: {fileID: -8878513221033722082, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.2
+        end: 0.3
+        sprite: {fileID: -5807987444940971551, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.3
+        end: 0.4
+        sprite: {fileID: -4546570782930855285, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+    - name: Run
+      length: 0.70000005
+      timelines:
+      - start: 0
+        end: 0.1
+        sprite: {fileID: -5251445019668343189, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.1
+        end: 0.2
+        sprite: {fileID: -4106701637606726508, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.2
+        end: 0.3
+        sprite: {fileID: 2877802243737411288, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.3
+        end: 0.4
+        sprite: {fileID: 826915476319844909, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.4
+        end: 0.5
+        sprite: {fileID: -4326640719568627971, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.5
+        end: 0.6
+        sprite: {fileID: -1333346045318347873, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.6
+        end: 0.70000005
+        sprite: {fileID: 1411975621794697470, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+    - name: Jump
+      length: 0.5
+      timelines:
+      - start: 0
+        end: 0.1
+        sprite: {fileID: 7637290059257903065, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.1
+        end: 0.2
+        sprite: {fileID: 55197829868330041, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.2
+        end: 0.3
+        sprite: {fileID: -3660464499730203126, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.3
+        end: 0.4
+        sprite: {fileID: -4478718038025743936, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.4
+        end: 0.5
+        sprite: {fileID: -4117283221497647301, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+    - name: Attack
+      length: 0.6
+      timelines:
+      - start: 0
+        end: 0.1
+        sprite: {fileID: -9104051536271034971, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.1
+        end: 0.2
+        sprite: {fileID: 2520600477053507983, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.2
+        end: 0.3
+        sprite: {fileID: 5950981911402367957, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.3
+        end: 0.4
+        sprite: {fileID: -3087437913550365998, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.4
+        end: 0.5
+        sprite: {fileID: -8147110920315076209, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
+      - start: 0.5
+        end: 0.6
+        sprite: {fileID: -4001651174186438304, guid: b79fe9f5991a52e469b2ec895125f6ae,
+          type: 3}
