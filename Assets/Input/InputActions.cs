@@ -49,6 +49,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""LeftRightAxis"",
+                    ""type"": ""Value"",
+                    ""id"": ""556d4730-75b1-47ec-8457-647da7614bcb"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -56,6 +64,17 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""2d40ba2a-4a9f-44b0-acf5-5f95bb5ed7e1"",
                     ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0e5675f-ac65-4702-ae42-727446cc389c"",
+                    ""path"": ""<Gamepad>/dpad/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -76,8 +95,30 @@ public class @InputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""ba80465a-514d-4806-af20-5ccb7830882f"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""89229752-d95e-4296-a6d0-1a5da74fc599"",
                     ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d530ba4-e0ef-42b6-8621-a63163cfe32e"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -95,6 +136,28 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22bf601c-0f89-4ccf-b3da-a2fe3176fa91"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""051f2a69-5a2e-43ed-9376-7eff2213bd90"",
+                    ""path"": ""<Gamepad>/leftStick/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftRightAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -107,6 +170,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_CharacterControl_Right = m_CharacterControl.FindAction("Right", throwIfNotFound: true);
         m_CharacterControl_Jump = m_CharacterControl.FindAction("Jump", throwIfNotFound: true);
         m_CharacterControl_Attack = m_CharacterControl.FindAction("Attack", throwIfNotFound: true);
+        m_CharacterControl_LeftRightAxis = m_CharacterControl.FindAction("LeftRightAxis", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -160,6 +224,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_CharacterControl_Right;
     private readonly InputAction m_CharacterControl_Jump;
     private readonly InputAction m_CharacterControl_Attack;
+    private readonly InputAction m_CharacterControl_LeftRightAxis;
     public struct CharacterControlActions
     {
         private @InputActions m_Wrapper;
@@ -168,6 +233,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @Right => m_Wrapper.m_CharacterControl_Right;
         public InputAction @Jump => m_Wrapper.m_CharacterControl_Jump;
         public InputAction @Attack => m_Wrapper.m_CharacterControl_Attack;
+        public InputAction @LeftRightAxis => m_Wrapper.m_CharacterControl_LeftRightAxis;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -189,6 +255,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Attack.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnAttack;
+                @LeftRightAxis.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnLeftRightAxis;
+                @LeftRightAxis.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnLeftRightAxis;
+                @LeftRightAxis.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnLeftRightAxis;
             }
             m_Wrapper.m_CharacterControlActionsCallbackInterface = instance;
             if (instance != null)
@@ -205,6 +274,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @LeftRightAxis.started += instance.OnLeftRightAxis;
+                @LeftRightAxis.performed += instance.OnLeftRightAxis;
+                @LeftRightAxis.canceled += instance.OnLeftRightAxis;
             }
         }
     }
@@ -215,5 +287,6 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnRight(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnLeftRightAxis(InputAction.CallbackContext context);
     }
 }

@@ -45,6 +45,10 @@ public class TestInputSystem : ComponentSystem, InputActions.ICharacterControlAc
         }
     }
 
+    public void OnLeftRightAxis(InputAction.CallbackContext context) {
+        Debug.Log($"Stick axis value : {context.ReadValue<float>()}");
+    }
+
     private InputActions _input;
     protected override void OnCreate() {
         _input = new InputActions();
