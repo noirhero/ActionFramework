@@ -5,8 +5,13 @@ using Unity.Entities;
 using UnityEngine;
 
 [Serializable]
+public struct InputComponent : IComponentData {
+}
+
+[Serializable]
 public struct InputDataComponent : IComponentData {
     public int state;
+    public float dir;
 }
 
 [Serializable]

@@ -8,6 +8,9 @@ public static class Utility {
     public static int GetHashCode(in string path) {
         return path.Sum(Convert.ToInt32);
     }
+
+    // todo : option
+    public static bool bShowInputLog = false;
 }
     
 public static class InputState {
@@ -24,21 +27,22 @@ public static class InputState {
     public static bool HasState(InputDataComponent inputComp, int compareState) {
         return 0 != (inputComp.state & compareState);
     }
-    public static string ShowLog(int state) {
+    
+    public static string ShowLog(InputDataComponent inputComp) {
         var cachedStr = string.Empty;
-        if (0 != (left & state)) {
+        if (0 != (left & inputComp.state)) {
             cachedStr += " Left";
         }
-        if (0 != (right & state)) {
+        if (0 != (right & inputComp.state)) {
             cachedStr += " Right";
         }
-        if (0 != (jump & state)) {
+        if (0 != (jump & inputComp.state)) {
             cachedStr += " Jump";
         }
-        if (0 != (attack & state)) {
+        if (0 != (attack & inputComp.state)) {
             cachedStr += " Attack";
         }
-        if (0 != (axis & state)) {
+        if (0 != (axis & inputComp.state)) {
             cachedStr += " Axis";
         }
         return cachedStr;
