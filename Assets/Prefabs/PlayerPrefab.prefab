@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2657312124070809622
+--- !u!1 &6145591884492036204
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1040954644038238967}
-  - component: {fileID: 7541887076822729653}
-  - component: {fileID: 7600075217311704326}
-  - component: {fileID: 1567360268456537064}
+  - component: {fileID: 206986005713746565}
+  - component: {fileID: 7629520329908313529}
+  - component: {fileID: 6200435173972560358}
+  - component: {fileID: 1800926448886847523}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -19,13 +19,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1040954644038238967
+--- !u!4 &206986005713746565
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2657312124070809622}
+  m_GameObject: {fileID: 6145591884492036204}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -33,39 +33,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7541887076822729653
+--- !u!114 &7629520329908313529
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2657312124070809622}
+  m_GameObject: {fileID: 6145591884492036204}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 1
---- !u!114 &7600075217311704326
+--- !u!114 &6200435173972560358
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2657312124070809622}
+  m_GameObject: {fileID: 6145591884492036204}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9e8071e72b8c8646b6e9545b682ae5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   guidSource: Assets/Prefabs/PlayerPrefab.prefab
---- !u!114 &1567360268456537064
+--- !u!114 &1800926448886847523
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2657312124070809622}
+  m_GameObject: {fileID: 6145591884492036204}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36d88420319e69943a5edbe0b29c67a2, type: 3}
@@ -83,7 +83,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 0
+      isExpanded: 1
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -98,12 +98,11 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: 7e010000350100009c01000058020000
-    _keys: 7e010000350100009c01000058020000
+    isExpanded: 1
+    _keyValues: 00000000010000000200000003000000
+    _keys: 00000000010000000200000003000000
     _values:
-    - name: Idle
-      length: 0.4
+    - length: 0.4
       timelines:
       - start: 0
         end: 0.1
@@ -121,8 +120,7 @@ MonoBehaviour:
         end: 0.4
         sprite: {fileID: -4546570782930855285, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
-    - name: Run
-      length: 0.70000005
+    - length: 0.70000005
       timelines:
       - start: 0
         end: 0.1
@@ -152,8 +150,7 @@ MonoBehaviour:
         end: 0.70000005
         sprite: {fileID: 1411975621794697470, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
-    - name: Jump
-      length: 0.5
+    - length: 0.5
       timelines:
       - start: 0
         end: 0.1
@@ -175,8 +172,7 @@ MonoBehaviour:
         end: 0.5
         sprite: {fileID: -4117283221497647301, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
-    - name: Attack
-      length: 0.6
+    - length: 0.6
       timelines:
       - start: 0
         end: 0.1

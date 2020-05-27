@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using UnityEngine;
 
 public static class Utility {
     public static int GetHashCode(in string path) {
@@ -11,8 +10,10 @@ public static class Utility {
 
     // todo : option
     public static bool bShowInputLog = false;
-}
     
+    public enum AnimState { Idle, Run, Jump, Attack }
+}
+
 public static class InputState {
     public const int left = 0x1;
     public const int right = 0x2;

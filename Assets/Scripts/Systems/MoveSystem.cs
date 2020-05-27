@@ -19,6 +19,9 @@ public class MoveSystem : ComponentSystem {
         if (false == EntityManager.HasComponent<Translation>(_controlEntity)) {
             return true;
         }
+        if (false == EntityManager.HasComponent<AnimationFrameComponent>(_controlEntity)) {
+            return true;
+        }
         
         //TODO Condition
         return false;
@@ -50,6 +53,17 @@ public class MoveSystem : ComponentSystem {
             var moveComp = EntityManager.GetComponentData<Translation>(_controlEntity);
             moveComp.Value.x += inputComp.value.x * _speedX;
             EntityManager.SetComponentData(_controlEntity, moveComp);
+
+            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+            animComp.setId = Utility.AnimState.Run;
+            animComp.flipX = inputComp.value.x < 0.0f;
+            EntityManager.SetComponentData(_controlEntity, animComp);
+        }
+        else {
+
+            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+            animComp.setId = Utility.AnimState.Idle;
+            EntityManager.SetComponentData(_controlEntity, animComp);
         }
     }
 }

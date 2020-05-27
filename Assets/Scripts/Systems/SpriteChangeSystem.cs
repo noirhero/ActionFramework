@@ -24,6 +24,8 @@ public class SpriteChangeSystem : SystemBase {
                         break;
                     }
                 }
+
+                renderer.flipX = state.flipX;
             })
             .Run();
     }

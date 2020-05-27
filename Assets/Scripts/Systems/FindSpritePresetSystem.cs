@@ -27,8 +27,8 @@ public class FindSpritePresetSystem : SystemBase {
                 EntityManager.RemoveComponent<FindSpritePresetComponent>(entity);
                 EntityManager.AddSharedComponentData(entity, preset);
                 EntityManager.AddComponentData(entity, new AnimationFrameComponent() {
-                    setId = preset.value.datas.Keys.First(),
-                    currentId = preset.value.datas.Keys.First()
+                    setId = (int)Utility.AnimState.Idle,
+                    currentId = (int)Utility.AnimState.Idle
                 });
             })
             .Run();

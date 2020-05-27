@@ -14,13 +14,12 @@ public class AnimTimeline {
 
 [Serializable]
 public class AnimData {
-    public string name;
     public float length;
     public List<AnimTimeline> timelines;
 }
 
 [Serializable]
-public class AnimDatas : SerializableDictionaryBase<int, AnimData> {
+public class AnimDatas : SerializableDictionaryBase<Utility.AnimState, AnimData> {
 }
 
 public class SpritePreset : MonoBehaviour {

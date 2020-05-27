@@ -5,7 +5,8 @@ using Unity.Entities;
 
 [Serializable]
 public struct AnimationFrameComponent : IComponentData {
-    public int setId;
-    public int currentId;
+    public Utility.AnimState setId;
+    public Utility.AnimState currentId;
     public float frame;
+    public bool flipX;
 }

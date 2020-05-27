@@ -22,7 +22,6 @@ public class SpritePresetInspector : Editor {
 
         foreach (var clip in preset.clips) {
             var animData = new AnimData() {
-                name = clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1),
                 length = clip.length,
                 timelines = new List<AnimTimeline>()
             };
@@ -46,7 +45,10 @@ public class SpritePresetInspector : Editor {
             }
             animData.timelines[animData.timelines.Count - 1].end = clip.length;
 
-            preset.datas.Add(Utility.GetHashCode(animData.name), animData);
+            
+            Utility.AnimState.TryParse(clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1), 
+                out Utility.AnimState animState);
+            preset.datas.Add(animState, animData);
         }
     }
 }
