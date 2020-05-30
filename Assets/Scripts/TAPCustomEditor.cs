@@ -59,7 +59,7 @@ public class TAPCustomEditor : EditorWindow {
 
         var i = 0;
         foreach (var data in preset.datas) {
-            foldedClipDatas[i].isFolded = EditorGUILayout.Foldout(foldedClipDatas[i].isFolded, data.Value.name, true);
+            foldedClipDatas[i].isFolded = EditorGUILayout.Foldout(foldedClipDatas[i].isFolded, data.Key.ToString(), true);
             if (foldedClipDatas[i].isFolded) {
                 EditorGUI.indentLevel++;
 
