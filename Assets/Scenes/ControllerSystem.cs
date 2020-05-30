@@ -7,23 +7,28 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-[UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
+[UpdateAfter(typeof(BuildPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
 public class ControllerSystem : JobComponentSystem {
     private BuildPhysicsWorld _buildPhysSystem;
     private EndFramePhysicsSystem _endPhysSystem;
+
     protected override void OnCreate() {
         _buildPhysSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
         _endPhysSystem = World.GetOrCreateSystem<EndFramePhysicsSystem>();
     }
 
+    private JobHandle _jobHandle;
+
     protected override unsafe JobHandle OnUpdate(JobHandle inputDeps) {
+        _jobHandle.Complete();
+
         var deltaTime = UnityEngine.Time.fixedDeltaTime;
         var physWorld = _buildPhysSystem.PhysicsWorld;
 
         inputDeps = JobHandle.CombineDependencies(inputDeps, _buildPhysSystem.FinalJobHandle);
-
-        var jobHandle = Entities
-            .ForEach((ref Translation translation, in Rotation rotation, in ControllerAuthoringComponent controller,  in PhysicsCollider collider) => {
+        _jobHandle = Entities
+            .ForEach((ref Translation translation, in Rotation rotation, in ControllerAuthoringComponent controller,
+                in PhysicsCollider collider) => {
                 var newPos = translation.Value;
                 newPos.y -= controller.gravity * deltaTime;
 
@@ -40,10 +45,8 @@ public class ControllerSystem : JobComponentSystem {
                 }
             })
             .Schedule(inputDeps);
+        _endPhysSystem.HandlesToWaitFor.Add(_jobHandle);
 
-        _endPhysSystem.HandlesToWaitFor.Add(jobHandle);
-
-        jobHandle.Complete();
-        return jobHandle;
+        return _jobHandle;
     }
 }
