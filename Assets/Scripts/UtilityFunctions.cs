@@ -8,7 +8,7 @@ public static class Utility {
         return path.Sum(Convert.ToInt32);
     }
 
-    // todo : option
+    // TODO option
     public static bool bShowInputLog = false;
     
     public enum AnimState { Idle, Run, Jump, Attack }

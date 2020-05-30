@@ -15,17 +15,22 @@ public struct InputDataComponent : IComponentData {
 }
 
 [Serializable]
-public struct InputMoveComponent : IComponentData {
+public struct MoveComponent : IComponentData {
     public Vector2 value;
     public float accumTime;
 }
 
 [Serializable]
-public struct InputJumpComponent : IComponentData {
+public struct JumpComponent : IComponentData {
     public float accumTime;
 }
 
 [Serializable]
-public struct InputAttackComponent : IComponentData {
+public struct FallComponent : IComponentData {
+    public float accumTime;
+}
+
+[Serializable]
+public struct AttackComponent : IComponentData {
     public float accumTime;
 }

@@ -45,10 +45,15 @@ public class SpritePresetInspector : Editor {
             }
             animData.timelines[animData.timelines.Count - 1].end = clip.length;
 
-            
-            Utility.AnimState.TryParse(clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1), 
-                out Utility.AnimState animState);
-            preset.datas.Add(animState, animData);
+
+            if (false == Utility.AnimState.TryParse(
+                clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1),
+                out Utility.AnimState animState)) {
+                Debug.LogError("!!!! Check Anim Name");
+            }
+            else {
+                preset.datas.Add(animState, animData);   
+            }
         }
     }
 }

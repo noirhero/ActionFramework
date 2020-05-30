@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputSystem : ComponentSystem, InputActions.ICharacterControlActions {
-    private bool IsLockedInput() {
+    private bool IsLocked() {
         if (false == EntityManager.HasComponent<InputDataComponent>(_inputEntity)) {
             return true;
         }
@@ -16,7 +16,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
     
     public void OnLeft(InputAction.CallbackContext context) {
-        if (IsLockedInput()) {
+        if (IsLocked()) {
             return;
         }
 
@@ -33,7 +33,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnRight(InputAction.CallbackContext context) {
-        if (IsLockedInput()) {
+        if (IsLocked()) {
             return;
         }
         
@@ -50,7 +50,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnJump(InputAction.CallbackContext context) {
-        if (IsLockedInput()) {
+        if (IsLocked()) {
             return;
         }
         
@@ -65,7 +65,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnAttack(InputAction.CallbackContext context) {
-        if (IsLockedInput()) {
+        if (IsLocked()) {
             return;
         }
         
@@ -80,7 +80,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnLeftRightAxis(InputAction.CallbackContext context) {
-        if (IsLockedInput()) {
+        if (IsLocked()) {
             return;
         }
         
@@ -115,7 +115,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     protected override void OnUpdate() {
-        if (IsLockedInput()) {
+        if (IsLocked()) {
             return;
         }
         
@@ -136,11 +136,11 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         
         if (0.0f != inputDataComp.dir) {
-            if (false == EntityManager.HasComponent<InputMoveComponent>(_inputEntity)) {
-                EntityManager.AddComponentData(_inputEntity, new InputMoveComponent());
+            if (false == EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
+                EntityManager.AddComponentData(_inputEntity, new MoveComponent());
             }
 
-            var cachedComp = EntityManager.GetComponentData<InputMoveComponent>(_inputEntity);
+            var cachedComp = EntityManager.GetComponentData<MoveComponent>(_inputEntity);
             if ((0.0f > cachedComp.value.x && 0.0f > inputDataComp.dir) ||
                 (0.0f < cachedComp.value.x && 0.0f < inputDataComp.dir)) {
                 cachedComp.accumTime += Time.DeltaTime;
@@ -152,8 +152,8 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             EntityManager.SetComponentData(_inputEntity, cachedComp);
         }
         else {
-            if (EntityManager.HasComponent<InputMoveComponent>(_inputEntity)) {
-                EntityManager.RemoveComponent<InputMoveComponent>(_inputEntity);
+            if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
+                EntityManager.RemoveComponent<MoveComponent>(_inputEntity);
             }
         }
     }
@@ -162,17 +162,23 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         
         if (InputState.HasState(inputDataComp, InputState.jump)) {
-            if (false == EntityManager.HasComponent<InputJumpComponent>(_inputEntity)) {
-                EntityManager.AddComponentData(_inputEntity, new InputJumpComponent());
+            if (false == EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
+                EntityManager.AddComponentData(_inputEntity, new JumpComponent());
             }
 
-            var cachedComp = EntityManager.GetComponentData<InputJumpComponent>(_inputEntity);
+            var cachedComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
             cachedComp.accumTime = Time.DeltaTime;
             EntityManager.SetComponentData(_inputEntity, cachedComp);
         }
         else {
-            if (EntityManager.HasComponent<InputJumpComponent>(_inputEntity)) {
-                EntityManager.RemoveComponent<InputJumpComponent>(_inputEntity);
+            if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
+                EntityManager.RemoveComponent<JumpComponent>(_inputEntity);
+                EntityManager.AddComponentData(_inputEntity, new FallComponent());
+            }
+            if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
+                var cachedComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
+                cachedComp.accumTime = Time.DeltaTime;
+                EntityManager.SetComponentData(_inputEntity, cachedComp);
             }
         }
     }
@@ -181,17 +187,17 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         
         if (InputState.HasState(inputDataComp, InputState.attack)) {
-            if (false == EntityManager.HasComponent<InputAttackComponent>(_inputEntity)) {
-                EntityManager.AddComponentData(_inputEntity, new InputAttackComponent());
+            if (false == EntityManager.HasComponent<AttackComponent>(_inputEntity)) {
+                EntityManager.AddComponentData(_inputEntity, new AttackComponent());
             }
 
-            var cachedComp = EntityManager.GetComponentData<InputAttackComponent>(_inputEntity);
+            var cachedComp = EntityManager.GetComponentData<AttackComponent>(_inputEntity);
             cachedComp.accumTime = Time.DeltaTime;
             EntityManager.SetComponentData(_inputEntity, cachedComp);
         }
         else {
-            if (EntityManager.HasComponent<InputAttackComponent>(_inputEntity)) {
-                EntityManager.RemoveComponent<InputAttackComponent>(_inputEntity);
+            if (EntityManager.HasComponent<AttackComponent>(_inputEntity)) {
+                EntityManager.RemoveComponent<AttackComponent>(_inputEntity);
             }
         }
     }
