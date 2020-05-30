@@ -1,6 +1,5 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
-using SuperTiled2Unity;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -126,7 +125,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         if (Utility.bShowInputLog) {
             var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
             var cachedLog = InputState.ShowLog(inputDataComp);
-            if (false == cachedLog.IsEmpty()) {
+            if (false == string.IsNullOrEmpty(cachedLog)) {
                 Debug.Log("Current Input State :" + cachedLog);
             }
         }

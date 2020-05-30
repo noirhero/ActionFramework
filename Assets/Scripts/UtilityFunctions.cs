@@ -10,7 +10,7 @@ public static class Utility {
 
     // TODO option
     public static bool bShowInputLog = false;
-    
+
     public enum AnimState { Idle, Run, Jump, Attack }
 }
 
@@ -24,11 +24,11 @@ public static class InputState {
     public static bool IsNone(int state) {
         return 0 == state;
     }
-    
+
     public static bool HasState(InputDataComponent inputComp, int compareState) {
         return 0 != (inputComp.state & compareState);
     }
-    
+
     public static string ShowLog(InputDataComponent inputComp) {
         var cachedStr = string.Empty;
         if (0 != (left & inputComp.state)) {
@@ -49,5 +49,3 @@ public static class InputState {
         return cachedStr;
     }
 }
-    
-
