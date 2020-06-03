@@ -36,6 +36,13 @@ public class MoveSystem : ComponentSystem {
             
             bIsStop = false;
         }
+        if (TryFall()) {
+            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+            animComp.setId = Utility.AnimState.Jump;
+            EntityManager.SetComponentData(_controlEntity, animComp);
+            
+            bIsStop = false;
+        }
         
         if (bIsStop) {
             var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
@@ -66,14 +73,14 @@ public class MoveSystem : ComponentSystem {
         return false;
     }
     
+    // TODO : temporary constant -> status 
     private const float _speedX = 0.01f;
+    private const float _speedY = 0.5f;
+    private const float gravity = 0.3f;
     private bool TryMove() {
         if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
             var moveComp = EntityManager.GetComponentData<MoveComponent>(_inputEntity);
-            if (Utility.bShowInputLog) {
-                Debug.Log("Move : " + moveComp.value.x + " (+"+moveComp.accumTime+")");
-            }
-
+            
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
             transComp.Value.x += moveComp.value.x * _speedX;
             EntityManager.SetComponentData(_controlEntity, transComp);
@@ -81,50 +88,52 @@ public class MoveSystem : ComponentSystem {
             var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
             animComp.flipX = moveComp.value.x < 0.0f;
             EntityManager.SetComponentData(_controlEntity, animComp);
+            
+            if (Utility.bShowInputLog) {
+                Debug.Log("Move : " + moveComp.value.x + " ("+moveComp.accumTime+")");
+            }
             return true;
         }
-
         return false;
     }
     
-    // TODO : temporary constant -> status 
-    private const float _speedY = 0.5f;
-    private const float gravity = 0.1f;
     private bool TryJump() {
         if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
             var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
             jumpComp.force -= gravity;
-            var calTransY = jumpComp.force * Time.DeltaTime * _speedY;
-            jumpComp.accumY += calTransY;
+            var deltaY = jumpComp.force * Time.DeltaTime * _speedY;
+            jumpComp.accumY += deltaY;
             EntityManager.SetComponentData(_inputEntity, jumpComp);
             
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            transComp.Value.y += calTransY;
+            transComp.Value.y += deltaY;
             EntityManager.SetComponentData(_controlEntity, transComp);
             
             if (Utility.bShowInputLog) {
-                Debug.Log("Jump force ("+jumpComp.force+") / (" +calTransY+")");
+                Debug.Log("Jump force ("+jumpComp.force+"/" +jumpComp.accumY+"/" +transComp.Value.y+")");
             }
             return true;
         }
-        
+        return false;
+    }
+    
+    private bool TryFall() {
         if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
             var fallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
             fallComp.force -= gravity;
-            var calTransY = fallComp.force * Time.DeltaTime * _speedY;
-            fallComp.accumY += calTransY;
+            var deltaY = fallComp.force * Time.DeltaTime * _speedY;
+            fallComp.accumY += deltaY;
             EntityManager.SetComponentData(_inputEntity, fallComp);
             
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            transComp.Value.y -= calTransY;
+            transComp.Value.y -= deltaY;
             EntityManager.SetComponentData(_controlEntity, transComp);
             
             if (Utility.bShowInputLog) {
-                Debug.Log("Fall force ("+fallComp.force+") / (" +calTransY+")");
+                Debug.Log("Fall force ("+fallComp.force+"/" +fallComp.accumY+"/" +transComp.Value.y+")");
             }
             return true;
         }
-        
         return false;
     }
 }
