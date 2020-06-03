@@ -62,7 +62,7 @@ public class MoveSystem : ComponentSystem {
             return true;
         }
         
-        //TODO Condition
+        // TODO : other condition
         return false;
     }
     
@@ -87,34 +87,41 @@ public class MoveSystem : ComponentSystem {
         return false;
     }
     
-    private const float _speedY = 1f;
+    // TODO : temporary constant -> status 
+    private const float _speedY = 0.5f;
+    private const float gravity = 0.1f;
     private bool TryJump() {
         if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
             var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
-            if (Utility.bShowInputLog) {
-                Debug.Log("Jump (+"+jumpComp.accumTime+")");
-            }
-
+            jumpComp.force -= gravity;
+            var calTransY = jumpComp.force * Time.DeltaTime * _speedY;
+            jumpComp.accumY += calTransY;
+            EntityManager.SetComponentData(_inputEntity, jumpComp);
+            
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            transComp.Value.y += jumpComp.accumTime * _speedY;
+            transComp.Value.y += calTransY;
             EntityManager.SetComponentData(_controlEntity, transComp);
+            
+            if (Utility.bShowInputLog) {
+                Debug.Log("Jump force ("+jumpComp.force+") / (" +calTransY+")");
+            }
             return true;
         }
         
         if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
-            var FallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
-            if (Utility.bShowInputLog) {
-                Debug.Log("Fall (+"+FallComp.accumTime+")");
-            }
+            var fallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
+            fallComp.force -= gravity;
+            var calTransY = fallComp.force * Time.DeltaTime * _speedY;
+            fallComp.accumY += calTransY;
+            EntityManager.SetComponentData(_inputEntity, fallComp);
             
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            transComp.Value.y -= FallComp.accumTime * _speedY;
-            if (0.0f >= transComp.Value.y) {
-                // TODO : Fall check
-                transComp.Value.y = 0.0f;
-                EntityManager.RemoveComponent<FallComponent>(_inputEntity);
-            }
+            transComp.Value.y -= calTransY;
             EntityManager.SetComponentData(_controlEntity, transComp);
+            
+            if (Utility.bShowInputLog) {
+                Debug.Log("Fall force ("+fallComp.force+") / (" +calTransY+")");
+            }
             return true;
         }
         

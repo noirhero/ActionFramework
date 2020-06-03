@@ -10,7 +10,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return true;
         }
         
-        //TODO Condition
+        // TODO : other condition
         return false;
     }
     
@@ -133,7 +133,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
     private void UpdateMove() {
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-        
         if (0.0f != inputDataComp.dir) {
             if (false == EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
                 EntityManager.AddComponentData(_inputEntity, new MoveComponent());
@@ -159,32 +158,28 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
     private void UpdateJump() {
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-        
-        if (InputState.HasState(inputDataComp, InputState.jump)) {
-            if (false == EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
-                EntityManager.AddComponentData(_inputEntity, new JumpComponent());
-            }
-
-            var cachedComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
-            cachedComp.accumTime = Time.DeltaTime;
-            EntityManager.SetComponentData(_inputEntity, cachedComp);
-        }
-        else {
-            if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
+        if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
+            var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
+            // TODO : temporary limit check -> check collision
+            if (1.0f < jumpComp.accumY) {
                 EntityManager.RemoveComponent<JumpComponent>(_inputEntity);
-                EntityManager.AddComponentData(_inputEntity, new FallComponent());
+                EntityManager.AddComponentData(_inputEntity, new FallComponent(10.0f));
             }
-            if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
-                var cachedComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
-                cachedComp.accumTime = Time.DeltaTime;
-                EntityManager.SetComponentData(_inputEntity, cachedComp);
+        }
+        else if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
+            var fallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
+            // TODO : temporary limit check -> check collision
+            if (1.0f < fallComp.accumY) {
+                EntityManager.RemoveComponent<FallComponent>(_inputEntity);
             }
+        }
+        else if (InputState.HasState(inputDataComp, InputState.jump)) {
+            EntityManager.AddComponentData(_inputEntity, new JumpComponent(10.0f));
         }
     }
 
     private void UpdateAttack() {
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-        
         if (InputState.HasState(inputDataComp, InputState.attack)) {
             if (false == EntityManager.HasComponent<AttackComponent>(_inputEntity)) {
                 EntityManager.AddComponentData(_inputEntity, new AttackComponent());

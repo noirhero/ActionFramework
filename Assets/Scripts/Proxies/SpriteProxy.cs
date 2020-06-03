@@ -12,7 +12,7 @@ public class SpriteProxy : MonoBehaviour, IConvertGameObjectToEntity {
             value = Utility.GetHashCode(asePath)
         });
 
-        // todo : temporary
+        // TODO : temporary added
         dstManager.AddComponentData(entity, new InputComponent());
     }
 }
