@@ -29,8 +29,7 @@ public class FindSpritePresetSystem : SystemBase {
                 EntityManager.AddComponentData(entity, new AnimationFrameComponent() {
                     setId = (int)Utility.AnimState.Idle,
                     currentId = (int)Utility.AnimState.Idle,
-                    bLooping = true,
-                    lockFrameIndex = Utility.INDEX_NONE
+                    bLooping = true
                 });
             })
             .Run();

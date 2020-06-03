@@ -27,9 +27,9 @@ public class SpriteChangeSystem : SystemBase {
                     }
                 }
 
-                var bIsLockFrame = state.lockFrameIndex != Utility.INDEX_NONE;
-                if (bIsLockFrame) {
-                    index = index > state.lockFrameIndex ? state.lockFrameIndex : index;
+                if (EntityManager.HasComponent<AnimationLockComponent>(entity)) {
+                    var lockComp = EntityManager.GetComponentData<AnimationLockComponent>(entity);
+                    index = index > lockComp.frameIndex ? lockComp.frameIndex : index;
                 }
                 
                 renderer.sprite = animData.timelines[index].sprite;

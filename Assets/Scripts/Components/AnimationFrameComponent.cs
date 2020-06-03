@@ -10,5 +10,13 @@ public struct AnimationFrameComponent : IComponentData {
     public float frame;
     public bool bFlipX;
     public bool bLooping;
-    public int lockFrameIndex;
+}
+
+[Serializable]
+public struct AnimationLockComponent : IComponentData {
+    public int frameIndex;
+
+    public AnimationLockComponent(int inIndex) {
+        frameIndex = inIndex;
+    }
 }

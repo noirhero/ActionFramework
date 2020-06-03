@@ -74,7 +74,6 @@ public class MoveSystem : ComponentSystem {
             var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
             animComp.setId = Utility.AnimState.Idle;
             animComp.bLooping = true;
-            animComp.lockFrameIndex = Utility.INDEX_NONE;
             EntityManager.SetComponentData(_controlEntity, animComp);
         }
     }
@@ -94,7 +93,6 @@ public class MoveSystem : ComponentSystem {
             
             var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
             animComp.bFlipX = moveComp.value.x < 0.0f;
-            animComp.lockFrameIndex = Utility.INDEX_NONE;
             EntityManager.SetComponentData(_controlEntity, animComp);
             
             if (Utility.bShowInputLog) {
@@ -116,10 +114,19 @@ public class MoveSystem : ComponentSystem {
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
             transComp.Value.y += jumpComp.lastDeltaY;
             EntityManager.SetComponentData(_controlEntity, transComp);
-            
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.lockFrameIndex = 0.0f < jumpComp.force ? 2 : Utility.INDEX_NONE; // TODO : temporary setting
-            EntityManager.SetComponentData(_controlEntity, animComp);
+
+            // TODO : add/remove timing
+            bool bJumpDown = 0.0f > jumpComp.force;
+            if (bJumpDown) {
+                if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
+                    EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
+                }
+            }
+            else {
+                if (false == EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
+                    EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
+                }
+            }
             
             if (Utility.bShowInputLog) {
                 Debug.Log("Jump force ("+jumpComp.force+"/" +jumpComp.accumY+"/" +transComp.Value.y+")");
