@@ -157,7 +157,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     // TODO : temporary constant -> status 
-    private const float force = 10.0f;
+    private const float force = 20.0f;
     private void UpdateJump() {
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {

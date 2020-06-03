@@ -8,9 +8,9 @@ public static class Utility {
         return path.Sum(Convert.ToInt32);
     }
 
-    // TODO : log option
-    public static bool bShowInputLog = true;
-
+    public static bool bShowInputLog = false;
+    public static int INDEX_NONE = -1;
+    
     public enum AnimState { Idle, Run, Jump, Attack }
 }
 

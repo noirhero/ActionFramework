@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class MoveSystem : ComponentSystem {
     private Entity _inputEntity;
-    private Entity _controlEntity;
+    private Entity _controlEntity; // TODO : choice move control entity 
+    
     protected override void OnStartRunning() {
         Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => {
             _inputEntity = inputEntity;
@@ -14,41 +15,6 @@ public class MoveSystem : ComponentSystem {
         Entities.ForEach((Entity controlEntity, ref InputComponent inputComp) => {
             _controlEntity = controlEntity;
         });
-    }
-
-    protected override void OnUpdate() {
-        if (IsLocked()) {
-            return;
-        }
-
-        bool bIsStop = true;
-        if (TryMove()) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Run;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-
-            bIsStop = false;
-        }
-        if (TryJump()) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Jump;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-            
-            bIsStop = false;
-        }
-        if (TryFall()) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Jump;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-            
-            bIsStop = false;
-        }
-        
-        if (bIsStop) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Idle;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-        }
     }
     
     private bool IsLocked() {
@@ -72,11 +38,52 @@ public class MoveSystem : ComponentSystem {
         // TODO : other condition
         return false;
     }
+
+    protected override void OnUpdate() {
+        if (IsLocked()) {
+            return;
+        }
+
+        bool bIsStop = true;
+        if (TryMove()) {
+            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+            animComp.setId = Utility.AnimState.Run;
+            animComp.bLooping = true;
+            EntityManager.SetComponentData(_controlEntity, animComp);
+
+            bIsStop = false;
+        }
+        if (TryJump()) {
+            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+            animComp.setId = Utility.AnimState.Jump;
+            animComp.bLooping = false;
+            EntityManager.SetComponentData(_controlEntity, animComp);
+            
+            bIsStop = false;
+        }
+        if (TryFall()) {
+            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+            animComp.setId = Utility.AnimState.Jump;
+            animComp.bLooping = false;
+            EntityManager.SetComponentData(_controlEntity, animComp);
+            
+            bIsStop = false;
+        }
+        
+        if (bIsStop) {
+            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+            animComp.setId = Utility.AnimState.Idle;
+            animComp.bLooping = true;
+            animComp.lockFrameIndex = Utility.INDEX_NONE;
+            EntityManager.SetComponentData(_controlEntity, animComp);
+        }
+    }
     
     // TODO : temporary constant -> status 
     private const float _speedX = 0.01f;
-    private const float _speedY = 0.5f;
+    private const float _speedY = 0.1f;
     private const float gravity = 0.3f;
+    
     private bool TryMove() {
         if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
             var moveComp = EntityManager.GetComponentData<MoveComponent>(_inputEntity);
@@ -86,7 +93,8 @@ public class MoveSystem : ComponentSystem {
             EntityManager.SetComponentData(_controlEntity, transComp);
             
             var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.flipX = moveComp.value.x < 0.0f;
+            animComp.bFlipX = moveComp.value.x < 0.0f;
+            animComp.lockFrameIndex = Utility.INDEX_NONE;
             EntityManager.SetComponentData(_controlEntity, animComp);
             
             if (Utility.bShowInputLog) {
@@ -101,13 +109,17 @@ public class MoveSystem : ComponentSystem {
         if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
             var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
             jumpComp.force -= gravity;
-            var deltaY = jumpComp.force * Time.DeltaTime * _speedY;
-            jumpComp.accumY += deltaY;
+            jumpComp.lastDeltaY = jumpComp.force * Time.DeltaTime * _speedY;
+            jumpComp.accumY += jumpComp.lastDeltaY;
             EntityManager.SetComponentData(_inputEntity, jumpComp);
             
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            transComp.Value.y += deltaY;
+            transComp.Value.y += jumpComp.lastDeltaY;
             EntityManager.SetComponentData(_controlEntity, transComp);
+            
+            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+            animComp.lockFrameIndex = 0.0f < jumpComp.force ? 2 : Utility.INDEX_NONE; // TODO : temporary setting
+            EntityManager.SetComponentData(_controlEntity, animComp);
             
             if (Utility.bShowInputLog) {
                 Debug.Log("Jump force ("+jumpComp.force+"/" +jumpComp.accumY+"/" +transComp.Value.y+")");

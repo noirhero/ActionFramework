@@ -15,17 +15,25 @@ public class SpriteChangeSystem : SystemBase {
 
                 var frame = state.frame;
                 if (frame > animData.length) {
-                    frame %= animData.length;
+                    frame = state.bLooping ? frame % animData.length : animData.length;
                 }
 
-                foreach (var timeline in animData.timelines) {
-                    if (frame >= timeline.start && frame < timeline.end) {
-                        renderer.sprite = timeline.sprite;
+                var index = 0;
+                for (int i = 0; i < animData.timelines.Count; ++i) {
+                    var timeline = animData.timelines[i];
+                    if (frame >= timeline.start && frame <= timeline.end) {
+                        index = i;
                         break;
                     }
                 }
 
-                renderer.flipX = state.flipX;
+                var bIsLockFrame = state.lockFrameIndex != Utility.INDEX_NONE;
+                if (bIsLockFrame) {
+                    index = index > state.lockFrameIndex ? state.lockFrameIndex : index;
+                }
+                
+                renderer.sprite = animData.timelines[index].sprite;
+                renderer.flipX = state.bFlipX;
             })
             .Run();
     }

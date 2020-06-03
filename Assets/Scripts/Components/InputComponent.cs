@@ -24,10 +24,12 @@ public struct MoveComponent : IComponentData {
 public struct JumpComponent : IComponentData {
     public float force;
     public float accumY;
+    public float lastDeltaY;
     
     public JumpComponent(float inForce) {
         force = inForce;
         accumY = 0.0f;
+        lastDeltaY = 0.0f;
     }
 }
 
