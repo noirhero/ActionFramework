@@ -5,7 +5,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Networking.Transport;
-using Unity.Rendering;
 using UnityEngine;
 
 public class ServerSystem : JobComponentSystem {

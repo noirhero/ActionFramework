@@ -10,7 +10,7 @@ public static class Utility {
 
     public static bool bShowInputLog = false;
     public static int INDEX_NONE = -1;
-    
+
     public enum AnimState { Idle, Run, Jump, Attack }
 }
 

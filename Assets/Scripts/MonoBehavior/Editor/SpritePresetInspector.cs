@@ -21,7 +21,7 @@ public class SpritePresetInspector : Editor {
         preset.datas.Clear();
 
         foreach (var clip in preset.clips) {
-            var animData = new AnimData() {
+            var animData = new AnimData {
                 length = clip.length,
                 timelines = new List<AnimTimeline>()
             };
@@ -30,7 +30,7 @@ public class SpritePresetInspector : Editor {
                 foreach (var frame in AnimationUtility.GetObjectReferenceCurve(clip, binding)) {
                     var sprite = (Sprite) frame.value;
 
-                    animData.timelines.Add(new AnimTimeline() {
+                    animData.timelines.Add(new AnimTimeline {
                         start = frame.time,
                         sprite = sprite
                     });
@@ -45,14 +45,13 @@ public class SpritePresetInspector : Editor {
             }
             animData.timelines[animData.timelines.Count - 1].end = clip.length;
 
-
-            if (false == Utility.AnimState.TryParse(
+            if (false == Enum.TryParse(
                 clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1),
                 out Utility.AnimState animState)) {
                 Debug.LogError("!!!! Check Anim Name");
             }
             else {
-                preset.datas.Add(animState, animData);   
+                preset.datas.Add(animState, animData);
             }
         }
     }

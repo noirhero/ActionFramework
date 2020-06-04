@@ -19,7 +19,7 @@ public class SpriteChangeSystem : SystemBase {
                 }
 
                 var index = 0;
-                for (int i = 0; i < animData.timelines.Count; ++i) {
+                for (var i = 0; i < animData.timelines.Count; ++i) {
                     var timeline = animData.timelines[i];
                     if (frame >= timeline.start && frame <= timeline.end) {
                         index = i;

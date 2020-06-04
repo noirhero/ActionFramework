@@ -13,7 +13,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         // TODO : other condition
         return false;
     }
-    
+
     public void OnLeft(InputAction.CallbackContext context) {
         if (IsLocked()) {
             return;

@@ -7,7 +7,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-[UpdateAfter(typeof(BuildPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
+[UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
 public class ControllerSystem : JobComponentSystem {
     private BuildPhysicsWorld _buildPhysSystem;
     private EndFramePhysicsSystem _endPhysSystem;
@@ -18,7 +18,6 @@ public class ControllerSystem : JobComponentSystem {
     }
 
     private JobHandle _jobHandle;
-
     protected override unsafe JobHandle OnUpdate(JobHandle inputDeps) {
         _jobHandle.Complete();
 
@@ -27,12 +26,11 @@ public class ControllerSystem : JobComponentSystem {
 
         inputDeps = JobHandle.CombineDependencies(inputDeps, _buildPhysSystem.FinalJobHandle);
         _jobHandle = Entities
-            .ForEach((ref Translation translation, in Rotation rotation, in ControllerAuthoringComponent controller,
-                in PhysicsCollider collider) => {
+            .ForEach((ref Translation translation, in Rotation rotation, in ControllerAuthoringComponent controller, in PhysicsCollider collider) => {
                 var newPos = translation.Value;
                 newPos.y -= controller.gravity * deltaTime;
 
-                if (physWorld.CastCollider(new ColliderCastInput() {
+                if (physWorld.CastCollider(new ColliderCastInput {
                     Collider = collider.ColliderPtr,
                     Orientation = rotation.Value,
                     Start = translation.Value,
