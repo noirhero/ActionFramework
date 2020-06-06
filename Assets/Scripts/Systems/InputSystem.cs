@@ -167,24 +167,19 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     // TODO : temporary constant -> status 
-    private const float force = 20.0f;
+    private const float force = 30.0f;
 
     private void UpdateJump() {
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
             var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
-            // TODO : temporary limit check -> check collision
-            if (0.0f > jumpComp.accumY) {
-                EntityManager.RemoveComponent<JumpComponent>(_inputEntity);
-                //EntityManager.AddComponentData(_inputEntity, new FallComponent(force));
-            }
+            jumpComp.accumTime += Time.DeltaTime;
+            EntityManager.SetComponentData(_inputEntity, jumpComp);
         }
         else if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
             var fallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
-            // TODO : temporary limit check -> check collision
-            if (1.5f < fallComp.accumY) {
-                EntityManager.RemoveComponent<FallComponent>(_inputEntity);
-            }
+            fallComp.accumTime += Time.DeltaTime;
+            EntityManager.SetComponentData(_inputEntity, fallComp);
         }
         else if (InputState.HasState(inputDataComp, InputState.jump)) {
             EntityManager.AddComponentData(_inputEntity, new JumpComponent(force));

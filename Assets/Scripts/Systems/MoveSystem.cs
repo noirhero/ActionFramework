@@ -2,15 +2,21 @@
 
 using Unity.Entities;
 using Unity.Transforms;
+using Unity.Mathematics;
+using Unity.Physics;
+using Unity.Physics.Systems;
 using UnityEngine;
 
 public class MoveSystem : ComponentSystem {
     private Entity _inputEntity;
     private Entity _controlEntity; // TODO : choice move control entity 
+    private BuildPhysicsWorld _buildPhysSystem;
 
     protected override void OnStartRunning() {
         Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => { _inputEntity = inputEntity; });
         Entities.ForEach((Entity controlEntity, ref InputComponent inputComp) => { _controlEntity = controlEntity; });
+
+        _buildPhysSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
 
     private bool IsLocked() {
@@ -61,8 +67,7 @@ public class MoveSystem : ComponentSystem {
 
             bIsStop = false;
         }
-
-        if (TryFall()) {
+        else if (TryFall()) {
             var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
             animComp.setId = Utility.AnimState.Jump;
             animComp.bLooping = false;
@@ -80,16 +85,16 @@ public class MoveSystem : ComponentSystem {
     }
 
     // TODO : temporary constant -> status 
-    private const float _speedX = 0.01f;
-    private const float _speedY = 0.1f;
-    private const float gravity = 0.3f;
+    private const float _speedX = 0.03f;
+    private const float _speedY = 0.2f;
+    private const float _gravity = 1.0f;
 
     private bool TryMove() {
         if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
             var moveComp = EntityManager.GetComponentData<MoveComponent>(_inputEntity);
 
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            transComp.Value.x += moveComp.value.x * _speedX;
+            CollisionTest(ref transComp.Value, Vector3.right, moveComp.value.x);
             EntityManager.SetComponentData(_controlEntity, transComp);
 
             var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
@@ -109,16 +114,9 @@ public class MoveSystem : ComponentSystem {
     private bool TryJump() {
         if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
             var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
-            jumpComp.force -= gravity;
-            jumpComp.lastDeltaY = jumpComp.force * Time.DeltaTime * _speedY;
-            jumpComp.accumY += jumpComp.lastDeltaY;
+            jumpComp.force -= _gravity;
             EntityManager.SetComponentData(_inputEntity, jumpComp);
 
-            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            transComp.Value.y += jumpComp.lastDeltaY;
-            EntityManager.SetComponentData(_controlEntity, transComp);
-
-            // TODO : add/remove timing
             bool bJumpDown = 0.0f > jumpComp.force;
             if (bJumpDown) {
                 if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
@@ -131,8 +129,19 @@ public class MoveSystem : ComponentSystem {
                 }
             }
 
+            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
+            var deltaY = jumpComp.force * Time.DeltaTime;
+            if (CollisionTest(ref transComp.Value, Vector3.up, deltaY)) {
+                EntityManager.RemoveComponent<JumpComponent>(_inputEntity);
+                if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
+                    EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
+                }
+            }
+
+            EntityManager.SetComponentData(_controlEntity, transComp);
+
             if (Utility.bShowInputLog) {
-                Debug.Log("Jump force (" + jumpComp.force + "/" + jumpComp.accumY + "/" + transComp.Value.y + ")");
+                Debug.Log("Jump force (" + jumpComp.force + ")");
             }
 
             return true;
@@ -144,22 +153,59 @@ public class MoveSystem : ComponentSystem {
     private bool TryFall() {
         if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
             var fallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
-            fallComp.force -= gravity;
-            var deltaY = fallComp.force * Time.DeltaTime * _speedY;
-            fallComp.accumY += deltaY;
+            fallComp.force -= _gravity;
+            var deltaY = fallComp.force * Time.DeltaTime;
             EntityManager.SetComponentData(_inputEntity, fallComp);
 
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            transComp.Value.y -= deltaY;
-            EntityManager.SetComponentData(_controlEntity, transComp);
+            if (CollisionTest(ref transComp.Value, Vector3.up, deltaY)) {
+                EntityManager.RemoveComponent<FallComponent>(_inputEntity);
+            }
+            else {
+                EntityManager.SetComponentData(_controlEntity, transComp);
+            }
 
             if (Utility.bShowInputLog) {
-                Debug.Log("Fall force (" + fallComp.force + "/" + fallComp.accumY + "/" + transComp.Value.y + ")");
+                Debug.Log("Fall force (" + fallComp.force + ")");
             }
 
             return true;
         }
+        else {
+            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
+            if (false == CollisionTest(ref transComp.Value, Vector3.down, _skinWidth)) {
+                EntityManager.AddComponentData(_inputEntity, new FallComponent(0.0f));
+            }
+        }
 
         return false;
+    }
+
+    private const float _skinWidth = 0.05f;
+
+    private unsafe bool CollisionTest(ref float3 outTrans, float3 inDir, float inDelta) {
+        var physWorld = _buildPhysSystem.PhysicsWorld;
+        var collider = EntityManager.GetComponentData<PhysicsCollider>(_controlEntity);
+        var rotation = EntityManager.GetComponentData<Rotation>(_controlEntity);
+
+        inDir.x *= _speedX;
+        inDir.y *= _speedY;
+        var delta = inDir * inDelta;
+        var newPos = outTrans + (delta);
+
+        var bIsHit = physWorld.CastCollider(new ColliderCastInput {
+            Collider = collider.ColliderPtr,
+            Orientation = rotation.Value,
+            Start = outTrans,
+            End = newPos
+        }, out var hit);
+
+        if (bIsHit) {
+            var offset = hit.Fraction - _skinWidth;
+            newPos = math.lerp(outTrans, newPos, offset);
+        }
+
+        outTrans = newPos;
+        return bIsHit;
     }
 }

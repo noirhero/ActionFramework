@@ -23,24 +23,22 @@ public struct MoveComponent : IComponentData {
 [Serializable]
 public struct JumpComponent : IComponentData {
     public float force;
-    public float accumY;
-    public float lastDeltaY;
+    public float accumTime;
 
     public JumpComponent(float inForce) {
         force = inForce;
-        accumY = 0.0f;
-        lastDeltaY = 0.0f;
+        accumTime = 0.0f;
     }
 }
 
 [Serializable]
 public struct FallComponent : IComponentData {
     public float force;
-    public float accumY;
+    public float accumTime;
 
     public FallComponent(float inForce) {
         force = inForce;
-        accumY = 0.0f;
+        accumTime = 0.0f;
     }
 }
 
