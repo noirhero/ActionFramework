@@ -11,7 +11,12 @@ public static class Utility {
     public static bool bShowInputLog = false;
     public static int INDEX_NONE = -1;
 
-    public enum AnimState { Idle, Run, Jump, Attack }
+    public enum AnimState {
+        Idle,
+        Run,
+        Jump,
+        Attack
+    }
 }
 
 public static class InputState {
@@ -34,18 +39,23 @@ public static class InputState {
         if (0 != (left & inputComp.state)) {
             cachedStr += " Left";
         }
+
         if (0 != (right & inputComp.state)) {
             cachedStr += " Right";
         }
+
         if (0 != (jump & inputComp.state)) {
             cachedStr += " Jump";
         }
+
         if (0 != (attack & inputComp.state)) {
             cachedStr += " Attack";
         }
+
         if (0 != (axis & inputComp.state)) {
             cachedStr += " Axis";
         }
+
         return cachedStr;
     }
 }

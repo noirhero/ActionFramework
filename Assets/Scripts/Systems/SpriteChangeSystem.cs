@@ -6,8 +6,8 @@ using UnityEngine;
 public class SpriteChangeSystem : SystemBase {
     protected override void OnUpdate() {
         Entities
-            .WithoutBurst()
-            .ForEach((Entity entity, SpriteRenderer renderer, in AnimationFrameComponent state) => {
+           .WithoutBurst()
+           .ForEach((Entity entity, SpriteRenderer renderer, in AnimationFrameComponent state) => {
                 var preset = EntityManager.GetSharedComponentData<SpritePresetComponent>(entity);
                 if (false == preset.value.datas.TryGetValue(state.currentId, out var animData)) {
                     return;
@@ -31,10 +31,10 @@ public class SpriteChangeSystem : SystemBase {
                     var lockComp = EntityManager.GetComponentData<AnimationLockComponent>(entity);
                     index = index > lockComp.frameIndex ? lockComp.frameIndex : index;
                 }
-                
+
                 renderer.sprite = animData.timelines[index].sprite;
                 renderer.flipX = state.bFlipX;
             })
-            .Run();
+           .Run();
     }
 }

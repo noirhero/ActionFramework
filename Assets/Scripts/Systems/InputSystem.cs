@@ -9,7 +9,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         if (false == EntityManager.HasComponent<InputDataComponent>(_inputEntity)) {
             return true;
         }
-        
+
         // TODO : other condition
         return false;
     }
@@ -24,10 +24,12 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             cachedComp.state |= InputState.left;
             cachedComp.dir += -1.0f;
         }
+
         if (context.canceled) {
             cachedComp.state ^= InputState.left;
             cachedComp.dir += 1.0f;
         }
+
         EntityManager.SetComponentData(_inputEntity, cachedComp);
     }
 
@@ -35,16 +37,18 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         if (IsLocked()) {
             return;
         }
-        
+
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (context.started) {
             cachedComp.state |= InputState.right;
             cachedComp.dir += 1.0f;
         }
+
         if (context.canceled) {
             cachedComp.state ^= InputState.right;
             cachedComp.dir += -1.0f;
         }
+
         EntityManager.SetComponentData(_inputEntity, cachedComp);
     }
 
@@ -52,14 +56,16 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         if (IsLocked()) {
             return;
         }
-        
+
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (context.started) {
             cachedComp.state |= InputState.jump;
         }
+
         if (context.canceled) {
             cachedComp.state ^= InputState.jump;
         }
+
         EntityManager.SetComponentData(_inputEntity, cachedComp);
     }
 
@@ -67,14 +73,16 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         if (IsLocked()) {
             return;
         }
-        
+
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (context.started) {
             cachedComp.state |= InputState.attack;
         }
+
         if (context.canceled) {
             cachedComp.state ^= InputState.attack;
         }
+
         EntityManager.SetComponentData(_inputEntity, cachedComp);
     }
 
@@ -82,7 +90,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         if (IsLocked()) {
             return;
         }
-        
+
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         cachedComp.dir = context.ReadValue<float>();
         if (0.0f != cachedComp.dir) {
@@ -97,6 +105,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
     private InputActions _input;
     private Entity _inputEntity;
+
     protected override void OnCreate() {
         _input = new InputActions();
         _input.CharacterControl.SetCallbacks(this);
@@ -117,7 +126,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         if (IsLocked()) {
             return;
         }
-        
+
         UpdateMove();
         UpdateJump();
         UpdateAttack();
@@ -146,6 +155,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             else {
                 cachedComp.accumTime = 0.0f;
             }
+
             cachedComp.value.x = inputDataComp.dir;
             EntityManager.SetComponentData(_inputEntity, cachedComp);
         }
@@ -158,6 +168,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
     // TODO : temporary constant -> status 
     private const float force = 20.0f;
+
     private void UpdateJump() {
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
