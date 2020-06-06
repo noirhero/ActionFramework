@@ -14,7 +14,7 @@ public class TAPCustomEditor : EditorWindow {
     public AnimClipData[] foldedClipDatas = null;
 
     private Vector2 _scrollPosition = Vector2.zero;
-    private Vector2 _windowSize = new Vector2(550, 450);
+    private Vector2 _windowSize = new Vector2(450, 450);
     private GUIContent[] _locationContents = new GUIContent[] { new GUIContent("X"), new GUIContent("Y") };
     private GUIContent[] _sizeContents = new GUIContent[] { new GUIContent("Width"), new GUIContent("Height") };
     private Texture2D _currentSpriteTexture = null;
@@ -81,36 +81,41 @@ public class TAPCustomEditor : EditorWindow {
 
         // 오른쪽 프리뷰 화면
         if (null != _currentSpriteTexture) {
-            var texture_location = new float[2] { _scrollPosition.x + 200, 50 };
-            var texture_size = 200.0f;
-            EditorGUI.DrawPreviewTexture(new Rect(texture_location[0], texture_location[1], texture_size, texture_size), _currentSpriteTexture);
+            var textureLocation = new float[2] { _scrollPosition.x + 200, 70 };
+            var textureSize = 200.0f;
+            EditorGUI.TextArea(new Rect(textureLocation[0], textureLocation[1] - 20, 200, EditorGUIUtility.singleLineHeight), "Texture size : " + _currentSpriteTexture.width + " x " + _currentSpriteTexture.height);
+
+            EditorGUI.DrawPreviewTexture(new Rect(textureLocation[0], textureLocation[1], textureSize, textureSize), _currentSpriteTexture);
 
             var idx = (int)(_currentIndex * 0.1f);
-            var timeline_idx = (_currentIndex % 10);
-            var current_rect = foldedClipDatas[idx].boxCollision[timeline_idx];
+            var timelineIndex = (_currentIndex % 10);
+            var currentRect = foldedClipDatas[idx].boxCollision[timelineIndex];
 
             // 위치 조정
-            var location = new float[2] { current_rect.x, (current_rect.y * -1.0f) };
-            EditorGUI.MultiFloatField(new Rect(200, 260, 200, EditorGUIUtility.singleLineHeight), new GUIContent(""), _locationContents, location);
-            foldedClipDatas[idx].boxCollision[timeline_idx].x = location[0];
-            foldedClipDatas[idx].boxCollision[timeline_idx].y = location[1] * -1.0f;
+            var location = new float[2] { currentRect.x, currentRect.y };
+            EditorGUI.MultiFloatField(new Rect(200, textureLocation[1] + textureSize + 20, 200, EditorGUIUtility.singleLineHeight), new GUIContent(), _locationContents, location);
+            foldedClipDatas[idx].boxCollision[timelineIndex].x = location[0];
+            foldedClipDatas[idx].boxCollision[timelineIndex].y = location[1];
 
             // 사이즈 조정
-            var size = new float[2] { current_rect.width, current_rect.height };
-            GUIContent[] size_contents = new GUIContent[] { new GUIContent("Width"), new GUIContent("Height") };
-            EditorGUI.MultiFloatField(new Rect(200, 270 + EditorGUIUtility.singleLineHeight, 200, EditorGUIUtility.singleLineHeight), new GUIContent(), _sizeContents, size);
-            foldedClipDatas[idx].boxCollision[timeline_idx].width = size[0];
-            foldedClipDatas[idx].boxCollision[timeline_idx].height = size[1];
+            var size = new float[2] { currentRect.width, currentRect.height };
+            EditorGUI.MultiFloatField(new Rect(200, textureLocation[1] + textureSize + 30 + EditorGUIUtility.singleLineHeight, 200, EditorGUIUtility.singleLineHeight), new GUIContent(), _sizeContents, size);
+            foldedClipDatas[idx].boxCollision[timelineIndex].width = size[0];
+            foldedClipDatas[idx].boxCollision[timelineIndex].height = size[1];
 
             // Draw preview lines
             if (0 < size[0] && 0 < size[1]) {
-                // 원점 = 캐릭터 발 밑 기준
-                var result_x = texture_location[0] + location[0] + (texture_size * 0.5f);
-                var result_y = texture_location[1] + (location[1] * -1.0f) + texture_size;
+                var ratio_x = (textureSize / _currentSpriteTexture.width);
+                var ratio_y = (textureSize / _currentSpriteTexture.height);
+                var scaled = new Rect(ratio_x * location[0], ratio_y * location[1], ratio_x * size[0], ratio_y * size[1]);
 
-                var left_x = result_x - (size[0] * 0.5f);
-                var right_x = result_x + (size[0] * 0.5f);
-                var top_y = result_y - size[1];
+                // 원점 = 캐릭터 발 밑 기준
+                var result_x = textureLocation[0] + scaled.x + (textureSize * 0.5f);
+                var result_y = textureLocation[1] - scaled.y + textureSize;
+
+                var left_x = result_x - (scaled.width * 0.5f);
+                var right_x = result_x + (scaled.width * 0.5f);
+                var top_y = result_y - scaled.height;
                 var bottom_y = result_y;
 
                 // clockwise
