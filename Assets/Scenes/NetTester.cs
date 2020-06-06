@@ -12,9 +12,7 @@ public class NetTester : MonoBehaviour {
         m_Driver = NetworkDriver.Create();
         m_Connection = default(NetworkConnection);
 
-        var endpoint = NetworkEndPoint.LoopbackIpv4;
-        endpoint.Port = 8989;
-        m_Connection = m_Driver.Connect(endpoint);
+        m_Connection = m_Driver.Connect(NetworkEndPoint.Parse("127.0.0.1", 8989));
     }
 
     public void OnDestroy() {
