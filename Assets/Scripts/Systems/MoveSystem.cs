@@ -117,8 +117,15 @@ public class MoveSystem : ComponentSystem {
             jumpComp.force -= _gravity;
             EntityManager.SetComponentData(_inputEntity, jumpComp);
 
+            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
+            var deltaY = jumpComp.force * Time.DeltaTime;
+            var bIsHit = CollisionTest(ref transComp.Value, Vector3.up, deltaY);
+            if (bIsHit) {
+                EntityManager.RemoveComponent<JumpComponent>(_inputEntity);
+            }
+            
             bool bJumpDown = 0.0f > jumpComp.force;
-            if (bJumpDown) {
+            if (bJumpDown || bIsHit) {
                 if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
                     EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
                 }
@@ -128,23 +135,13 @@ public class MoveSystem : ComponentSystem {
                     EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
                 }
             }
-
-            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            var deltaY = jumpComp.force * Time.DeltaTime;
-            if (CollisionTest(ref transComp.Value, Vector3.up, deltaY)) {
-                EntityManager.RemoveComponent<JumpComponent>(_inputEntity);
-                if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
-                    EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
-                }
-            }
-
             EntityManager.SetComponentData(_controlEntity, transComp);
 
             if (Utility.bShowInputLog) {
                 Debug.Log("Jump force (" + jumpComp.force + ")");
             }
 
-            return true;
+            return bIsHit == false;
         }
 
         return false;
@@ -175,6 +172,7 @@ public class MoveSystem : ComponentSystem {
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
             if (false == FallingTest(transComp.Value, Vector3.down, _skinWidth)) {
                 EntityManager.AddComponentData(_inputEntity, new FallComponent(0.0f));
+                return true;
             }
         }
 
@@ -193,13 +191,20 @@ public class MoveSystem : ComponentSystem {
         var delta = inDir * inDelta;
         var newPos = outTrans + (delta);
 
+        var startPos = outTrans;
+        var endPos = newPos;
+        var bInversePos = outTrans.x > newPos.x;
+        if (bInversePos) {
+            startPos = newPos;
+            endPos = outTrans;
+        }
+
         var bIsHit = physWorld.CastCollider(new ColliderCastInput {
             Collider = collider.ColliderPtr,
             Orientation = rotation.Value,
-            Start = outTrans,
-            End = newPos
+            Start = startPos,
+            End = endPos
         }, out var hit);
-
         if (bIsHit) {
             var offset = hit.Fraction - _skinWidth;
             newPos = math.lerp(outTrans, newPos, offset);
@@ -226,7 +231,6 @@ public class MoveSystem : ComponentSystem {
             End = newPos
         }, out var hit);
 
-        Debug.DrawLine(inTrans, newPos, Color.red);
         return bIsHit;
     }
 }
