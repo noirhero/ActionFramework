@@ -1,10 +1,10 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
-using Unity.Transforms;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
+using Unity.Transforms;
 using UnityEngine;
 
 public class MoveSystem : ComponentSystem {
@@ -173,7 +173,7 @@ public class MoveSystem : ComponentSystem {
         }
         else {
             var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            if (false == CollisionTest(ref transComp.Value, Vector3.down, _skinWidth)) {
+            if (false == FallingTest(transComp.Value, Vector3.down, _skinWidth)) {
                 EntityManager.AddComponentData(_inputEntity, new FallComponent(0.0f));
             }
         }
@@ -206,6 +206,27 @@ public class MoveSystem : ComponentSystem {
         }
 
         outTrans = newPos;
+        return bIsHit;
+    }
+
+    private unsafe bool FallingTest(float3 inTrans, float3 inDir, float inDelta) {
+        var physWorld = _buildPhysSystem.PhysicsWorld;
+        var collider = EntityManager.GetComponentData<PhysicsCollider>(_controlEntity);
+        var rotation = EntityManager.GetComponentData<Rotation>(_controlEntity);
+
+        inDir.x *= _speedX;
+        inDir.y *= _speedY;
+        var delta = inDir * inDelta;
+        var newPos = inTrans + (delta);
+
+        var bIsHit = physWorld.CastCollider(new ColliderCastInput {
+            Collider = collider.ColliderPtr,
+            Orientation = rotation.Value,
+            Start = inTrans,
+            End = newPos
+        }, out var hit);
+
+        Debug.DrawLine(inTrans, newPos, Color.red);
         return bIsHit;
     }
 }

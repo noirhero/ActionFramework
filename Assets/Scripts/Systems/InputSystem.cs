@@ -25,7 +25,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             cachedComp.dir += -1.0f;
         }
 
-        if (context.canceled) {
+        if (InputState.HasState(cachedComp, InputState.left) && context.canceled) {
             cachedComp.state ^= InputState.left;
             cachedComp.dir += 1.0f;
         }
@@ -44,7 +44,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             cachedComp.dir += 1.0f;
         }
 
-        if (context.canceled) {
+        if (InputState.HasState(cachedComp, InputState.right) && context.canceled) {
             cachedComp.state ^= InputState.right;
             cachedComp.dir += -1.0f;
         }
@@ -62,7 +62,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             cachedComp.state |= InputState.jump;
         }
 
-        if (context.canceled) {
+        if (InputState.HasState(cachedComp, InputState.jump) && context.canceled) {
             cachedComp.state ^= InputState.jump;
         }
 
@@ -79,7 +79,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             cachedComp.state |= InputState.attack;
         }
 
-        if (context.canceled) {
+        if (InputState.HasState(cachedComp, InputState.attack) && context.canceled) {
             cachedComp.state ^= InputState.attack;
         }
 
@@ -174,7 +174,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
             var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
             jumpComp.accumTime += Time.DeltaTime;
-            EntityManager.SetComponentData(_inputEntity, jumpComp);
+            EntityManager.SetComponentData(_inputEntity, jumpComp); 
         }
         else if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
             var fallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
@@ -183,6 +183,10 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         }
         else if (InputState.HasState(inputDataComp, InputState.jump)) {
             EntityManager.AddComponentData(_inputEntity, new JumpComponent(force));
+            
+            // should be once play
+            inputDataComp.state ^= InputState.jump;
+            EntityManager.SetComponentData(_inputEntity, inputDataComp); 
         }
     }
 
