@@ -2,23 +2,18 @@
 
 using UnityEngine;
 using UnityEditor;
-using Unity.Physics.Authoring;
-
-public struct AnimClipData {
-    public bool isFolded;
-    public Rect[] boxCollision;
-}
 
 public class TAPCustomEditor : EditorWindow {
     public SpritePreset preset;
-    public AnimClipData[] foldedClipDatas = null;
+    public bool[] foldedClipDatas = null;
 
     private Vector2 _scrollPosition = Vector2.zero;
     private Vector2 _windowSize = new Vector2(450, 450);
     private GUIContent[] _locationContents = new GUIContent[] { new GUIContent("X"), new GUIContent("Y") };
     private GUIContent[] _sizeContents = new GUIContent[] { new GUIContent("Width"), new GUIContent("Height") };
     private Texture2D _currentSpriteTexture = null;
-    private int _currentIndex = -1;
+    private Utility.AnimState _currentKey;
+    private int _currentTimelineIndex = -1;
 
 
     [MenuItem("Window/---- TAP Custom Editor ----")]
@@ -28,13 +23,7 @@ public class TAPCustomEditor : EditorWindow {
 
     public void InitPresetData() {
         _currentSpriteTexture = null;   // OnGUI 호출될 때마다 덮어씌워지는 것 방지
-        foldedClipDatas = new AnimClipData[preset.datas.Count];
-
-        var i = 0;
-        foreach (var data in preset.datas) {
-            foldedClipDatas[i].isFolded = false;
-            foldedClipDatas[i++].boxCollision = new Rect[data.Value.timelines.Count];
-        }
+        foldedClipDatas = new bool[preset.datas.Count];
     }
 
     public void OnGUI() {
@@ -42,12 +31,22 @@ public class TAPCustomEditor : EditorWindow {
 
         GUILayout.BeginArea(new Rect(0, 0, _windowSize.x, _windowSize.y));
         GUILayout.Label("Animation Setting", EditorStyles.boldLabel);
+
+        // preset 바뀔 때마다 초기화
+        EditorGUI.BeginChangeCheck();
         preset = (SpritePreset)(EditorGUILayout.ObjectField("preset", preset, typeof(SpritePreset), true, GUILayout.Width(400), GUILayout.ExpandWidth(false)));
+        if (EditorGUI.EndChangeCheck()) {
+            if (preset) {
+                InitPresetData();
+            }
+        }
+
         if (null == preset) {
             GUILayout.EndArea();
             return;
         }
 
+        // 프리셋 전환 없이 코드 변경 후 OnGUI 호출됐을 때 null인 경우가 있음
         if (null == foldedClipDatas) {
             InitPresetData();
         }
@@ -59,15 +58,16 @@ public class TAPCustomEditor : EditorWindow {
 
         var i = 0;
         foreach (var data in preset.datas) {
-            foldedClipDatas[i].isFolded = EditorGUILayout.Foldout(foldedClipDatas[i].isFolded, data.Key.ToString(), true);
-            if (foldedClipDatas[i].isFolded) {
+            foldedClipDatas[i] = EditorGUILayout.Foldout(foldedClipDatas[i], data.Key.ToString(), true);
+            if (foldedClipDatas[i]) {
                 EditorGUI.indentLevel++;
 
                 for (var j = 0; j < data.Value.timelines.Count; ++j) {
                     var isClicked = GUILayout.Button("Frame " + j, GUILayout.MinWidth(100), GUILayout.MaxWidth(100), GUILayout.MinHeight(20), GUILayout.MaxHeight(20));
                     if (isClicked) {
+                        _currentKey = data.Key;
+                        _currentTimelineIndex = j;
                         _currentSpriteTexture = data.Value.timelines[j].sprite.texture;
-                        _currentIndex = (i * 10) + j;   // 현재 선택된 메뉴를 보여주기 위한 간단 인덱싱
                     }
                 }
 
@@ -81,27 +81,44 @@ public class TAPCustomEditor : EditorWindow {
 
         // 오른쪽 프리뷰 화면
         if (null != _currentSpriteTexture) {
-            var textureLocation = new float[2] { _scrollPosition.x + 200, 70 };
+            var textureLocation = new float[2] { _scrollPosition.x + 200, 100 };
             var textureSize = 200.0f;
+            EditorGUI.TextArea(new Rect(textureLocation[0], textureLocation[1] - 40, 200, EditorGUIUtility.singleLineHeight), _currentKey.ToString() + " / Frame " + _currentTimelineIndex);
             EditorGUI.TextArea(new Rect(textureLocation[0], textureLocation[1] - 20, 200, EditorGUIUtility.singleLineHeight), "Texture size : " + _currentSpriteTexture.width + " x " + _currentSpriteTexture.height);
-
             EditorGUI.DrawPreviewTexture(new Rect(textureLocation[0], textureLocation[1], textureSize, textureSize), _currentSpriteTexture);
 
-            var idx = (int)(_currentIndex * 0.1f);
-            var timelineIndex = (_currentIndex % 10);
-            var currentRect = foldedClipDatas[idx].boxCollision[timelineIndex];
+            if (false == preset.datas.TryGetValue(_currentKey, out var animData) || 0 > _currentTimelineIndex) {
+                EditorGUILayout.EndHorizontal();
+                GUILayout.EndArea();
+                return;
+            }
+            
+            var currentRect = animData.timelines[_currentTimelineIndex].attackCollision;
 
             // 위치 조정
             var location = new float[2] { currentRect.x, currentRect.y };
             EditorGUI.MultiFloatField(new Rect(200, textureLocation[1] + textureSize + 20, 200, EditorGUIUtility.singleLineHeight), new GUIContent(), _locationContents, location);
-            foldedClipDatas[idx].boxCollision[timelineIndex].x = location[0];
-            foldedClipDatas[idx].boxCollision[timelineIndex].y = location[1];
+            animData.timelines[_currentTimelineIndex].attackCollision.x = location[0];
+            animData.timelines[_currentTimelineIndex].attackCollision.y = location[1];
 
             // 사이즈 조정
             var size = new float[2] { currentRect.width, currentRect.height };
             EditorGUI.MultiFloatField(new Rect(200, textureLocation[1] + textureSize + 30 + EditorGUIUtility.singleLineHeight, 200, EditorGUIUtility.singleLineHeight), new GUIContent(), _sizeContents, size);
-            foldedClipDatas[idx].boxCollision[timelineIndex].width = size[0];
-            foldedClipDatas[idx].boxCollision[timelineIndex].height = size[1];
+            animData.timelines[_currentTimelineIndex].attackCollision.width = size[0];
+            animData.timelines[_currentTimelineIndex].attackCollision.height = size[1];
+
+            // Reset
+            var isClicked = GUILayout.Button("Reset this frame", GUILayout.MinWidth(110), GUILayout.MaxWidth(110), GUILayout.MinHeight(20), GUILayout.MaxHeight(20));
+            if (isClicked) {
+                animData.timelines[_currentTimelineIndex].attackCollision = new Rect();
+            }
+
+            // Save
+            isClicked = GUILayout.Button("Save All", GUILayout.MinWidth(80), GUILayout.MaxWidth(80), GUILayout.MinHeight(20), GUILayout.MaxHeight(20));
+            if (isClicked) {
+                var presetPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(preset.gameObject);
+                PrefabUtility.SaveAsPrefabAsset(preset.gameObject, presetPath);
+            }
 
             // Draw preview lines
             if (0 < size[0] && 0 < size[1]) {

@@ -10,6 +10,7 @@ public class AnimTimeline {
     public float start;
     public float end;
     public Sprite sprite;
+    public Rect attackCollision;
 }
 
 [Serializable]
