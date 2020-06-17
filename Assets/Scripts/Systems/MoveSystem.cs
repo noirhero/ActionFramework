@@ -189,27 +189,19 @@ public class MoveSystem : ComponentSystem {
         inDir.x *= _speedX;
         inDir.y *= _speedY;
         var delta = inDir * inDelta;
-        var newPos = outTrans + (delta);
-
-        var startPos = outTrans;
-        var endPos = newPos;
-        var bInversePos = outTrans.x > newPos.x;
-        if (bInversePos) {
-            startPos = newPos;
-            endPos = outTrans;
-        }
+        var newPos = outTrans + delta;
 
         var bIsHit = physWorld.CastCollider(new ColliderCastInput {
             Collider = collider.ColliderPtr,
             Orientation = rotation.Value,
-            Start = startPos,
-            End = endPos
+            Start = outTrans,
+            End = newPos
         }, out var hit);
         if (bIsHit) {
             var offset = hit.Fraction - _skinWidth;
             newPos = math.lerp(outTrans, newPos, offset);
         }
-
+        
         outTrans = newPos;
         return bIsHit;
     }
