@@ -40,6 +40,10 @@ public class MoveSystem : ComponentSystem {
             return true;
         }
 
+        if (EntityManager.HasComponent<AttackComponent>(_inputEntity)) {
+            return true;
+        }
+
         // TODO : other condition
         return false;
     }
@@ -199,27 +203,7 @@ public class MoveSystem : ComponentSystem {
         }, out var hit);
         if (bIsHit) {
             var offset = hit.Fraction - _skinWidth;
-            var resultPos = math.lerp(outTrans, newPos, offset);
-            
-            // todo : 임시방편으로 움직이도록만 우선 처리..
-            if (hit.Fraction == 0.0f) {
-                if (newPos.x < outTrans.x) { // left
-                    if (resultPos.x >= outTrans.x) {
-                        resultPos.x = newPos.x;
-                    }
-                }
-                else if (newPos.x > outTrans.x) { // right
-                    if (resultPos.x <= outTrans.x) {
-                        resultPos.x = newPos.x;
-                    }
-                }
-                else if (newPos.y > outTrans.y) { // 
-                    if (resultPos.y <= outTrans.y) {
-                        resultPos.y = newPos.y;
-                    }
-                }
-            }
-            newPos = resultPos;
+            newPos = math.lerp(outTrans, newPos, offset);
         }
         
         outTrans = newPos;
