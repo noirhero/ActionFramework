@@ -83,7 +83,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 1
+      isExpanded: 0
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 1
+    isExpanded: 0
     _keyValues: 00000000010000000200000003000000
     _keys: 00000000010000000200000003000000
     _values:
@@ -108,93 +108,225 @@ MonoBehaviour:
         end: 0.1
         sprite: {fileID: -1722777087426869409, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: -8878513221033722082, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: -5807987444940971551, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.3
         end: 0.4
         sprite: {fileID: -4546570782930855285, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
     - length: 0.70000005
       timelines:
       - start: 0
         end: 0.1
         sprite: {fileID: -5251445019668343189, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: -4106701637606726508, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: 2877802243737411288, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.3
         end: 0.4
         sprite: {fileID: 826915476319844909, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.4
         end: 0.5
         sprite: {fileID: -4326640719568627971, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.5
         end: 0.6
         sprite: {fileID: -1333346045318347873, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.6
         end: 0.70000005
         sprite: {fileID: 1411975621794697470, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
     - length: 0.5
       timelines:
       - start: 0
         end: 0.1
         sprite: {fileID: 7637290059257903065, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: 55197829868330041, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: -3660464499730203126, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.3
         end: 0.4
         sprite: {fileID: -4478718038025743936, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.4
         end: 0.5
         sprite: {fileID: -4117283221497647301, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
     - length: 0.6
       timelines:
       - start: 0
         end: 0.1
         sprite: {fileID: -9104051536271034971, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: 2520600477053507983, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: 5950981911402367957, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 25.03
+          y: 1.5
+          width: 29.8
+          height: 61.68
       - start: 0.3
         end: 0.4
         sprite: {fileID: -3087437913550365998, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.4
         end: 0.5
         sprite: {fileID: -8147110920315076209, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
       - start: 0.5
         end: 0.6
         sprite: {fileID: -4001651174186438304, guid: b79fe9f5991a52e469b2ec895125f6ae,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
