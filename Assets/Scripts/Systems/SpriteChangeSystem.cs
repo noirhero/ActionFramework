@@ -2,6 +2,7 @@
 
 using Unity.Entities;
 using UnityEngine;
+using Unity.Transforms;
 
 public class SpriteChangeSystem : SystemBase {
     protected override void OnUpdate() {
@@ -34,7 +35,33 @@ public class SpriteChangeSystem : SystemBase {
 
                 renderer.sprite = animData.timelines[index].sprite;
                 renderer.flipX = state.bFlipX;
-            })
+
+                // collision preview
+                var entityScale = new Vector2(1.0f, 1.0f);
+                if (EntityManager.HasComponent<CompositeScale>(entity))
+                {
+                   var scaleComp = EntityManager.GetComponentData<CompositeScale>(entity);
+                   entityScale.x = scaleComp.Value.c0.x;
+                   entityScale.y = scaleComp.Value.c1.y;
+                }
+                entityScale *= (1 / renderer.sprite.pixelsPerUnit);
+
+                var transComp = EntityManager.GetComponentData<Translation>(entity);
+
+                var attackCollision = animData.timelines[index].attackCollision;
+                var collision = new Rect(transComp.Value.x, transComp.Value.y, 
+                                         attackCollision.width * entityScale.x, 
+                                         attackCollision.height * entityScale.y);
+             
+                var left_x = collision.x - (collision.width * 0.5f);
+                var right_x = collision.x + (collision.width * 0.5f);
+                var top_y = collision.y;
+                var bottom_y = collision.y + collision.height;
+                Debug.DrawLine(new Vector3(left_x, top_y), new Vector3(right_x, top_y));
+                Debug.DrawLine(new Vector3(right_x, top_y), new Vector3(right_x, bottom_y));
+                Debug.DrawLine(new Vector3(right_x, bottom_y), new Vector3(left_x, bottom_y));
+                Debug.DrawLine(new Vector3(left_x, bottom_y), new Vector3(left_x, top_y));
+           })
            .Run();
     }
 }
