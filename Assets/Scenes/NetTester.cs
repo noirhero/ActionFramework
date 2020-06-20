@@ -4,26 +4,26 @@ using UnityEngine;
 using Unity.Networking.Transport;
 
 public class NetTester : MonoBehaviour {
-    public NetworkDriver m_Driver;
-    public NetworkConnection m_Connection;
-    public bool m_Done;
+    private NetworkDriver _driver;
+    private NetworkPipeline _pipeline;
+    private NetworkConnection _connection;
+    private bool done;
 
     void Start() {
-        m_Driver = NetworkDriver.Create();
-        m_Connection = default(NetworkConnection);
-
-        m_Connection = m_Driver.Connect(NetworkEndPoint.Parse("127.0.0.1", 8989));
+        _driver = NetworkDriver.Create();
+        _pipeline = _driver.CreatePipeline(typeof(ReliableSequencedPipelineStage));
+        _connection = _driver.Connect(NetworkEndPoint.Parse("127.0.0.1", 8989));
     }
 
     public void OnDestroy() {
-        m_Driver.Dispose();
+        _driver.Dispose();
     }
 
     void Update() {
-        m_Driver.ScheduleUpdate().Complete();
+        _driver.ScheduleUpdate().Complete();
 
-        if (!m_Connection.IsCreated) {
-            if (!m_Done)
+        if (!_connection.IsCreated) {
+            if (!done)
                 Debug.Log("Something went wrong during connect");
             return;
         }
@@ -31,25 +31,24 @@ public class NetTester : MonoBehaviour {
         DataStreamReader stream;
         NetworkEvent.Type cmd;
 
-        while ((cmd = m_Connection.PopEvent(m_Driver, out stream)) != NetworkEvent.Type.Empty) {
+        while ((cmd = _connection.PopEvent(_driver, out stream)) != NetworkEvent.Type.Empty) {
             if (cmd == NetworkEvent.Type.Connect) {
                 Debug.Log("We are now connected to the server");
 
-                uint value = 1;
-                var writer = m_Driver.BeginSend(m_Connection);
+                uint value = 10;
+                var writer = _driver.BeginSend(_connection);
+                //var writer = _driver.BeginSend(_pipeline, _connection);
                 writer.WriteUInt(value);
-                m_Driver.EndSend(writer);
+                _driver.EndSend(writer);
             }
             else if (cmd == NetworkEvent.Type.Data) {
-                uint value = stream.ReadUInt();
-                Debug.Log("Got the value = " + value + " back from the server");
-                m_Done = true;
-                m_Connection.Disconnect(m_Driver);
-                m_Connection = default(NetworkConnection);
+                Debug.Log($"Got the value = {stream.ReadUInt()} back from the server");
+                done = true;
+                _connection.Disconnect(_driver);
             }
             else if (cmd == NetworkEvent.Type.Disconnect) {
                 Debug.Log("Client got disconnected from server");
-                m_Connection = default(NetworkConnection);
+                _connection = default;
             }
         }
     }

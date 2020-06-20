@@ -1,17 +1,23 @@
-﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
+// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using System;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Networking.Transport;
+using Unity.Networking.Transport.Utilities;
 using UnityEngine;
 
 public class ServerSystem : JobComponentSystem {
     private NetworkDriver _driver;
+    private NetworkPipeline _pipeline;
     private NativeList<NetworkConnection> _connections;
+
     protected override void OnCreate() {
-        _driver = NetworkDriver.Create();
+        _driver = NetworkDriver.Create(new ReliableUtility.Parameters {
+            WindowSize = 32
+        });
+        _pipeline = _driver.CreatePipeline(typeof(ReliableSequencedPipelineStage));
         _connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
 
         var endpoint = NetworkEndPoint.AnyIpv4;
@@ -25,6 +31,7 @@ public class ServerSystem : JobComponentSystem {
     }
 
     private JobHandle _jobHandle;
+
     protected override void OnDestroy() {
         _jobHandle.Complete();
         _connections.Dispose();
@@ -53,18 +60,19 @@ public class ServerSystem : JobComponentSystem {
     struct ServerUpdateJob : IJobParallelForDefer {
         public NetworkDriver.Concurrent driver;
         public NativeArray<NetworkConnection> connections;
+        public NetworkPipeline pipeline;
 
         public void Execute(int index) {
+            var connection = connections[index];
             NetworkEvent.Type cmd;
-            while (NetworkEvent.Type.Empty !=
-                   (cmd = driver.PopEventForConnection(connections[index], out var stream))) {
+            while (NetworkEvent.Type.Empty != (cmd = driver.PopEventForConnection(connection, out var stream))) {
                 switch (cmd) {
                     case NetworkEvent.Type.Data: {
                         var number = stream.ReadUInt();
-                        Debug.Log("Got " + number + " from the Client adding + 2 to it.");
+                        Debug.Log($"Got {number} from the Client adding + 2 to it.");
                         number += 2;
 
-                        var writer = driver.BeginSend(connections[index]);
+                        var writer = driver.BeginSend(pipeline, connection);
                         writer.WriteUInt(number);
                         driver.EndSend(writer);
                         break;
@@ -94,9 +102,10 @@ public class ServerSystem : JobComponentSystem {
 
         var updateJob = new ServerUpdateJob {
             driver = _driver.ToConcurrent(),
-            connections = _connections.AsDeferredJobArray()
+            connections = _connections.AsDeferredJobArray(),
+            pipeline = _pipeline
         };
-        
+
         _jobHandle = _driver.ScheduleUpdate(inputDeps);
         _jobHandle = connectJob.Schedule(_jobHandle);
         _jobHandle = updateJob.Schedule(_connections, 1, _jobHandle);
