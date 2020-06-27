@@ -14,6 +14,14 @@ public class ServerSystem : JobComponentSystem {
     private NativeList<NetworkConnection> _connections;
 
     protected override void OnCreate() {
+        Enabled = false;
+    }
+
+    protected override void OnStartRunning() {
+        if (_driver.IsCreated) {
+            return;
+        }
+
         _driver = NetworkDriver.Create(new ReliableUtility.Parameters {
             WindowSize = 32
         });
@@ -34,8 +42,14 @@ public class ServerSystem : JobComponentSystem {
 
     protected override void OnDestroy() {
         _jobHandle.Complete();
-        _connections.Dispose();
-        _driver.Dispose();
+
+        if (_connections.IsCreated) {
+            _connections.Dispose();
+        }
+
+        if (_driver.IsCreated) {
+            _driver.Dispose();
+        }
     }
 
     struct ServerUpdateConnectionsJob : IJob {
@@ -50,7 +64,7 @@ public class ServerSystem : JobComponentSystem {
             }
 
             NetworkConnection c;
-            while ((c = driver.Accept()) != default(NetworkConnection)) {
+            while ((c = driver.Accept()) != default) {
                 connections.Add(c);
                 Debug.Log("Accepted a connection");
             }
@@ -79,7 +93,7 @@ public class ServerSystem : JobComponentSystem {
                     }
                     case NetworkEvent.Type.Disconnect:
                         Debug.Log("Client disconnected from server");
-                        connections[index] = default(NetworkConnection);
+                        connections[index] = default;
                         break;
                     case NetworkEvent.Type.Empty:
                         break;
