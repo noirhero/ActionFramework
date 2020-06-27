@@ -7,8 +7,9 @@ using Unity.Transforms;
 public class SpriteChangeSystem : SystemBase {
     protected override void OnUpdate() {
         Entities
-           .WithoutBurst()
-           .ForEach((Entity entity, SpriteRenderer renderer, in AnimationFrameComponent state) => {
+            .WithoutBurst()
+            .WithStructuralChanges()
+            .ForEach((Entity entity, SpriteRenderer renderer, in AnimationFrameComponent state) => {
                 var preset = EntityManager.GetSharedComponentData<SpritePresetComponent>(entity);
                 if (false == preset.value.datas.TryGetValue(state.currentId, out var animData)) {
                     return;
@@ -36,32 +37,27 @@ public class SpriteChangeSystem : SystemBase {
                 renderer.sprite = animData.timelines[index].sprite;
                 renderer.flipX = state.bFlipX;
 
-                // collision preview
-                var entityScale = new Vector2(1.0f, 1.0f);
-                if (EntityManager.HasComponent<CompositeScale>(entity))
-                {
-                   var scaleComp = EntityManager.GetComponentData<CompositeScale>(entity);
-                   entityScale.x = scaleComp.Value.c0.x;
-                   entityScale.y = scaleComp.Value.c1.y;
-                }
-                entityScale *= (1 / renderer.sprite.pixelsPerUnit);
-
-                var transComp = EntityManager.GetComponentData<Translation>(entity);
-
                 var attackCollision = animData.timelines[index].attackCollision;
-                var collision = new Rect(transComp.Value.x, transComp.Value.y, 
-                                         attackCollision.width * entityScale.x, 
-                                         attackCollision.height * entityScale.y);
-             
-                var left_x = collision.x - (collision.width * 0.5f);
-                var right_x = collision.x + (collision.width * 0.5f);
-                var top_y = collision.y;
-                var bottom_y = collision.y + collision.height;
-                Debug.DrawLine(new Vector3(left_x, top_y), new Vector3(right_x, top_y));
-                Debug.DrawLine(new Vector3(right_x, top_y), new Vector3(right_x, bottom_y));
-                Debug.DrawLine(new Vector3(right_x, bottom_y), new Vector3(left_x, bottom_y));
-                Debug.DrawLine(new Vector3(left_x, bottom_y), new Vector3(left_x, top_y));
-           })
+                var HasAttackCollision = EntityManager.HasComponent<AttackCollisionComponent>(entity);
+
+                // 현재 프레임에 공격 판정 데이터 있음
+                if (0 < attackCollision.width + attackCollision.height) {
+                    if (HasAttackCollision) {
+                        var attackCollisionComp = EntityManager.GetComponentData<AttackCollisionComponent>(entity);
+                        attackCollisionComp.bounds = attackCollision;
+                    }
+                    else {
+                        var newComp = new AttackCollisionComponent() { bounds = attackCollision, pixelsPerUnit = renderer.sprite.pixelsPerUnit };
+                        EntityManager.AddComponentData<AttackCollisionComponent>(entity, newComp);
+                    }
+                }
+                // 없으면 삭제
+                else {
+                    if (HasAttackCollision) {
+                        EntityManager.RemoveComponent<AttackCollisionComponent>(entity);
+                    }
+                }
+            })
            .Run();
     }
 }
