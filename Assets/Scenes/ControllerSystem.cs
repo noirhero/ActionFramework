@@ -24,7 +24,7 @@ public class ControllerSystem : JobComponentSystem {
         var deltaTime = UnityEngine.Time.fixedDeltaTime;
         var physWorld = _buildPhysSystem.PhysicsWorld;
 
-        inputDeps = JobHandle.CombineDependencies(inputDeps, _buildPhysSystem.FinalJobHandle);
+        inputDeps = JobHandle.CombineDependencies(inputDeps, _buildPhysSystem.GetOutputDependency());
         _jobHandle = Entities
             .ForEach((ref Translation translation, in Rotation rotation, in ControllerAuthoringComponent controller, in PhysicsCollider collider) => {
                 var newPos = translation.Value;
@@ -43,7 +43,7 @@ public class ControllerSystem : JobComponentSystem {
                 }
             })
             .Schedule(inputDeps);
-        _endPhysSystem.HandlesToWaitFor.Add(_jobHandle);
+        _endPhysSystem.AddInputDependency(_jobHandle);
 
         return _jobHandle;
     }
