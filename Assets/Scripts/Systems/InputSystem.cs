@@ -105,6 +105,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
     private InputActions _input;
     private Entity _inputEntity;
+    private Entity _controlEntity; // TODO : choice move control entity 
 
     protected override void OnCreate() {
         _input = new InputActions();
@@ -116,82 +117,39 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
     protected override void OnStartRunning() {
         _input.Enable();
+        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => { _controlEntity = controlEntity; });
     }
 
     protected override void OnStopRunning() {
         _input.Disable();
     }
 
+    private const float _force = 50.0f;
+    private const float _gravity = 3.0f;
+
     protected override void OnUpdate() {
         if (IsLocked()) {
             return;
         }
 
-        UpdateMove();
-        UpdateJump();
-        UpdateAttack();
+        var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
 
-        if (Utility.bShowInputLog) {
-            var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-            var cachedLog = InputState.ShowLog(inputDataComp);
-            if (false == string.IsNullOrEmpty(cachedLog)) {
-                Debug.Log("Current Input State :" + cachedLog);
-            }
-        }
-    }
-
-    private void UpdateMove() {
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-        if (0.0f != inputDataComp.dir) {
-            if (false == EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
-                EntityManager.AddComponentData(_inputEntity, new MoveComponent());
-            }
 
-            var cachedComp = EntityManager.GetComponentData<MoveComponent>(_inputEntity);
-            if ((0.0f > cachedComp.value.x && 0.0f > inputDataComp.dir) ||
-                (0.0f < cachedComp.value.x && 0.0f < inputDataComp.dir)) {
-                cachedComp.accumTime += Time.DeltaTime;
-            }
-            else {
-                cachedComp.accumTime = 0.0f;
-            }
+        //jump
+        if (InputState.HasState(inputDataComp, InputState.jump)) {
+            moveComp.value.y = _force;
 
-            cachedComp.value.x = inputDataComp.dir;
-            EntityManager.SetComponentData(_inputEntity, cachedComp);
-        }
-        else {
-            if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
-                EntityManager.RemoveComponent<MoveComponent>(_inputEntity);
-            }
-        }
-    }
-
-    // TODO : temporary constant -> status 
-    private const float force = 30.0f;
-
-    private void UpdateJump() {
-        var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-        if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
-            var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
-            jumpComp.accumTime += Time.DeltaTime;
-            EntityManager.SetComponentData(_inputEntity, jumpComp); 
-        }
-        else if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
-            var fallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
-            fallComp.accumTime += Time.DeltaTime;
-            EntityManager.SetComponentData(_inputEntity, fallComp);
-        }
-        else if (InputState.HasState(inputDataComp, InputState.jump)) {
-            EntityManager.AddComponentData(_inputEntity, new JumpComponent(force));
-            
             // should be once play
             inputDataComp.state ^= InputState.jump;
-            EntityManager.SetComponentData(_inputEntity, inputDataComp); 
+            EntityManager.SetComponentData(_inputEntity, inputDataComp);
         }
-    }
 
-    private void UpdateAttack() {
-        var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        moveComp.value.x = inputDataComp.dir;
+        moveComp.value.y -= _gravity;
+        EntityManager.SetComponentData(_controlEntity, moveComp);
+
+        // attack
         if (InputState.HasState(inputDataComp, InputState.attack)) {
             if (false == EntityManager.HasComponent<AttackComponent>(_inputEntity)) {
                 EntityManager.AddComponentData(_inputEntity, new AttackComponent());
@@ -204,6 +162,14 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         else {
             if (EntityManager.HasComponent<AttackComponent>(_inputEntity)) {
                 EntityManager.RemoveComponent<AttackComponent>(_inputEntity);
+            }
+        }
+
+        // log
+        if (Utility.bShowInputLog) {
+            var cachedLog = InputState.ShowLog(inputDataComp);
+            if (false == string.IsNullOrEmpty(cachedLog)) {
+                Debug.Log("Current Input State :" + cachedLog);
             }
         }
     }

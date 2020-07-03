@@ -32,15 +32,6 @@ public class CombatSystem : ComponentSystem {
         if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
             return true;
         }
-
-        if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
-            return true;
-        }
-
-        if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
-            return true;
-        }
-
         // TODO : other condition
         return false;
     }
@@ -60,12 +51,12 @@ public class CombatSystem : ComponentSystem {
             bIsStop = false;
         }
 
-        if (bIsStop) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Idle;
-            animComp.bLooping = true;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-        }
+        // if (bIsStop) {
+        //     var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+        //     animComp.setId = Utility.AnimState.Idle;
+        //     animComp.bLooping = true;
+        //     EntityManager.SetComponentData(_controlEntity, animComp);
+        // }
     }
 
     private bool TryAttack() {

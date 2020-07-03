@@ -5,7 +5,6 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
-using UnityEngine;
 
 public class MoveSystem : ComponentSystem {
     private Entity _inputEntity;
@@ -14,7 +13,7 @@ public class MoveSystem : ComponentSystem {
 
     protected override void OnStartRunning() {
         Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => { _inputEntity = inputEntity; });
-        Entities.ForEach((Entity controlEntity, ref InputComponent inputComp) => { _controlEntity = controlEntity; });
+        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => { _controlEntity = controlEntity; });
 
         _buildPhysSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
@@ -48,185 +47,96 @@ public class MoveSystem : ComponentSystem {
         return false;
     }
 
+    // TODO : temporary constant -> status 
+    private const float _speedX = 0.03f;
+    private const float _speedY = 0.1f;
+    private const float _skinWidth = 0.01f;
+
     protected override void OnUpdate() {
         if (IsLocked()) {
             return;
         }
 
-        bool bIsStop = true;
-        if (TryMove()) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Run;
-            animComp.bLooping = true;
-            EntityManager.SetComponentData(_controlEntity, animComp);
+        var translation = EntityManager.GetComponentData<Translation>(_controlEntity);
+        var calcPos = translation.Value;
+        calcPos.x = GetPositionX(calcPos);
+        calcPos.y = GetPositionY(calcPos);
 
-            bIsStop = false;
-        }
+        var dir = math.normalizesafe(calcPos - translation.Value);
+        translation.Value = calcPos;
+        EntityManager.SetComponentData(_controlEntity, translation);
 
-        if (TryJump()) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+        if (((0.0f < dir.y) && (0.01f < dir.y)) ||
+            (0.0f > dir.y) && (-0.01f > dir.y)) {
             animComp.setId = Utility.AnimState.Jump;
             animComp.bLooping = false;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-
-            bIsStop = false;
-        }
-        else if (TryFall()) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Jump;
-            animComp.bLooping = false;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-
-            bIsStop = false;
-        }
-
-        if (bIsStop) {
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Idle;
-            animComp.bLooping = true;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-        }
-    }
-
-    // TODO : temporary constant -> status 
-    private const float _speedX = 0.03f;
-    private const float _speedY = 0.2f;
-    private const float _gravity = 1.0f;
-
-    private bool TryMove() {
-        if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
-            var moveComp = EntityManager.GetComponentData<MoveComponent>(_inputEntity);
-
-            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            CollisionTest(ref transComp.Value, Vector3.right, moveComp.value.x);
-            EntityManager.SetComponentData(_controlEntity, transComp);
-
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.bFlipX = moveComp.value.x < 0.0f;
-            EntityManager.SetComponentData(_controlEntity, animComp);
-
-            if (Utility.bShowInputLog) {
-                Debug.Log("Move : " + moveComp.value.x + " (" + moveComp.accumTime + ")");
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool TryJump() {
-        if (EntityManager.HasComponent<JumpComponent>(_inputEntity)) {
-            var jumpComp = EntityManager.GetComponentData<JumpComponent>(_inputEntity);
-            jumpComp.force -= _gravity;
-            EntityManager.SetComponentData(_inputEntity, jumpComp);
-
-            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            var deltaY = jumpComp.force * Time.DeltaTime;
-            var bIsHit = CollisionTest(ref transComp.Value, Vector3.up, deltaY);
-            if (bIsHit) {
-                EntityManager.RemoveComponent<JumpComponent>(_inputEntity);
-            }
-            
-            bool bJumpDown = 0.0f > jumpComp.force;
-            if (bJumpDown || bIsHit) {
-                if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
-                    EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
-                }
-            }
-            else {
+            var bIsJump = 0.0f < dir.y;
+            if (bIsJump) {
                 if (false == EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
                     EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
                 }
             }
-            EntityManager.SetComponentData(_controlEntity, transComp);
-
-            if (Utility.bShowInputLog) {
-                Debug.Log("Jump force (" + jumpComp.force + ")");
-            }
-
-            return bIsHit == false;
-        }
-
-        return false;
-    }
-
-    private bool TryFall() {
-        if (EntityManager.HasComponent<FallComponent>(_inputEntity)) {
-            var fallComp = EntityManager.GetComponentData<FallComponent>(_inputEntity);
-            fallComp.force -= _gravity;
-            var deltaY = fallComp.force * Time.DeltaTime;
-            EntityManager.SetComponentData(_inputEntity, fallComp);
-
-            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            if (CollisionTest(ref transComp.Value, Vector3.up, deltaY)) {
-                EntityManager.RemoveComponent<FallComponent>(_inputEntity);
-            }
             else {
-                EntityManager.SetComponentData(_controlEntity, transComp);
+                if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
+                    EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
+                }
             }
-
-            if (Utility.bShowInputLog) {
-                Debug.Log("Fall force (" + fallComp.force + ")");
-            }
-
-            return true;
+        }
+        else if (((0.0f < dir.x) && (0.01f < dir.x)) ||
+                 (0.0f > dir.x) && (-0.01f > dir.x)) {
+            animComp.bFlipX = dir.x < 0.0f;
+            animComp.setId = Utility.AnimState.Run;
+            animComp.bLooping = true;
         }
         else {
-            var transComp = EntityManager.GetComponentData<Translation>(_controlEntity);
-            if (false == FallingTest(transComp.Value, Vector3.down, _skinWidth)) {
-                EntityManager.AddComponentData(_inputEntity, new FallComponent(0.0f));
-                return true;
-            }
+            animComp.setId = Utility.AnimState.Idle;
+            animComp.bLooping = true;
         }
 
-        return false;
+        EntityManager.SetComponentData(_controlEntity, animComp);
     }
 
-    private const float _skinWidth = 0.05f;
+    private float GetPositionX(float3 inPos) {
+        var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
+        var velocity = float3.zero;
+        velocity.x = moveComp.value.x;
+        velocity.x *= _speedX;
+        //Debug.Log("GetPosition----- X ---------");
+        CollisionTest(velocity, ref inPos);
+        return inPos.x;
+    }
 
-    private unsafe bool CollisionTest(ref float3 outTrans, float3 inDir, float inDelta) {
+    private float GetPositionY(float3 inPos) {
+        var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
+        var velocity = float3.zero;
+        velocity.y = moveComp.value.y;
+        velocity.y *= Time.fixedDeltaTime;
+        velocity.y *= _speedY;
+        //Debug.Log("GetPosition----- Y ---------");
+        CollisionTest(velocity, ref inPos);
+        return inPos.y;
+    }
+
+    private unsafe void CollisionTest(float3 inVelocity, ref float3 outPos) {
         var physWorld = _buildPhysSystem.PhysicsWorld;
         var collider = EntityManager.GetComponentData<PhysicsCollider>(_controlEntity);
         var rotation = EntityManager.GetComponentData<Rotation>(_controlEntity);
 
-        inDir.x *= _speedX;
-        inDir.y *= _speedY;
-        var delta = inDir * inDelta;
-        var newPos = outTrans + delta;
+        var startPos = outPos;
+        var newPos = outPos + inVelocity;
 
         var bIsHit = physWorld.CastCollider(new ColliderCastInput {
             Collider = collider.ColliderPtr,
             Orientation = rotation.Value,
-            Start = outTrans,
+            Start = startPos,
             End = newPos
         }, out var hit);
         if (bIsHit) {
-            var offset = hit.Fraction - _skinWidth;
-            newPos = math.lerp(outTrans, newPos, offset);
+            newPos = math.lerp(startPos, newPos, hit.Fraction);
+            newPos -= math.normalize(inVelocity) * _skinWidth;
         }
-        
-        outTrans = newPos;
-        return bIsHit;
-    }
 
-    private unsafe bool FallingTest(float3 inTrans, float3 inDir, float inDelta) {
-        var physWorld = _buildPhysSystem.PhysicsWorld;
-        var collider = EntityManager.GetComponentData<PhysicsCollider>(_controlEntity);
-        var rotation = EntityManager.GetComponentData<Rotation>(_controlEntity);
-
-        inDir.x *= _speedX;
-        inDir.y *= _speedY;
-        var delta = inDir * inDelta;
-        var newPos = inTrans + (delta);
-
-        var bIsHit = physWorld.CastCollider(new ColliderCastInput {
-            Collider = collider.ColliderPtr,
-            Orientation = rotation.Value,
-            Start = inTrans,
-            End = newPos
-        }, out var hit);
-
-        return bIsHit;
+        outPos = newPos;
     }
 }
