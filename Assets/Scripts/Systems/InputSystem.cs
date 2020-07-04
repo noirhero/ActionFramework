@@ -1,6 +1,7 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -125,7 +126,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     private const float _force = 50.0f;
-    private const float _gravity = 3.0f;
+    private const float _gravity = 2.0f;
 
     protected override void OnUpdate() {
         if (IsLocked()) {
@@ -133,20 +134,28 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         }
 
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
 
         //jump
-        if (InputState.HasState(inputDataComp, InputState.jump)) {
-            moveComp.value.y = _force;
+        if (EntityManager.HasComponent<JumpComponent>(_controlEntity)) {
+            if (0.0f > moveComp.value.y) {
+                EntityManager.RemoveComponent<JumpComponent>(_controlEntity);
+            }
+        }
+        else {
+            if (InputState.HasState(inputDataComp, InputState.jump)) {
+                moveComp.value.y = _force;
 
-            // should be once play
-            inputDataComp.state ^= InputState.jump;
-            EntityManager.SetComponentData(_inputEntity, inputDataComp);
+                // should be once play
+                inputDataComp.state ^= InputState.jump;
+                EntityManager.SetComponentData(_inputEntity, inputDataComp);
+
+                EntityManager.AddComponentData(_controlEntity, new JumpComponent());
+            }
         }
 
         moveComp.value.x = inputDataComp.dir;
-        moveComp.value.y -= _gravity;
+        moveComp.value.y = math.max(moveComp.value.y - _gravity, -20.0f);
         EntityManager.SetComponentData(_controlEntity, moveComp);
 
         // attack

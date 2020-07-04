@@ -51,6 +51,7 @@ public class MoveSystem : ComponentSystem {
     private const float _speedX = 0.03f;
     private const float _speedY = 0.1f;
     private const float _skinWidth = 0.01f;
+    private const float _stepOffset = 0.01f;
 
     protected override void OnUpdate() {
         if (IsLocked()) {
@@ -58,33 +59,20 @@ public class MoveSystem : ComponentSystem {
         }
 
         var translation = EntityManager.GetComponentData<Translation>(_controlEntity);
+        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+
         var calcPos = translation.Value;
         calcPos.x = GetPositionX(calcPos);
         calcPos.y = GetPositionY(calcPos);
 
-        var dir = math.normalizesafe(calcPos - translation.Value);
-        translation.Value = calcPos;
-        EntityManager.SetComponentData(_controlEntity, translation);
-
-        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-        if (((0.0f < dir.y) && (0.01f < dir.y)) ||
-            (0.0f > dir.y) && (-0.01f > dir.y)) {
+        var dir = calcPos - translation.Value;
+        if (((0.0f < dir.y) && (_stepOffset < dir.y)) ||
+            (0.0f > dir.y) && (-_stepOffset > dir.y)) {
             animComp.setId = Utility.AnimState.Jump;
             animComp.bLooping = false;
-            var bIsJump = 0.0f < dir.y;
-            if (bIsJump) {
-                if (false == EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
-                    EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
-                }
-            }
-            else {
-                if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
-                    EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
-                }
-            }
         }
-        else if (((0.0f < dir.x) && (0.01f < dir.x)) ||
-                 (0.0f > dir.x) && (-0.01f > dir.x)) {
+        else if (((0.0f < dir.x) && (_stepOffset < dir.x)) ||
+                 (0.0f > dir.x) && (-_stepOffset > dir.x)) {
             animComp.bFlipX = dir.x < 0.0f;
             animComp.setId = Utility.AnimState.Run;
             animComp.bLooping = true;
@@ -94,7 +82,21 @@ public class MoveSystem : ComponentSystem {
             animComp.bLooping = true;
         }
 
+        if (EntityManager.HasComponent<JumpComponent>(_controlEntity)) {
+            if (false == EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
+                EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
+            }
+        }
+        else {
+            if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
+                EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
+            }
+        }
+
         EntityManager.SetComponentData(_controlEntity, animComp);
+
+        translation.Value = calcPos;
+        EntityManager.SetComponentData(_controlEntity, translation);
     }
 
     private float GetPositionX(float3 inPos) {
@@ -134,7 +136,7 @@ public class MoveSystem : ComponentSystem {
         }, out var hit);
         if (bIsHit) {
             newPos = math.lerp(startPos, newPos, hit.Fraction);
-            newPos -= math.normalize(inVelocity) * _skinWidth;
+            newPos -= math.normalizesafe(inVelocity) * _skinWidth;
         }
 
         outPos = newPos;
