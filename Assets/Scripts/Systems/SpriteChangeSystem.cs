@@ -10,6 +10,10 @@ public class SpriteChangeSystem : SystemBase {
             .WithoutBurst()
             .WithStructuralChanges()
             .ForEach((Entity entity, SpriteRenderer renderer, in AnimationFrameComponent state) => {
+                if (false == EntityManager.HasComponent<SpritePresetComponent>(entity)) {
+                    return;
+                }
+
                 var preset = EntityManager.GetSharedComponentData<SpritePresetComponent>(entity);
                 if (false == preset.value.datas.TryGetValue(state.currentId, out var animData)) {
                     return;
