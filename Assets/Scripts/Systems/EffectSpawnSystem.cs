@@ -22,7 +22,7 @@ public class EffectSpawnSystem : SystemBase {
             .ForEach((in EffectGuidComponent effectGuid) => { effectGuidList.Add(effectGuid); })
             .Run();
 
-        var effectGuidArray = new NativeArray<EffectGuidComponent>(effectGuidList.Count, Allocator.Temp);
+        var effectGuidArray = new NativeArray<EffectGuidComponent>(effectGuidList.Count, Allocator.TempJob);
         for (int i = 0; i < effectGuidArray.Length; ++i) {
             effectGuidArray[i] = effectGuidList[i];
         }
@@ -32,37 +32,37 @@ public class EffectSpawnSystem : SystemBase {
         Entities
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, in EffectSpawnComponent spawnInfo) => {
-                foreach (var effectGuid in effectGuidArray) {
-                    if (spawnInfo.id != effectGuid.id) {
+                for(int i = 0; i < effectGuidArray.Length; ++i) {
+                    if (spawnInfo.id != effectGuidArray[i].id) {
                         continue;
                     }
-        
-                    var spawnEntity = cmdBuf.Instantiate(entityInQueryIndex, effectGuid.prefab);
-        
+
+                    var spawnEntity = cmdBuf.Instantiate(entityInQueryIndex, effectGuidArray[i].prefab);
+
                     cmdBuf.SetComponent(entityInQueryIndex, spawnEntity, new Translation {
                         Value = spawnInfo.pos
                     });
-        
+                    
                     if (false == quaternion.identity.Equals(spawnInfo.rot)) {
                         cmdBuf.SetComponent(entityInQueryIndex, spawnEntity, new Rotation {
                             Value = spawnInfo.rot
                         });
                     }
-        
+                    
                     if (false == oneUniformScale.Equals(spawnInfo.scale)) {
                         cmdBuf.SetComponent(entityInQueryIndex, spawnEntity, new NonUniformScale {
                             Value = spawnInfo.scale
                         });
                     }
-        
+
                     break;
                 }
-        
+
                 cmdBuf.DestroyEntity(entityInQueryIndex, entity);
             })
             .WithDeallocateOnJobCompletion(effectGuidArray)
             .ScheduleParallel();
-        
+
         _cmdBufSystem.AddJobHandleForProducer(Dependency);
     }
 }
