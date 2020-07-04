@@ -40,11 +40,16 @@ public class SpriteChangeSystem : SystemBase {
                 var attackCollision = animData.timelines[index].attackCollision;
                 var HasAttackCollision = EntityManager.HasComponent<AttackCollisionComponent>(entity);
 
+                if (renderer.flipX) {
+                    attackCollision.x *= -1.0f;
+                }
+
                 // 현재 프레임에 공격 판정 데이터 있음
                 if (0 < attackCollision.width + attackCollision.height) {
                     if (HasAttackCollision) {
                         var attackCollisionComp = EntityManager.GetComponentData<AttackCollisionComponent>(entity);
                         attackCollisionComp.bounds = attackCollision;
+                        EntityManager.SetComponentData<AttackCollisionComponent>(entity, attackCollisionComp);
                     }
                     else {
                         var newComp = new AttackCollisionComponent() { bounds = attackCollision, pixelsPerUnit = renderer.sprite.pixelsPerUnit };
@@ -52,10 +57,8 @@ public class SpriteChangeSystem : SystemBase {
                     }
                 }
                 // 없으면 삭제
-                else {
-                    if (HasAttackCollision) {
-                        EntityManager.RemoveComponent<AttackCollisionComponent>(entity);
-                    }
+                else if (HasAttackCollision) {
+                    EntityManager.RemoveComponent<AttackCollisionComponent>(entity);
                 }
             })
            .Run();

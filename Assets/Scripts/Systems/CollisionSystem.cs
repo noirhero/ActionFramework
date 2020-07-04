@@ -25,13 +25,14 @@ public class CollisionSystem : SystemBase {
                     entityScale.y = scaleComp.Value.c1.y;
                 }
                 entityScale *= (1 / attackCollisionComp.pixelsPerUnit);
+                var scaledPos = new Vector2(attackBounds.x * entityScale.x, attackBounds.y * entityScale.y);
                 var scaledSize = new Vector2(attackBounds.width * entityScale.x, attackBounds.height * entityScale.y);
 
                 // get position
                 var attackerTranslation = EntityManager.GetComponentData<Translation>(attacker);
-                var position = new Vector2(attackerTranslation.Value.x - (scaledSize.x * 0.5f), attackerTranslation.Value.y);
+                scaledPos += new Vector2(attackerTranslation.Value.x - (scaledSize.x * 0.5f), attackerTranslation.Value.y);
 
-                var attackCollision = new Rect(position, scaledSize);
+                var attackCollision = new Rect(scaledPos, scaledSize);
 
                 { // preview
                     Debug.DrawLine(new Vector3(attackCollision.xMin, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMin));   // top
