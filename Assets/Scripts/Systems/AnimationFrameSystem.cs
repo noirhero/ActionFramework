@@ -12,6 +12,12 @@ public class AnimationFrameSystem : JobComponentSystem {
                 if (state.setId != state.currentId) {
                     state.currentId = state.setId;
                     state.frame = 0.0f;
+                    state.bDone = false;
+                }
+
+                // default setting
+                if (state.bDone) {
+                    state.setId = Utility.AnimState.Idle;
                 }
 
                 state.frame += deltaTime;

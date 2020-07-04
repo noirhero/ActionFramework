@@ -41,35 +41,13 @@ public class CombatSystem : ComponentSystem {
             return;
         }
 
-        bool bIsStop = true;
-        if (TryAttack()) {
+        if (EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
+            EntityManager.RemoveComponent<AttackComponent>(_controlEntity);
+            
             var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
             animComp.setId = Utility.AnimState.Attack;
-            animComp.bLooping = true;
+            animComp.bLooping = false;
             EntityManager.SetComponentData(_controlEntity, animComp);
-
-            bIsStop = false;
         }
-
-        // if (bIsStop) {
-        //     var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-        //     animComp.setId = Utility.AnimState.Idle;
-        //     animComp.bLooping = true;
-        //     EntityManager.SetComponentData(_controlEntity, animComp);
-        // }
-    }
-
-    private bool TryAttack() {
-        if (EntityManager.HasComponent<AttackComponent>(_inputEntity)) {
-            var attackComp = EntityManager.GetComponentData<AttackComponent>(_inputEntity);
-
-            if (Utility.bShowInputLog) {
-                Debug.Log("Attack : " + attackComp.accumTime);
-            }
-
-            return true;
-        }
-
-        return false;
     }
 }

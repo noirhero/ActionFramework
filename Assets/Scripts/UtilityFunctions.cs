@@ -17,6 +17,21 @@ public static class Utility {
         Jump,
         Attack
     }
+
+    public static bool IsPossibleAnimChange(AnimState inState, in AnimationFrameComponent inAnimComp) {
+        // TODO : 조건 정리 필욘\요
+        switch (inState) {
+            case AnimState.Run:
+                return AnimState.Attack != inAnimComp.currentId;
+            case AnimState.Attack:
+                return AnimState.Idle == inAnimComp.currentId;
+            case AnimState.Jump:
+                return AnimState.Jump != inAnimComp.currentId;
+            case AnimState.Idle:
+                return inAnimComp.bDone;
+            default: return true;
+        }
+    }
 }
 
 public static class InputState {

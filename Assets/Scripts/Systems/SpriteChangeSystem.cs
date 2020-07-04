@@ -9,7 +9,7 @@ public class SpriteChangeSystem : SystemBase {
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
-            .ForEach((Entity entity, SpriteRenderer renderer, in AnimationFrameComponent state) => {
+            .ForEach((Entity entity, SpriteRenderer renderer, ref AnimationFrameComponent state) => {
                 var preset = EntityManager.GetSharedComponentData<SpritePresetComponent>(entity);
                 if (false == preset.value.datas.TryGetValue(state.currentId, out var animData)) {
                     return;
@@ -17,7 +17,12 @@ public class SpriteChangeSystem : SystemBase {
 
                 var frame = state.frame;
                 if (frame > animData.length) {
-                    frame = state.bLooping ? frame % animData.length : animData.length;
+                    if (state.bLooping) {
+                        frame %= animData.length;
+                    }
+                    else {
+                        state.bDone = true;
+                    }
                 }
 
                 var index = 0;

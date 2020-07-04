@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
+using UnityEngine;
 
 public class MoveSystem : ComponentSystem {
     private Entity _inputEntity;
@@ -59,12 +60,11 @@ public class MoveSystem : ComponentSystem {
         }
 
         var translation = EntityManager.GetComponentData<Translation>(_controlEntity);
-        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-
         var calcPos = translation.Value;
         calcPos.x = GetPositionX(calcPos);
         calcPos.y = GetPositionY(calcPos);
 
+        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
         var dir = calcPos - translation.Value;
         if (((0.0f < dir.y) && (_stepOffset < dir.y)) ||
             (0.0f > dir.y) && (-_stepOffset > dir.y)) {
@@ -78,45 +78,40 @@ public class MoveSystem : ComponentSystem {
             animComp.bLooping = true;
         }
         else {
-            animComp.setId = Utility.AnimState.Idle;
-            animComp.bLooping = true;
+            if(animComp.currentId == Utility.AnimState.Jump ||
+               animComp.currentId == Utility.AnimState.Run)
+            animComp.bDone = true;
         }
-
-        if (EntityManager.HasComponent<JumpComponent>(_controlEntity)) {
-            if (false == EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
-                EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
-            }
-        }
-        else {
-            if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
-                EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
-            }
-        }
-
         EntityManager.SetComponentData(_controlEntity, animComp);
-
+        
         translation.Value = calcPos;
         EntityManager.SetComponentData(_controlEntity, translation);
     }
 
     private float GetPositionX(float3 inPos) {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-        var velocity = float3.zero;
-        velocity.x = moveComp.value.x;
-        velocity.x *= _speedX;
-        //Debug.Log("GetPosition----- X ---------");
-        CollisionTest(velocity, ref inPos);
+        if (0.0f != moveComp.value.x) {
+            var velocity = float3.zero;
+            velocity.x = moveComp.value.x;
+            velocity.x *= _speedX;
+            //Debug.Log("GetPosition----- X ---------");
+            CollisionTest(velocity, ref inPos);
+        }
+
         return inPos.x;
     }
 
     private float GetPositionY(float3 inPos) {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-        var velocity = float3.zero;
-        velocity.y = moveComp.value.y;
-        velocity.y *= Time.fixedDeltaTime;
-        velocity.y *= _speedY;
-        //Debug.Log("GetPosition----- Y ---------");
-        CollisionTest(velocity, ref inPos);
+        if (0.0f != moveComp.value.y) {
+            var velocity = float3.zero;
+            velocity.y = moveComp.value.y;
+            velocity.y *= Time.fixedDeltaTime;
+            velocity.y *= _speedY;
+            //Debug.Log("GetPosition----- Y ---------");
+            CollisionTest(velocity, ref inPos);
+        }
+
         return inPos.y;
     }
 
