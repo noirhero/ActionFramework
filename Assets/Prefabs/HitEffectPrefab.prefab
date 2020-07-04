@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9222191435420404148
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2968002852138953756}
+  - component: {fileID: 5709752712121025069}
+  - component: {fileID: 4278420042763021664}
+  - component: {fileID: 5132228956029020331}
+  m_Layer: 0
+  m_Name: HitPrefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2968002852138953756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222191435420404148}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5709752712121025069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222191435420404148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
+--- !u!114 &4278420042763021664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222191435420404148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e8071e72b8c8646b6e9545b682ae5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guidSource: Assets/Resources/Effects/Hit.ase
+--- !u!114 &5132228956029020331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222191435420404148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d88420319e69943a5edbe0b29c67a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: -8762088029899543968, guid: 1a78fb606de273343a2828844a8e4f73, type: 3}
+  datas:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 01000000
+    _keys: 01000000
+    _values:
+    - length: 0.50000006
+      timelines:
+      - start: 0
+        end: 0.05
+        sprite: {fileID: -8713610838554504592, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.05
+        end: 0.1
+        sprite: {fileID: -5380467712287798985, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.1
+        end: 0.15
+        sprite: {fileID: -8450504970380036380, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.15
+        end: 0.2
+        sprite: {fileID: 5631605738800074998, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.2
+        end: 0.25
+        sprite: {fileID: 7723270754375653938, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.25
+        end: 0.3
+        sprite: {fileID: 2901342632129909344, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.3
+        end: 0.35000002
+        sprite: {fileID: -2885347995968238646, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.35000002
+        end: 0.40000004
+        sprite: {fileID: 354180065179308364, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.40000004
+        end: 0.45000005
+        sprite: {fileID: -3436422937941370134, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+      - start: 0.45000005
+        end: 0.50000006
+        sprite: {fileID: -2860437518901574422, guid: 1a78fb606de273343a2828844a8e4f73,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
