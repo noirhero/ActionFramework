@@ -32,7 +32,7 @@ public class EffectSpawnSystem : SystemBase {
         Entities
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, in EffectSpawnComponent spawnInfo) => {
-                for(int i = 0; i < effectGuidArray.Length; ++i) {
+                for (int i = 0; i < effectGuidArray.Length; ++i) {
                     if (spawnInfo.id != effectGuidArray[i].id) {
                         continue;
                     }
@@ -42,15 +42,15 @@ public class EffectSpawnSystem : SystemBase {
                     cmdBuf.SetComponent(entityInQueryIndex, spawnEntity, new Translation {
                         Value = spawnInfo.pos
                     });
-                    
+
                     if (false == quaternion.identity.Equals(spawnInfo.rot)) {
-                        cmdBuf.SetComponent(entityInQueryIndex, spawnEntity, new Rotation {
+                        cmdBuf.AddComponent(entityInQueryIndex, spawnEntity, new Rotation {
                             Value = spawnInfo.rot
                         });
                     }
-                    
+
                     if (false == oneUniformScale.Equals(spawnInfo.scale)) {
-                        cmdBuf.SetComponent(entityInQueryIndex, spawnEntity, new NonUniformScale {
+                        cmdBuf.AddComponent(entityInQueryIndex, spawnEntity, new NonUniformScale {
                             Value = spawnInfo.scale
                         });
                     }

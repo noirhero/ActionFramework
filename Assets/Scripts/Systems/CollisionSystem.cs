@@ -64,6 +64,13 @@ public class CollisionSystem : SystemBase {
                         // 충돌 감지!
                         if (attackCollision.Overlaps(targetCollision)) {
                             Debug.Log("Overlaps! '-^");
+
+                            var effectSpawnEntity = EntityManager.CreateEntity();
+                            EntityManager.AddComponentData(effectSpawnEntity, new EffectSpawnComponent {
+                                pos = targetTranslation.Value,
+                                rot = quaternion.identity,
+                                scale = new float3(2.0f)
+                            });
                         }
 
                         { // preview
