@@ -60,40 +60,41 @@ public class MoveSystem : ComponentSystem {
 
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
         var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-        
+
         // run
         var bMovingX = moveComp.value.x != 0.0f;
         var bTransX = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
                       (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
         if (bMovingX || bTransX) {
-            animComp.bFlipX = bMovingX? moveComp.value.x < 0.0f : animComp.bFlipX;
+            animComp.bFlipX = bMovingX ? moveComp.value.x < 0.0f : animComp.bFlipX;
             if (false == AnimUtility.HasState(animComp, AnimUtility.run)) {
-                animComp.state |= AnimUtility.run;   
+                animComp.state |= AnimUtility.run;
             }
         }
         else {
             if (AnimUtility.HasState(animComp, AnimUtility.run)) {
-                animComp.state ^= AnimUtility.run;   
+                animComp.state ^= AnimUtility.run;
             }
         }
-        
+
         // jump
         var bMovingY = moveComp.value.y != Utility.terminalVelocity;
-        var bTransY = ((0.0f < dir.y) && (Utility.stepOffset < dir.y)) || 
+        var bTransY = ((0.0f < dir.y) && (Utility.stepOffset < dir.y)) ||
                       (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
-         if (bTransY || bMovingY) {
+        if (bTransY || bMovingY) {
             if (false == AnimUtility.HasState(animComp, AnimUtility.jump)) {
-                animComp.state |= AnimUtility.jump;   
+                animComp.state |= AnimUtility.jump;
             }
         }
         else {
             animComp.state |= AnimUtility.jump;
             if (AnimUtility.HasState(animComp, AnimUtility.jump)) {
-                animComp.state ^= AnimUtility.jump;   
+                animComp.state ^= AnimUtility.jump;
             }
         }
+
         EntityManager.SetComponentData(_controlEntity, animComp);
-        
+
         translation.Value = calcPos;
         EntityManager.SetComponentData(_controlEntity, translation);
     }

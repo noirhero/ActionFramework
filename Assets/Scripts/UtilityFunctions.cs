@@ -9,7 +9,7 @@ public static class Utility {
     }
 
     public static int INDEX_NONE = -1;
-    
+
     // TODO : temporary constant -> status 
     public const float force = 50.0f;
     public const float gravity = 2.0f;
@@ -28,6 +28,7 @@ public static class AnimUtility {
         Attack,
         Hit,
     }
+
     public const int run = 0x1;
     public const int jump = 0x2;
     public const int attack = 0x4;
@@ -51,12 +52,15 @@ public static class AnimUtility {
         if (HasState(inAnimComp, jump)) {
             return AnimKey.Jump;
         }
+
         if (HasState(inAnimComp, attack)) {
             return AnimKey.Attack;
         }
+
         if (HasState(inAnimComp, run)) {
             return AnimKey.Run;
         }
+
         if (HasState(inAnimComp, hit)) {
             return AnimKey.Hit;
         }
@@ -66,29 +70,29 @@ public static class AnimUtility {
 
     public static bool IsChangeAnim(AnimationFrameComponent inAnimComp, int inState) {
         // 조건 정리
-        if (0 != (AnimUtility.run & inState)) {
-            if (AnimUtility.AnimKey.Attack == inAnimComp.currentAnim ||
-                AnimUtility.AnimKey.Hit == inAnimComp.currentAnim) {
+        if (0 != (run & inState)) {
+            if (AnimKey.Attack == inAnimComp.currentAnim ||
+                AnimKey.Hit == inAnimComp.currentAnim) {
                 return false;
             }
         }
         else {
-            if (AnimUtility.AnimKey.Attack == inAnimComp.currentAnim ||
-                AnimUtility.AnimKey.Hit == inAnimComp.currentAnim ||
-                AnimUtility.AnimKey.Jump == inAnimComp.currentAnim) {
+            if (AnimKey.Attack == inAnimComp.currentAnim ||
+                AnimKey.Hit == inAnimComp.currentAnim ||
+                AnimKey.Jump == inAnimComp.currentAnim) {
                 return false;
             }
         }
 
         return true;
     }
-    
+
     public static string ShowLog(AnimationFrameComponent animComp) {
         var cachedStr = string.Empty;
         if (0 != (run & animComp.state)) {
             cachedStr += " run";
         }
-        
+
         if (0 != (jump & animComp.state)) {
             cachedStr += " jump";
         }

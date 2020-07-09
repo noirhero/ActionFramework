@@ -31,6 +31,7 @@ public class CombatSystem : ComponentSystem {
         if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
             return true;
         }
+
         // TODO : other condition
         return false;
     }
@@ -45,16 +46,17 @@ public class CombatSystem : ComponentSystem {
             if (1.0f <= animComp.frameRate) {
                 EntityManager.RemoveComponent<AttackComponent>(_controlEntity);
             }
-            
+
             if (false == AnimUtility.HasState(animComp, AnimUtility.attack)) {
-                animComp.state |= AnimUtility.attack;   
+                animComp.state |= AnimUtility.attack;
             }
         }
         else {
             if (AnimUtility.HasState(animComp, AnimUtility.attack)) {
-                animComp.state ^= AnimUtility.attack;   
+                animComp.state ^= AnimUtility.attack;
             }
         }
+
         EntityManager.SetComponentData(_controlEntity, animComp);
     }
 }

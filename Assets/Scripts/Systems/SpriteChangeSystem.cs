@@ -6,9 +6,9 @@ using UnityEngine;
 public class SpriteChangeSystem : SystemBase {
     protected override void OnUpdate() {
         Entities
-            .WithoutBurst()
-            .WithStructuralChanges()
-            .ForEach((Entity entity, SpriteRenderer renderer, ref AnimationFrameComponent animComp) => {
+           .WithoutBurst()
+           .WithStructuralChanges()
+           .ForEach((Entity entity, SpriteRenderer renderer, ref AnimationFrameComponent animComp) => {
                 if (false == EntityManager.HasComponent<SpritePresetComponent>(entity)) {
                     return;
                 }
@@ -24,6 +24,7 @@ public class SpriteChangeSystem : SystemBase {
                         frame %= animData.length;
                     }
                 }
+
                 animComp.frameRate = frame / animData.length;
 
                 var index = 0;
@@ -58,7 +59,8 @@ public class SpriteChangeSystem : SystemBase {
                         EntityManager.SetComponentData<AttackCollisionComponent>(entity, attackCollisionComp);
                     }
                     else {
-                        var newComp = new AttackCollisionComponent() { bounds = attackCollision, pixelsPerUnit = renderer.sprite.pixelsPerUnit };
+                        var newComp = new AttackCollisionComponent()
+                            {bounds = attackCollision, pixelsPerUnit = renderer.sprite.pixelsPerUnit};
                         EntityManager.AddComponentData<AttackCollisionComponent>(entity, newComp);
                     }
                 }

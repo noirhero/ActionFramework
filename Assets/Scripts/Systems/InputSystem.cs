@@ -2,7 +2,6 @@
 
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputSystem : ComponentSystem, InputActions.ICharacterControlActions {
@@ -137,14 +136,13 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-        
+
         // run
         moveComp.value.x = AnimUtility.IsChangeAnim(animComp, AnimUtility.run) ? inputDataComp.dir : 0.0f;
 
         // jump
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.jump) &&
             InputUtility.HasState(inputDataComp, InputUtility.jump)) {
-            
             moveComp.value.y = Utility.force;
 
             // should be once play
@@ -158,7 +156,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
                 EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
             }
         }
-        
+
         // falling
         if (0.0f > moveComp.value.y) {
             if (EntityManager.HasComponent<JumpComponent>(_controlEntity)) {
@@ -176,11 +174,11 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             // should be once play
             inputDataComp.state ^= InputUtility.attack;
         }
-        
+
         // gravity
         moveComp.value.y = math.max(moveComp.value.y - Utility.gravity, Utility.terminalVelocity);
         EntityManager.SetComponentData(_controlEntity, moveComp);
-        
+
         EntityManager.SetComponentData(_inputEntity, inputDataComp);
     }
 }
