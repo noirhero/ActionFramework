@@ -67,13 +67,13 @@ public class MoveSystem : ComponentSystem {
                       (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
         if (bMovingX || bTransX) {
             animComp.bFlipX = bMovingX? moveComp.value.x < 0.0f : animComp.bFlipX;
-            if (false == AnimState.HasState(animComp, AnimState.run)) {
-                animComp.state |= AnimState.run;   
+            if (false == AnimUtility.HasState(animComp, AnimUtility.run)) {
+                animComp.state |= AnimUtility.run;   
             }
         }
         else {
-            if (AnimState.HasState(animComp, AnimState.run)) {
-                animComp.state ^= AnimState.run;   
+            if (AnimUtility.HasState(animComp, AnimUtility.run)) {
+                animComp.state ^= AnimUtility.run;   
             }
         }
         
@@ -82,14 +82,14 @@ public class MoveSystem : ComponentSystem {
         var bTransY = ((0.0f < dir.y) && (Utility.stepOffset < dir.y)) || 
                       (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
          if (bTransY || bMovingY) {
-            if (false == AnimState.HasState(animComp, AnimState.jump)) {
-                animComp.state |= AnimState.jump;   
+            if (false == AnimUtility.HasState(animComp, AnimUtility.jump)) {
+                animComp.state |= AnimUtility.jump;   
             }
         }
         else {
-            animComp.state |= AnimState.jump;
-            if (AnimState.HasState(animComp, AnimState.jump)) {
-                animComp.state ^= AnimState.jump;   
+            animComp.state |= AnimUtility.jump;
+            if (AnimUtility.HasState(animComp, AnimUtility.jump)) {
+                animComp.state ^= AnimUtility.jump;   
             }
         }
         EntityManager.SetComponentData(_controlEntity, animComp);

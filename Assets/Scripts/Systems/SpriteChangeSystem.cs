@@ -20,10 +20,11 @@ public class SpriteChangeSystem : SystemBase {
 
                 var frame = animComp.frame;
                 if (frame > animData.length) {
-                    if (AnimState.IsLooping(animComp)) {
+                    if (AnimUtility.IsLooping(animComp)) {
                         frame %= animData.length;
                     }
                 }
+                animComp.frameRate = frame / animData.length;
 
                 var index = 0;
                 for (var i = 0; i < animData.timelines.Count; ++i) {

@@ -12,7 +12,7 @@ public class TAPCustomEditor : EditorWindow {
     private GUIContent[] _locationContents = new GUIContent[] { new GUIContent("X"), new GUIContent("Y") };
     private GUIContent[] _sizeContents = new GUIContent[] { new GUIContent("Width"), new GUIContent("Height") };
     private Texture2D _currentSpriteTexture = null;
-    private AnimState.AnimKey _currentKey;
+    private AnimUtility.AnimKey _currentKey;
     private int _currentTimelineIndex = -1;
 
 

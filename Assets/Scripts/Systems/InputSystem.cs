@@ -26,12 +26,12 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (context.started) {
-            cachedComp.state |= InputState.left;
+            cachedComp.state |= InputUtility.left;
             cachedComp.dir += -1.0f;
         }
 
-        if (InputState.HasState(cachedComp, InputState.left) && context.canceled) {
-            cachedComp.state ^= InputState.left;
+        if (InputUtility.HasState(cachedComp, InputUtility.left) && context.canceled) {
+            cachedComp.state ^= InputUtility.left;
             cachedComp.dir += 1.0f;
         }
 
@@ -45,12 +45,12 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (context.started) {
-            cachedComp.state |= InputState.right;
+            cachedComp.state |= InputUtility.right;
             cachedComp.dir += 1.0f;
         }
 
-        if (InputState.HasState(cachedComp, InputState.right) && context.canceled) {
-            cachedComp.state ^= InputState.right;
+        if (InputUtility.HasState(cachedComp, InputUtility.right) && context.canceled) {
+            cachedComp.state ^= InputUtility.right;
             cachedComp.dir += -1.0f;
         }
 
@@ -64,11 +64,11 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (context.started) {
-            cachedComp.state |= InputState.jump;
+            cachedComp.state |= InputUtility.jump;
         }
 
-        if (InputState.HasState(cachedComp, InputState.jump) && context.canceled) {
-            cachedComp.state ^= InputState.jump;
+        if (InputUtility.HasState(cachedComp, InputUtility.jump) && context.canceled) {
+            cachedComp.state ^= InputUtility.jump;
         }
 
         EntityManager.SetComponentData(_inputEntity, cachedComp);
@@ -81,11 +81,11 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         if (context.started) {
-            cachedComp.state |= InputState.attack;
+            cachedComp.state |= InputUtility.attack;
         }
 
-        if (InputState.HasState(cachedComp, InputState.attack) && context.canceled) {
-            cachedComp.state ^= InputState.attack;
+        if (InputUtility.HasState(cachedComp, InputUtility.attack) && context.canceled) {
+            cachedComp.state ^= InputUtility.attack;
         }
 
         EntityManager.SetComponentData(_inputEntity, cachedComp);
@@ -99,10 +99,10 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         cachedComp.dir = context.ReadValue<float>();
         if (0.0f != cachedComp.dir) {
-            cachedComp.state |= InputState.axis;
+            cachedComp.state |= InputUtility.axis;
         }
         else {
-            cachedComp.state ^= InputState.axis;
+            cachedComp.state ^= InputUtility.axis;
         }
 
         EntityManager.SetComponentData(_inputEntity, cachedComp);
@@ -134,20 +134,21 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-
+        var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+        
         // run
-        moveComp.value.x = inputDataComp.dir;
+        moveComp.value.x = AnimUtility.IsChangeAnim(animComp, AnimUtility.run) ? inputDataComp.dir : 0.0f;
 
         // jump
-        if (InputState.HasState(inputDataComp, InputState.jump)) {
+        if (AnimUtility.IsChangeAnim(animComp, AnimUtility.jump) &&
+            InputUtility.HasState(inputDataComp, InputUtility.jump)) {
             
             moveComp.value.y = Utility.force;
 
             // should be once play
-            inputDataComp.state ^= InputState.jump;
-            EntityManager.SetComponentData(_inputEntity, inputDataComp);
+            inputDataComp.state ^= InputUtility.jump;
 
             EntityManager.AddComponentData(_controlEntity, new JumpComponent());
             EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
@@ -165,27 +166,21 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             }
         }
 
-        // gravity
-        moveComp.value.y = math.max(moveComp.value.y - Utility.gravity, Utility.terminalVelocity);
-        EntityManager.SetComponentData(_controlEntity, moveComp);
-
         // attack
-        if (InputState.HasState(inputDataComp, InputState.attack)) {
+        if (AnimUtility.IsChangeAnim(animComp, AnimUtility.attack) &&
+            InputUtility.HasState(inputDataComp, InputUtility.attack)) {
             if (false == EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
                 EntityManager.AddComponentData(_controlEntity, new AttackComponent());
             }
 
             // should be once play
-            inputDataComp.state ^= InputState.attack;
-            EntityManager.SetComponentData(_inputEntity, inputDataComp);
+            inputDataComp.state ^= InputUtility.attack;
         }
-
-        // log
-        if (Utility.bShowInputLog) {
-            var cachedLog = InputState.ShowLog(inputDataComp);
-            if (false == string.IsNullOrEmpty(cachedLog)) {
-                Debug.Log("Current Input State :" + cachedLog);
-            }
-        }
+        
+        // gravity
+        moveComp.value.y = math.max(moveComp.value.y - Utility.gravity, Utility.terminalVelocity);
+        EntityManager.SetComponentData(_controlEntity, moveComp);
+        
+        EntityManager.SetComponentData(_inputEntity, inputDataComp);
     }
 }

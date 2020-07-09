@@ -8,7 +8,6 @@ public static class Utility {
         return path.Sum(Convert.ToInt32);
     }
 
-    public static bool bShowInputLog = false;
     public static int INDEX_NONE = -1;
     
     // TODO : temporary constant -> status 
@@ -21,7 +20,7 @@ public static class Utility {
     public const float stepOffset = 0.01f;
 }
 
-public static class AnimState {
+public static class AnimUtility {
     public enum AnimKey {
         Idle,
         Run,
@@ -38,23 +37,6 @@ public static class AnimState {
         return 0 != (inAnimComp.state & insState);
     }
 
-    public static AnimKey GetAnimKey(AnimationFrameComponent inAnimComp) {
-        if (HasState(inAnimComp, AnimState.jump)) {
-            return AnimKey.Jump;
-        }
-        if (HasState(inAnimComp, AnimState.attack)) {
-            return AnimKey.Attack;
-        }
-        if (HasState(inAnimComp, AnimState.run)) {
-            return AnimKey.Run;
-        }
-        if (HasState(inAnimComp, AnimState.hit)) {
-            return AnimKey.Hit;
-        }
-
-        return AnimKey.Idle;
-    }
-
     public static bool IsLooping(AnimationFrameComponent inAnimComp) {
         if (inAnimComp.currentAnim == AnimKey.Run ||
             inAnimComp.currentAnim == AnimKey.Idle) {
@@ -62,6 +44,43 @@ public static class AnimState {
         }
 
         return false;
+    }
+
+    public static AnimKey GetAnimKey(AnimationFrameComponent inAnimComp) {
+        // 우선 순위별
+        if (HasState(inAnimComp, jump)) {
+            return AnimKey.Jump;
+        }
+        if (HasState(inAnimComp, attack)) {
+            return AnimKey.Attack;
+        }
+        if (HasState(inAnimComp, run)) {
+            return AnimKey.Run;
+        }
+        if (HasState(inAnimComp, hit)) {
+            return AnimKey.Hit;
+        }
+
+        return AnimKey.Idle;
+    }
+
+    public static bool IsChangeAnim(AnimationFrameComponent inAnimComp, int inState) {
+        // 조건 정리
+        if (0 != (AnimUtility.run & inState)) {
+            if (AnimUtility.AnimKey.Attack == inAnimComp.currentAnim ||
+                AnimUtility.AnimKey.Hit == inAnimComp.currentAnim) {
+                return false;
+            }
+        }
+        else {
+            if (AnimUtility.AnimKey.Attack == inAnimComp.currentAnim ||
+                AnimUtility.AnimKey.Hit == inAnimComp.currentAnim ||
+                AnimUtility.AnimKey.Jump == inAnimComp.currentAnim) {
+                return false;
+            }
+        }
+
+        return true;
     }
     
     public static string ShowLog(AnimationFrameComponent animComp) {
@@ -86,7 +105,7 @@ public static class AnimState {
     }
 }
 
-public static class InputState {
+public static class InputUtility {
     public const int left = 0x1;
     public const int right = 0x2;
     public const int jump = 0x4;

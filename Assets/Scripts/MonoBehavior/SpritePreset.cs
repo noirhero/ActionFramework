@@ -20,7 +20,7 @@ public class AnimData {
 }
 
 [Serializable]
-public class AnimDatas : SerializableDictionaryBase<AnimState.AnimKey, AnimData> {
+public class AnimDatas : SerializableDictionaryBase<AnimUtility.AnimKey, AnimData> {
 }
 
 public class SpritePreset : MonoBehaviour {

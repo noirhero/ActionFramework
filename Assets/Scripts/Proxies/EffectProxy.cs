@@ -13,7 +13,7 @@ public class EffectProxy : MonoBehaviour, IConvertGameObjectToEntity {
         });
 
         dstManager.AddComponentData(entity,  new AnimationFrameComponent {
-            state = AnimState.run,
+            state = AnimUtility.run,
         });
     }
 }

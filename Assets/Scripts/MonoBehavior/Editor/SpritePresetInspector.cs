@@ -47,7 +47,7 @@ public class SpritePresetInspector : Editor {
 
             if (false == Enum.TryParse(
                 clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1),
-                out AnimState.AnimKey animID)) {
+                out AnimUtility.AnimKey animID)) {
                 Debug.LogError("!!!! Check Anim Name");
             }
             else {

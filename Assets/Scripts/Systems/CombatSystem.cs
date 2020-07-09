@@ -42,15 +42,17 @@ public class CombatSystem : ComponentSystem {
 
         var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
         if (EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
-            EntityManager.RemoveComponent<AttackComponent>(_controlEntity);
+            if (1.0f <= animComp.frameRate) {
+                EntityManager.RemoveComponent<AttackComponent>(_controlEntity);
+            }
             
-            if (false == AnimState.HasState(animComp, AnimState.attack)) {
-                animComp.state |= AnimState.attack;   
+            if (false == AnimUtility.HasState(animComp, AnimUtility.attack)) {
+                animComp.state |= AnimUtility.attack;   
             }
         }
         else {
-            if (AnimState.HasState(animComp, AnimState.attack)) {
-                animComp.state ^= AnimState.attack;   
+            if (AnimUtility.HasState(animComp, AnimUtility.attack)) {
+                animComp.state ^= AnimUtility.attack;   
             }
         }
         EntityManager.SetComponentData(_controlEntity, animComp);
