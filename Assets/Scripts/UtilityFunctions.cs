@@ -38,7 +38,7 @@ public static class AnimState {
         return 0 != (inAnimComp.state & insState);
     }
 
-    public static AnimKey GetAnimID(AnimationFrameComponent inAnimComp) {
+    public static AnimKey GetAnimKey(AnimationFrameComponent inAnimComp) {
         if (HasState(inAnimComp, AnimState.jump)) {
             return AnimKey.Jump;
         }

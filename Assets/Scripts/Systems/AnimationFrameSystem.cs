@@ -9,7 +9,7 @@ public class AnimationFrameSystem : JobComponentSystem {
         return Entities
               .WithBurst()
               .ForEach((ref AnimationFrameComponent animComp) => {
-                   var animID = AnimState.GetAnimID(animComp);
+                   var animID = AnimState.GetAnimKey(animComp);
                    if (animComp.currentAnim != animID) {
                        animComp.currentAnim = animID;
                        animComp.frame = 0.0f;
