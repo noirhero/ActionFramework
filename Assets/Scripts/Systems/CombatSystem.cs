@@ -1,7 +1,6 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
-using UnityEngine;
 
 public class CombatSystem : ComponentSystem {
     private Entity _inputEntity;
@@ -41,13 +40,19 @@ public class CombatSystem : ComponentSystem {
             return;
         }
 
+        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
         if (EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
             EntityManager.RemoveComponent<AttackComponent>(_controlEntity);
             
-            var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
-            animComp.setId = Utility.AnimState.Attack;
-            animComp.bLooping = false;
-            EntityManager.SetComponentData(_controlEntity, animComp);
+            if (false == AnimState.HasState(animComp, AnimState.attack)) {
+                animComp.state |= AnimState.attack;   
+            }
         }
+        else {
+            if (AnimState.HasState(animComp, AnimState.attack)) {
+                animComp.state ^= AnimState.attack;   
+            }
+        }
+        EntityManager.SetComponentData(_controlEntity, animComp);
     }
 }

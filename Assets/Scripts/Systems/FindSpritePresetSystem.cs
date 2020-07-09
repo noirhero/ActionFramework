@@ -27,12 +27,7 @@ public class FindSpritePresetSystem : SystemBase {
                 EntityManager.AddSharedComponentData(entity, preset);
 
                 if (false == EntityManager.HasComponent<AnimationFrameComponent>(entity)) {
-                    EntityManager.AddComponentData(entity, new AnimationFrameComponent() {
-                        setId = (int)Utility.AnimState.Idle,
-                        currentId = (int)Utility.AnimState.Idle,
-                        bLooping = true,
-                        bDone = false
-                    });
+                    EntityManager.AddComponentData(entity, new AnimationFrameComponent());
                 }
             })
             .Run();

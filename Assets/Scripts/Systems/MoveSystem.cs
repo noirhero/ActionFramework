@@ -5,7 +5,6 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
-using UnityEngine;
 
 public class MoveSystem : ComponentSystem {
     private Entity _inputEntity;
@@ -48,12 +47,6 @@ public class MoveSystem : ComponentSystem {
         return false;
     }
 
-    // TODO : temporary constant -> status 
-    private const float _speedX = 0.03f;
-    private const float _speedY = 0.1f;
-    private const float _skinWidth = 0.01f;
-    private const float _stepOffset = 0.01f;
-
     protected override void OnUpdate() {
         if (IsLocked()) {
             return;
@@ -63,24 +56,41 @@ public class MoveSystem : ComponentSystem {
         var calcPos = translation.Value;
         calcPos.x = GetPositionX(calcPos);
         calcPos.y = GetPositionY(calcPos);
-
-        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
         var dir = calcPos - translation.Value;
-        if (((0.0f < dir.y) && (_stepOffset < dir.y)) ||
-            (0.0f > dir.y) && (-_stepOffset > dir.y)) {
-            animComp.setId = Utility.AnimState.Jump;
-            animComp.bLooping = false;
-        }
-        else if (((0.0f < dir.x) && (_stepOffset < dir.x)) ||
-                 (0.0f > dir.x) && (-_stepOffset > dir.x)) {
-            animComp.bFlipX = dir.x < 0.0f;
-            animComp.setId = Utility.AnimState.Run;
-            animComp.bLooping = true;
+
+        var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
+        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+        
+        // run
+        var bMovingX = moveComp.value.x != 0.0f;
+        var bTransX = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
+                      (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
+        if (bMovingX || bTransX) {
+            animComp.bFlipX = bMovingX? moveComp.value.x < 0.0f : animComp.bFlipX;
+            if (false == AnimState.HasState(animComp, AnimState.run)) {
+                animComp.state |= AnimState.run;   
+            }
         }
         else {
-            if(animComp.currentId == Utility.AnimState.Jump ||
-               animComp.currentId == Utility.AnimState.Run)
-            animComp.bDone = true;
+            if (AnimState.HasState(animComp, AnimState.run)) {
+                animComp.state ^= AnimState.run;   
+            }
+        }
+        
+        // jump
+        var bMovingY = moveComp.value.y != Utility.terminalVelocity;
+        var bTransY = ((0.0f < dir.y) && (Utility.stepOffset < dir.y)) || 
+                      (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
+         if (bTransY || bMovingY) {
+            if (false == AnimState.HasState(animComp, AnimState.jump)) {
+                animComp.state |= AnimState.jump;   
+            }
+        }
+        else {
+            animComp.state |= AnimState.jump;
+            if (AnimState.HasState(animComp, AnimState.jump)) {
+                animComp.state ^= AnimState.jump;   
+            }
         }
         EntityManager.SetComponentData(_controlEntity, animComp);
         
@@ -93,7 +103,7 @@ public class MoveSystem : ComponentSystem {
         if (0.0f != moveComp.value.x) {
             var velocity = float3.zero;
             velocity.x = moveComp.value.x;
-            velocity.x *= _speedX;
+            velocity.x *= Utility.speedX;
             //Debug.Log("GetPosition----- X ---------");
             CollisionTest(velocity, ref inPos);
         }
@@ -107,7 +117,7 @@ public class MoveSystem : ComponentSystem {
             var velocity = float3.zero;
             velocity.y = moveComp.value.y;
             velocity.y *= Time.fixedDeltaTime;
-            velocity.y *= _speedY;
+            velocity.y *= Utility.speedY;
             //Debug.Log("GetPosition----- Y ---------");
             CollisionTest(velocity, ref inPos);
         }
@@ -131,7 +141,7 @@ public class MoveSystem : ComponentSystem {
         }, out var hit);
         if (bIsHit) {
             newPos = math.lerp(startPos, newPos, hit.Fraction);
-            newPos -= math.normalizesafe(inVelocity) * _skinWidth;
+            newPos -= math.normalizesafe(inVelocity) * Utility.skinWidth;
         }
 
         outPos = newPos;

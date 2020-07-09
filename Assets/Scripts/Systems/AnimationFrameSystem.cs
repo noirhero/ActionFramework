@@ -7,21 +7,17 @@ public class AnimationFrameSystem : JobComponentSystem {
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         var deltaTime = Time.DeltaTime;
         return Entities
-            .WithBurst()
-            .ForEach((ref AnimationFrameComponent state) => {
-                if (state.setId != state.currentId) {
-                    state.currentId = state.setId;
-                    state.frame = 0.0f;
-                    state.bDone = false;
-                }
-
-                // default setting
-                if (state.bDone) {
-                    state.setId = Utility.AnimState.Idle;
-                }
-
-                state.frame += deltaTime;
-            })
-            .Schedule(inputDeps);
+              .WithBurst()
+              .ForEach((ref AnimationFrameComponent animComp) => {
+                   var animID = AnimState.GetAnimID(animComp);
+                   if (animComp.currentAnim != animID) {
+                       animComp.currentAnim = animID;
+                       animComp.frame = 0.0f;
+                   }
+                   else {
+                       animComp.frame += deltaTime;
+                   }
+               })
+              .Schedule(inputDeps);
     }
 }

@@ -5,12 +5,10 @@ using Unity.Entities;
 
 [Serializable]
 public struct AnimationFrameComponent : IComponentData {
-    public Utility.AnimState setId;
-    public Utility.AnimState currentId;
+    public AnimState.AnimKey currentAnim;
+    public int state;
     public float frame;
     public bool bFlipX;
-    public bool bLooping;
-    public bool bDone;
 }
 
 [Serializable]

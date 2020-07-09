@@ -47,11 +47,11 @@ public class SpritePresetInspector : Editor {
 
             if (false == Enum.TryParse(
                 clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1),
-                out Utility.AnimState animState)) {
+                out AnimState.AnimKey animID)) {
                 Debug.LogError("!!!! Check Anim Name");
             }
             else {
-                preset.datas.Add(animState, animData);
+                preset.datas.Add(animID, animData);
             }
         }
     }

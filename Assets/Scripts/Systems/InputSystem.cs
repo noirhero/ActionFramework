@@ -129,10 +129,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         _input.Disable();
     }
 
-    private const float _force = 50.0f;
-    private const float _gravity = 2.0f;
-    private const float _terminalVelocity = -20.0f;
-
     protected override void OnUpdate() {
         if (IsLocked()) {
             return;
@@ -140,21 +136,14 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
 
         // run
-        if (Utility.IsPossibleAnimChange(Utility.AnimState.Run, animComp)) {
-            moveComp.value.x = inputDataComp.dir;
-        }
-        else {
-            moveComp.value.x = 0.0f;
-        }
+        moveComp.value.x = inputDataComp.dir;
 
         // jump
-        if (Utility.IsPossibleAnimChange(Utility.AnimState.Jump, animComp) &&
-            InputState.HasState(inputDataComp, InputState.jump)) {
+        if (InputState.HasState(inputDataComp, InputState.jump)) {
             
-            moveComp.value.y = _force;
+            moveComp.value.y = Utility.force;
 
             // should be once play
             inputDataComp.state ^= InputState.jump;
@@ -163,20 +152,25 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             EntityManager.AddComponentData(_controlEntity, new JumpComponent());
             EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
         }
-        if (EntityManager.HasComponent<JumpComponent>(_controlEntity)) {
-            if (0.0f > moveComp.value.y) {
-                EntityManager.RemoveComponent<JumpComponent>(_controlEntity);
+        else {
+            if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
                 EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
+            }
+        }
+        
+        // falling
+        if (0.0f > moveComp.value.y) {
+            if (EntityManager.HasComponent<JumpComponent>(_controlEntity)) {
+                EntityManager.RemoveComponent<JumpComponent>(_controlEntity);
             }
         }
 
         // gravity
-        moveComp.value.y = math.max(moveComp.value.y - _gravity, _terminalVelocity);
+        moveComp.value.y = math.max(moveComp.value.y - Utility.gravity, Utility.terminalVelocity);
         EntityManager.SetComponentData(_controlEntity, moveComp);
 
         // attack
-        if (Utility.IsPossibleAnimChange(Utility.AnimState.Attack, animComp) &&
-            InputState.HasState(inputDataComp, InputState.attack)) {
+        if (InputState.HasState(inputDataComp, InputState.attack)) {
             if (false == EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
                 EntityManager.AddComponentData(_controlEntity, new AttackComponent());
             }

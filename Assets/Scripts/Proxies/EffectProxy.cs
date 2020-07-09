@@ -13,9 +13,7 @@ public class EffectProxy : MonoBehaviour, IConvertGameObjectToEntity {
         });
 
         dstManager.AddComponentData(entity,  new AnimationFrameComponent {
-            setId = Utility.AnimState.Run,
-            currentId = Utility.AnimState.Run,
-            bLooping = true
+            state = AnimState.run,
         });
     }
 }

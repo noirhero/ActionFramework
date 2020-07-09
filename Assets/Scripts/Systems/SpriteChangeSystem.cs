@@ -2,30 +2,26 @@
 
 using Unity.Entities;
 using UnityEngine;
-using Unity.Transforms;
 
 public class SpriteChangeSystem : SystemBase {
     protected override void OnUpdate() {
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
-            .ForEach((Entity entity, SpriteRenderer renderer, ref AnimationFrameComponent state) => {
+            .ForEach((Entity entity, SpriteRenderer renderer, ref AnimationFrameComponent animComp) => {
                 if (false == EntityManager.HasComponent<SpritePresetComponent>(entity)) {
                     return;
                 }
 
                 var preset = EntityManager.GetSharedComponentData<SpritePresetComponent>(entity);
-                if (false == preset.value.datas.TryGetValue(state.currentId, out var animData)) {
+                if (false == preset.value.datas.TryGetValue(animComp.currentAnim, out var animData)) {
                     return;
                 }
 
-                var frame = state.frame;
+                var frame = animComp.frame;
                 if (frame > animData.length) {
-                    if (state.bLooping) {
+                    if (AnimState.IsLooping(animComp)) {
                         frame %= animData.length;
-                    }
-                    else {
-                        state.bDone = true;
                     }
                 }
 
@@ -44,7 +40,7 @@ public class SpriteChangeSystem : SystemBase {
                 }
 
                 renderer.sprite = animData.timelines[index].sprite;
-                renderer.flipX = state.bFlipX;
+                renderer.flipX = animComp.bFlipX;
 
                 var attackCollision = animData.timelines[index].attackCollision;
                 var HasAttackCollision = EntityManager.HasComponent<AttackCollisionComponent>(entity);
