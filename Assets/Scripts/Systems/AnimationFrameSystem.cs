@@ -6,19 +6,20 @@ using Unity.Jobs;
 public class AnimationFrameSystem : JobComponentSystem {
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         var deltaTime = Time.DeltaTime;
-        return Entities
-              .WithBurst()
-              .ForEach((ref AnimationFrameComponent animComp) => {
-                   var animID = AnimUtility.GetAnimKey(animComp);
-                   if (animComp.currentAnim != animID) {
-                       animComp.currentAnim = animID;
-                       animComp.frame = 0.0f;
-                       animComp.frameRate = 0.0f;
-                   }
-                   else {
-                       animComp.frame += deltaTime;
-                   }
-               })
-              .Schedule(inputDeps);
+
+        return Entities.WithBurst()
+                       .ForEach((ref AnimationFrameComponent animComp) => {
+                            var animID = AnimUtility.GetAnimKey(animComp);
+
+                            if (animComp.currentAnim != animID) {
+                                animComp.currentAnim = animID;
+                                animComp.frame = 0.0f;
+                                animComp.frameRate = 0.0f;
+                            }
+                            else {
+                                animComp.frame += deltaTime;
+                            }
+                        })
+                       .Schedule(inputDeps);
     }
 }

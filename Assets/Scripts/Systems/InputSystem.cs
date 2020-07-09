@@ -23,18 +23,20 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+
         if (context.started) {
-            cachedComp.state |= InputUtility.left;
-            cachedComp.dir += -1.0f;
+            dataComp.state |= InputUtility.left;
+            dataComp.dir += -1.0f;
         }
 
-        if (InputUtility.HasState(cachedComp, InputUtility.left) && context.canceled) {
-            cachedComp.state ^= InputUtility.left;
-            cachedComp.dir += 1.0f;
+        if (InputUtility.HasState(dataComp, InputUtility.left) &&
+            context.canceled) {
+            dataComp.state ^= InputUtility.left;
+            dataComp.dir += 1.0f;
         }
 
-        EntityManager.SetComponentData(_inputEntity, cachedComp);
+        EntityManager.SetComponentData(_inputEntity, dataComp);
     }
 
     public void OnRight(InputAction.CallbackContext context) {
@@ -42,18 +44,20 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+
         if (context.started) {
-            cachedComp.state |= InputUtility.right;
-            cachedComp.dir += 1.0f;
+            dataComp.state |= InputUtility.right;
+            dataComp.dir += 1.0f;
         }
 
-        if (InputUtility.HasState(cachedComp, InputUtility.right) && context.canceled) {
-            cachedComp.state ^= InputUtility.right;
-            cachedComp.dir += -1.0f;
+        if (InputUtility.HasState(dataComp, InputUtility.right) &&
+            context.canceled) {
+            dataComp.state ^= InputUtility.right;
+            dataComp.dir += -1.0f;
         }
 
-        EntityManager.SetComponentData(_inputEntity, cachedComp);
+        EntityManager.SetComponentData(_inputEntity, dataComp);
     }
 
     public void OnJump(InputAction.CallbackContext context) {
@@ -61,16 +65,18 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+
         if (context.started) {
-            cachedComp.state |= InputUtility.jump;
+            dataComp.state |= InputUtility.jump;
         }
 
-        if (InputUtility.HasState(cachedComp, InputUtility.jump) && context.canceled) {
-            cachedComp.state ^= InputUtility.jump;
+        if (InputUtility.HasState(dataComp, InputUtility.jump) &&
+            context.canceled) {
+            dataComp.state ^= InputUtility.jump;
         }
 
-        EntityManager.SetComponentData(_inputEntity, cachedComp);
+        EntityManager.SetComponentData(_inputEntity, dataComp);
     }
 
     public void OnAttack(InputAction.CallbackContext context) {
@@ -78,16 +84,18 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+
         if (context.started) {
-            cachedComp.state |= InputUtility.attack;
+            dataComp.state |= InputUtility.attack;
         }
 
-        if (InputUtility.HasState(cachedComp, InputUtility.attack) && context.canceled) {
-            cachedComp.state ^= InputUtility.attack;
+        if (InputUtility.HasState(dataComp, InputUtility.attack) &&
+            context.canceled) {
+            dataComp.state ^= InputUtility.attack;
         }
 
-        EntityManager.SetComponentData(_inputEntity, cachedComp);
+        EntityManager.SetComponentData(_inputEntity, dataComp);
     }
 
     public void OnLeftRightAxis(InputAction.CallbackContext context) {
@@ -95,16 +103,17 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var cachedComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-        cachedComp.dir = context.ReadValue<float>();
-        if (0.0f != cachedComp.dir) {
-            cachedComp.state |= InputUtility.axis;
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        dataComp.dir = context.ReadValue<float>();
+
+        if (0.0f != dataComp.dir) {
+            dataComp.state |= InputUtility.axis;
         }
         else {
-            cachedComp.state ^= InputUtility.axis;
+            dataComp.state ^= InputUtility.axis;
         }
 
-        EntityManager.SetComponentData(_inputEntity, cachedComp);
+        EntityManager.SetComponentData(_inputEntity, dataComp);
     }
 
     private InputActions _input;
@@ -121,7 +130,10 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
     protected override void OnStartRunning() {
         _input.Enable();
-        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => { _controlEntity = controlEntity; });
+
+        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => {
+            _controlEntity = controlEntity;
+        });
     }
 
     protected override void OnStopRunning() {

@@ -89,6 +89,7 @@ public static class AnimUtility {
 
     public static string ShowLog(AnimationFrameComponent animComp) {
         var cachedStr = string.Empty;
+
         if (0 != (run & animComp.state)) {
             cachedStr += " run";
         }
@@ -126,6 +127,7 @@ public static class InputUtility {
 
     public static string ShowLog(InputDataComponent inputComp) {
         var cachedStr = string.Empty;
+
         if (0 != (left & inputComp.state)) {
             cachedStr += " Left";
         }

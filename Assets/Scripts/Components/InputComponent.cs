@@ -5,8 +5,7 @@ using Unity.Entities;
 using UnityEngine;
 
 [Serializable]
-public struct InputComponent : IComponentData {
-}
+public struct InputComponent : IComponentData { }
 
 [Serializable]
 public struct InputDataComponent : IComponentData {
@@ -20,8 +19,7 @@ public struct MoveComponent : IComponentData {
 }
 
 [Serializable]
-public struct JumpComponent : IComponentData {
-}
+public struct JumpComponent : IComponentData { }
 
 [Serializable]
 public struct AttackComponent : IComponentData {

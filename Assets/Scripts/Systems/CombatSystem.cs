@@ -7,8 +7,13 @@ public class CombatSystem : ComponentSystem {
     private Entity _controlEntity;
 
     protected override void OnStartRunning() {
-        Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => { _inputEntity = inputEntity; });
-        Entities.ForEach((Entity controlEntity, ref InputComponent inputComp) => { _controlEntity = controlEntity; });
+        Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => {
+            _inputEntity = inputEntity;
+        });
+
+        Entities.ForEach((Entity controlEntity, ref InputComponent inputComp) => {
+            _controlEntity = controlEntity;
+        });
     }
 
     private bool IsLocked() {
@@ -42,6 +47,7 @@ public class CombatSystem : ComponentSystem {
         }
 
         var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+
         if (EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
             if (1.0f <= animComp.frameRate) {
                 EntityManager.RemoveComponent<AttackComponent>(_controlEntity);

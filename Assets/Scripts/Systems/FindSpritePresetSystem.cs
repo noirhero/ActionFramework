@@ -6,30 +6,29 @@ using Unity.Entities;
 public class FindSpritePresetSystem : SystemBase {
     protected override void OnUpdate() {
         Dictionary<int, SpritePresetComponent> presets = new Dictionary<int, SpritePresetComponent>();
-        Entities
-            .WithName("FindSpritePresetSystem_Collecting")
-            .WithoutBurst()
-            .ForEach((SpritePresetComponent preset, in GuidComponent guid) => {
-                presets.Add(guid.value, preset);
-            })
-            .Run();
 
-        Entities
-            .WithName("FindSpritePresetSystem")
-            .WithoutBurst()
-            .WithStructuralChanges()
-            .ForEach((Entity entity, in FindSpritePresetComponent findGuid) => {
-                if (false == presets.TryGetValue(findGuid.value, out var preset)) {
-                    return;
-                }
+        Entities.WithName("FindSpritePresetSystem_Collecting")
+                .WithoutBurst()
+                .ForEach((SpritePresetComponent preset, in GuidComponent guid) => {
+                     presets.Add(guid.value, preset);
+                 })
+                .Run();
 
-                EntityManager.RemoveComponent<FindSpritePresetComponent>(entity);
-                EntityManager.AddSharedComponentData(entity, preset);
+        Entities.WithName("FindSpritePresetSystem")
+                .WithoutBurst()
+                .WithStructuralChanges()
+                .ForEach((Entity entity, in FindSpritePresetComponent findGuid) => {
+                     if (false == presets.TryGetValue(findGuid.value, out var preset)) {
+                         return;
+                     }
 
-                if (false == EntityManager.HasComponent<AnimationFrameComponent>(entity)) {
-                    EntityManager.AddComponentData(entity, new AnimationFrameComponent());
-                }
-            })
-            .Run();
+                     EntityManager.RemoveComponent<FindSpritePresetComponent>(entity);
+                     EntityManager.AddSharedComponentData(entity, preset);
+
+                     if (false == EntityManager.HasComponent<AnimationFrameComponent>(entity)) {
+                         EntityManager.AddComponentData(entity, new AnimationFrameComponent());
+                     }
+                 })
+                .Run();
     }
 }

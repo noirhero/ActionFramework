@@ -12,8 +12,13 @@ public class MoveSystem : ComponentSystem {
     private BuildPhysicsWorld _buildPhysSystem;
 
     protected override void OnStartRunning() {
-        Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => { _inputEntity = inputEntity; });
-        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => { _controlEntity = controlEntity; });
+        Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => {
+            _inputEntity = inputEntity;
+        });
+
+        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => {
+            _controlEntity = controlEntity;
+        });
 
         _buildPhysSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
@@ -63,10 +68,10 @@ public class MoveSystem : ComponentSystem {
 
         // run
         var bMovingX = moveComp.value.x != 0.0f;
-        var bTransX = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
-                      (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
+        var bTransX = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) || (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
         if (bMovingX || bTransX) {
             animComp.bFlipX = bMovingX ? moveComp.value.x < 0.0f : animComp.bFlipX;
+
             if (false == AnimUtility.HasState(animComp, AnimUtility.run)) {
                 animComp.state |= AnimUtility.run;
             }
@@ -79,8 +84,7 @@ public class MoveSystem : ComponentSystem {
 
         // jump
         var bMovingY = moveComp.value.y != Utility.terminalVelocity;
-        var bTransY = ((0.0f < dir.y) && (Utility.stepOffset < dir.y)) ||
-                      (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
+        var bTransY = ((0.0f < dir.y) && (Utility.stepOffset < dir.y)) || (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
         if (bTransY || bMovingY) {
             if (false == AnimUtility.HasState(animComp, AnimUtility.jump)) {
                 animComp.state |= AnimUtility.jump;
@@ -88,6 +92,7 @@ public class MoveSystem : ComponentSystem {
         }
         else {
             animComp.state |= AnimUtility.jump;
+
             if (AnimUtility.HasState(animComp, AnimUtility.jump)) {
                 animComp.state ^= AnimUtility.jump;
             }
@@ -101,10 +106,12 @@ public class MoveSystem : ComponentSystem {
 
     private float GetPositionX(float3 inPos) {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
+
         if (0.0f != moveComp.value.x) {
             var velocity = float3.zero;
             velocity.x = moveComp.value.x;
             velocity.x *= Utility.speedX;
+
             //Debug.Log("GetPosition----- X ---------");
             CollisionTest(velocity, ref inPos);
         }
@@ -114,11 +121,13 @@ public class MoveSystem : ComponentSystem {
 
     private float GetPositionY(float3 inPos) {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
+
         if (0.0f != moveComp.value.y) {
             var velocity = float3.zero;
             velocity.y = moveComp.value.y;
             velocity.y *= Time.fixedDeltaTime;
             velocity.y *= Utility.speedY;
+
             //Debug.Log("GetPosition----- Y ---------");
             CollisionTest(velocity, ref inPos);
         }
@@ -140,6 +149,7 @@ public class MoveSystem : ComponentSystem {
             Start = startPos,
             End = newPos
         }, out var hit);
+
         if (bIsHit) {
             newPos = math.lerp(startPos, newPos, hit.Fraction);
             newPos -= math.normalizesafe(inVelocity) * Utility.skinWidth;
