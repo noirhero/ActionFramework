@@ -8,27 +8,25 @@ public class FindSpritePresetSystem : SystemBase {
         Dictionary<int, SpritePresetComponent> presets = new Dictionary<int, SpritePresetComponent>();
 
         Entities.WithName("FindSpritePresetSystem_Collecting")
-                .WithoutBurst()
-                .ForEach((SpritePresetComponent preset, in GuidComponent guid) => {
-                     presets.Add(guid.value, preset);
-                 })
-                .Run();
+            .WithoutBurst()
+            .ForEach((SpritePresetComponent preset, in GuidComponent guid) => { presets.Add(guid.value, preset); })
+            .Run();
 
         Entities.WithName("FindSpritePresetSystem")
-                .WithoutBurst()
-                .WithStructuralChanges()
-                .ForEach((Entity entity, in FindSpritePresetComponent findGuid) => {
-                     if (false == presets.TryGetValue(findGuid.value, out var preset)) {
-                         return;
-                     }
+            .WithoutBurst()
+            .WithStructuralChanges()
+            .ForEach((Entity entity, in FindSpritePresetComponent findGuid) => {
+                if (false == presets.TryGetValue(findGuid.value, out var preset)) {
+                    return;
+                }
 
-                     EntityManager.RemoveComponent<FindSpritePresetComponent>(entity);
-                     EntityManager.AddSharedComponentData(entity, preset);
+                EntityManager.RemoveComponent<FindSpritePresetComponent>(entity);
+                EntityManager.AddSharedComponentData(entity, preset);
 
-                     if (false == EntityManager.HasComponent<AnimationFrameComponent>(entity)) {
-                         EntityManager.AddComponentData(entity, new AnimationFrameComponent());
-                     }
-                 })
-                .Run();
+                if (false == EntityManager.HasComponent<AnimationFrameComponent>(entity)) {
+                    EntityManager.AddComponentData(entity, new AnimationFrameComponent());
+                }
+            })
+            .Run();
     }
 }

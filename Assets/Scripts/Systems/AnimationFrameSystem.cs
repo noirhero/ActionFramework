@@ -9,18 +9,18 @@ public class AnimationFrameSystem : JobComponentSystem {
         var deltaTime = Time.DeltaTime;
 
         return Entities.WithBurst()
-                       .ForEach((ref AnimationFrameComponent animComp) => {
-                            var animKey = AnimUtility.GetAnimKey(animComp);
+            .ForEach((ref AnimationFrameComponent animComp) => {
+                var animKey = AnimUtility.GetAnimKey(animComp);
 
-                            if (animComp.currentAnim != animKey) {
-                                animComp.currentAnim = animKey;
-                                animComp.frame = 0.0f;
-                                animComp.frameRate = 0.0f;
-                            }
-                            else {
-                                animComp.frame += deltaTime;
-                            }
-                        })
-                       .Schedule(inputDeps);
+                if (animComp.currentAnim != animKey) {
+                    animComp.currentAnim = animKey;
+                    animComp.frame = 0.0f;
+                    animComp.frameRate = 0.0f;
+                }
+                else {
+                    animComp.frame += deltaTime;
+                }
+            })
+            .Schedule(inputDeps);
     }
 }

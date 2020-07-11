@@ -12,13 +12,9 @@ public class MoveSystem : ComponentSystem {
     private BuildPhysicsWorld _buildPhysSystem;
 
     protected override void OnStartRunning() {
-        Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => {
-            _inputEntity = inputEntity;
-        });
+        Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => { _inputEntity = inputEntity; });
 
-        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => {
-            _controlEntity = controlEntity;
-        });
+        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => { _controlEntity = controlEntity; });
 
         _buildPhysSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
@@ -68,7 +64,8 @@ public class MoveSystem : ComponentSystem {
 
         // run
         var bMovingX = moveComp.value.x != 0.0f;
-        var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) || (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
+        var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
+                       (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
         if (bMovingX || bRunning) {
             animComp.bFlipX = bMovingX ? moveComp.value.x < 0.0f : animComp.bFlipX;
 
@@ -110,7 +107,7 @@ public class MoveSystem : ComponentSystem {
                 EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
             }
         }
-        
+
         EntityManager.SetComponentData(_controlEntity, animComp);
 
         translation.Value = calcPos;

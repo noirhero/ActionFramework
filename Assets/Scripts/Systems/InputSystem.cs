@@ -131,9 +131,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     protected override void OnStartRunning() {
         _input.Enable();
 
-        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => {
-            _controlEntity = controlEntity;
-        });
+        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => { _controlEntity = controlEntity; });
     }
 
     protected override void OnStopRunning() {
