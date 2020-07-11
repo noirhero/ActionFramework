@@ -19,9 +19,7 @@ public class SpriteChangeSystem : SystemBase {
 
                     var frame = animComp.frame;
                     if (frame > animData.length) {
-                        if (AnimUtility.IsLooping(animComp)) {
-                            frame %= animData.length;
-                        }
+                        frame = AnimUtility.IsLooping(animComp) ? frame % animData.length : animData.length;
                     }
 
                     animComp.frameRate = frame / animData.length;
