@@ -11,6 +11,7 @@ public class AnimTimeline {
     public float end;
     public Sprite sprite;
     public Rect attackCollision;
+    public bool bUseMultiCollision;
 }
 
 [Serializable]

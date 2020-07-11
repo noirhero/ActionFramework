@@ -8,77 +8,85 @@ public class SpriteChangeSystem : SystemBase {
         Entities.WithoutBurst()
                 .WithStructuralChanges()
                 .ForEach((Entity entity, SpriteRenderer renderer, ref AnimationFrameComponent animComp) => {
-                     if (false == EntityManager.HasComponent<SpritePresetComponent>(entity)) {
-                         return;
-                     }
+                    if (false == EntityManager.HasComponent<SpritePresetComponent>(entity)) {
+                        return;
+                    }
 
-                     var preset = EntityManager.GetSharedComponentData<SpritePresetComponent>(entity);
-                     if (false == preset.value.datas.TryGetValue(animComp.currentAnim, out var animData)) {
-                         return;
-                     }
+                    var preset = EntityManager.GetSharedComponentData<SpritePresetComponent>(entity);
+                    if (false == preset.value.datas.TryGetValue(animComp.currentAnim, out var animData)) {
+                        return;
+                    }
 
-                     var frame = animComp.frame;
-                     if (frame > animData.length) {
-                         if (AnimUtility.IsLooping(animComp)) {
-                             frame %= animData.length;
-                         }
-                     }
+                    var frame = animComp.frame;
+                    if (frame > animData.length) {
+                        if (AnimUtility.IsLooping(animComp)) {
+                            frame %= animData.length;
+                        }
+                    }
 
-                     animComp.frameRate = frame / animData.length;
+                    animComp.frameRate = frame / animData.length;
 
-                     var index = 0;
-                     for (var i = 0; i < animData.timelines.Count; ++i) {
-                         var timeline = animData.timelines[i];
+                    var index = 0;
+                    for (var i = 0; i < animData.timelines.Count; ++i) {
+                        var timeline = animData.timelines[i];
 
-                         if (frame >= timeline.start &&
-                             frame <= timeline.end) {
-                             index = i;
+                        if (frame >= timeline.start &&
+                            frame <= timeline.end) {
+                            index = i;
 
-                             break;
-                         }
-                     }
+                            break;
+                        }
+                    }
 
-                     if (EntityManager.HasComponent<AnimationLockComponent>(entity)) {
-                         var lockComp = EntityManager.GetComponentData<AnimationLockComponent>(entity);
-                         index = index > lockComp.frameIndex ? lockComp.frameIndex : index;
-                     }
+                    if (EntityManager.HasComponent<AnimationLockComponent>(entity)) {
+                        var lockComp = EntityManager.GetComponentData<AnimationLockComponent>(entity);
+                        index = index > lockComp.frameIndex ? lockComp.frameIndex : index;
+                    }
 
-                     renderer.sprite = animData.timelines[index]
-                                               .sprite;
+                    renderer.sprite = animData.timelines[index]
+                                              .sprite;
 
-                     renderer.flipX = animComp.bFlipX;
+                    renderer.flipX = animComp.bFlipX;
 
-                     var attackCollision = animData.timelines[index]
-                                                   .attackCollision;
+                    var attackCollision = animData.timelines[index]
+                                                  .attackCollision;
 
-                     var HasAttackCollision = EntityManager.HasComponent<AttackCollisionComponent>(entity);
+                    var HasAttackCollisionComp = EntityManager.HasComponent<AttackCollisionComponent>(entity);
 
-                     if (renderer.flipX) {
-                         attackCollision.x *= -1.0f;
-                     }
+                    if (renderer.flipX) {
+                        attackCollision.x *= -1.0f;
+                    }
 
-                     // 현재 프레임에 공격 판정 데이터 있음
-                     if (0 < attackCollision.width + attackCollision.height) {
-                         if (HasAttackCollision) {
-                             var attackCollisionComp = EntityManager.GetComponentData<AttackCollisionComponent>(entity);
-                             attackCollisionComp.bounds = attackCollision;
-                             EntityManager.SetComponentData<AttackCollisionComponent>(entity, attackCollisionComp);
-                         }
-                         else {
-                             var newComp = new AttackCollisionComponent() {
-                                 bounds = attackCollision,
-                                 pixelsPerUnit = renderer.sprite.pixelsPerUnit
-                             };
+                    // 현재 프레임에 공격 판정 데이터 있음
+                    if ((0 < attackCollision.width) && (0 < attackCollision.height)) {
+                        if (HasAttackCollisionComp) {
+                            var attackCollisionComp = EntityManager.GetComponentData<AttackCollisionComponent>(entity);
 
-                             EntityManager.AddComponentData<AttackCollisionComponent>(entity, newComp);
-                         }
-                     }
+                            // 이전 프레임의 값이 남은 경우
+                            if (index != attackCollisionComp.animationFrame) {
+                                attackCollisionComp.bounds = attackCollision;
+                                attackCollisionComp.animationFrame = index;
+                                attackCollisionComp.bIsConsumed = false;
 
-                     // 없으면 삭제
-                     else if (HasAttackCollision) {
-                         EntityManager.RemoveComponent<AttackCollisionComponent>(entity);
-                     }
-                 })
+                                EntityManager.SetComponentData<AttackCollisionComponent>(entity, attackCollisionComp);
+                            }
+                        }
+                        else {
+                            var newComp = new AttackCollisionComponent() {
+                                bounds = attackCollision,
+                                pixelsPerUnit = renderer.sprite.pixelsPerUnit,
+                                animationFrame = index,
+                                bShouldMultiCollide = animData.timelines[index].bUseMultiCollision
+                            };
+
+                            EntityManager.AddComponentData<AttackCollisionComponent>(entity, newComp);
+                        }
+                    }
+                    // 이전 프레임에는 있었으나 지금은 없음
+                    else if (HasAttackCollisionComp) {
+                        EntityManager.RemoveComponent<AttackCollisionComponent>(entity);
+                    }
+                })
                 .Run();
     }
 }

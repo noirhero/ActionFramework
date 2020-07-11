@@ -14,6 +14,8 @@ public class CollisionSystem : SystemBase {
             .WithoutBurst()
             .WithStructuralChanges()
             .ForEach((Entity attacker, AttackCollisionComponent attackCollisionComp, PhysicsCollider attackerCollider) => {
+                if (attackCollisionComp.bIsConsumed && (false == attackCollisionComp.bShouldMultiCollide))
+                    return;
 
                 var attackBounds = attackCollisionComp.bounds;
 
@@ -64,6 +66,9 @@ public class CollisionSystem : SystemBase {
                         // 충돌 감지!
                         if (attackCollision.Overlaps(targetCollision)) {
                             Debug.Log("Overlaps! '-^");
+
+                            attackCollisionComp.bIsConsumed = true;
+                            EntityManager.SetComponentData<AttackCollisionComponent>(attacker, attackCollisionComp);
 
                             var effectSpawnEntity = EntityManager.CreateEntity();
                             EntityManager.AddComponentData(effectSpawnEntity, new EffectSpawnComponent {
