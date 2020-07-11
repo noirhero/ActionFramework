@@ -161,19 +161,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             inputDataComp.state ^= InputUtility.jump;
 
             EntityManager.AddComponentData(_controlEntity, new JumpComponent());
-            EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
-        }
-        else {
-            if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
-                EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
-            }
-        }
-
-        // falling
-        if (0.0f > moveComp.value.y) {
-            if (EntityManager.HasComponent<JumpComponent>(_controlEntity)) {
-                EntityManager.RemoveComponent<JumpComponent>(_controlEntity);
-            }
         }
 
         // attack

@@ -2,6 +2,7 @@
 
 using Unity.Entities;
 using Unity.Jobs;
+using UnityEngine;
 
 public class AnimationFrameSystem : JobComponentSystem {
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
@@ -9,10 +10,10 @@ public class AnimationFrameSystem : JobComponentSystem {
 
         return Entities.WithBurst()
                        .ForEach((ref AnimationFrameComponent animComp) => {
-                            var animID = AnimUtility.GetAnimKey(animComp);
+                            var animKey = AnimUtility.GetAnimKey(animComp);
 
-                            if (animComp.currentAnim != animID) {
-                                animComp.currentAnim = animID;
+                            if (animComp.currentAnim != animKey) {
+                                animComp.currentAnim = animKey;
                                 animComp.frame = 0.0f;
                                 animComp.frameRate = 0.0f;
                             }

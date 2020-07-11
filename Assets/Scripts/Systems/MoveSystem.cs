@@ -68,8 +68,8 @@ public class MoveSystem : ComponentSystem {
 
         // run
         var bMovingX = moveComp.value.x != 0.0f;
-        var bTransX = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) || (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
-        if (bMovingX || bTransX) {
+        var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) || (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
+        if (bMovingX || bRunning) {
             animComp.bFlipX = bMovingX ? moveComp.value.x < 0.0f : animComp.bFlipX;
 
             if (false == AnimUtility.HasState(animComp, AnimUtility.run)) {
@@ -84,8 +84,9 @@ public class MoveSystem : ComponentSystem {
 
         // jump
         var bMovingY = moveComp.value.y != Utility.terminalVelocity;
-        var bTransY = ((0.0f < dir.y) && (Utility.stepOffset < dir.y)) || (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
-        if (bTransY || bMovingY) {
+        var bFalling = (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
+        var bJumping = (0.0f < dir.y) && (Utility.stepOffset < dir.y);
+        if (bMovingY || bJumping || bFalling) {
             if (false == AnimUtility.HasState(animComp, AnimUtility.jump)) {
                 animComp.state |= AnimUtility.jump;
             }
@@ -98,6 +99,18 @@ public class MoveSystem : ComponentSystem {
             }
         }
 
+        // jump anim lock
+        if (bJumping) {
+            if (false == EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
+                EntityManager.AddComponentData(_controlEntity, new AnimationLockComponent(2));
+            }
+        }
+        else {
+            if (EntityManager.HasComponent<AnimationLockComponent>(_controlEntity)) {
+                EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
+            }
+        }
+        
         EntityManager.SetComponentData(_controlEntity, animComp);
 
         translation.Value = calcPos;
