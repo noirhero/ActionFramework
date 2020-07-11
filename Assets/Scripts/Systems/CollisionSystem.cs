@@ -47,6 +47,10 @@ public class CollisionSystem : SystemBase {
                     if (attacker == hitTarget)
                         return;
 
+                    // 이미 맞음
+                    if (EntityManager.HasComponent<HitComponent>(hitTarget))
+                        return;
+
                     // 현재 같은 Controller 필터일 경우에만 충돌 감지 처리
                     if (hitTargetCollider.Value.Value.Filter.BelongsTo != attackerCollider.Value.Value.Filter.BelongsTo)
                         return;
@@ -69,6 +73,12 @@ public class CollisionSystem : SystemBase {
 
                             attackCollisionComp.bIsConsumed = true;
                             EntityManager.SetComponentData<AttackCollisionComponent>(attacker, attackCollisionComp);
+
+                            var hitComponent = new HitComponent() {
+                                damage = 10,
+                                godTime = 0.5f
+                            };
+                            EntityManager.AddComponentData<HitComponent>(hitTarget, hitComponent);
 
                             var effectSpawnEntity = EntityManager.CreateEntity();
                             EntityManager.AddComponentData(effectSpawnEntity, new EffectSpawnComponent {
