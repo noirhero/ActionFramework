@@ -20,6 +20,12 @@ public static class Utility {
     public const float stepOffset = 0.01f;
 }
 
+public static class SoundUtility {
+    public enum SourceKey {
+        GhostTown
+    }
+}
+
 public static class AnimUtility {
     public enum AnimKey {
         Idle,
