@@ -21,6 +21,9 @@ public class EffectSpawnSystem : SystemBase {
             .WithoutBurst()
             .ForEach((in EffectGuidComponent effectGuid) => { effectGuidList.Add(effectGuid); })
             .Run();
+        if (0 == effectGuidList.Count) {
+            return;
+        }
 
         var effectGuidArray = new NativeArray<EffectGuidComponent>(effectGuidList.Count, Allocator.TempJob);
         for (int i = 0; i < effectGuidArray.Length; ++i) {
