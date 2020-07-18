@@ -22,7 +22,8 @@ public static class Utility {
 
 public static class SoundUtility {
     public enum SourceKey {
-        GhostTown
+        GhostTown,
+        FootStep,
     }
 }
 
