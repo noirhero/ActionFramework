@@ -5,7 +5,6 @@ using UnityEngine;
 using Unity.Transforms;
 using Unity.Mathematics;
 using Unity.Physics;
-using UnityEditor;
 
 public class CollisionSystem : SystemBase {
 
@@ -78,7 +77,7 @@ public class CollisionSystem : SystemBase {
                                 damage = 10,
                                 godTime = 0.5f,
                                 hitEffectColor = Color.black,
-                                hitEffectTime = 0.2f
+                                hitEffectTime = 0.1f
                             };
                             EntityManager.AddComponentData<HitComponent>(hitTarget, hitComponent);
 
@@ -86,7 +85,7 @@ public class CollisionSystem : SystemBase {
                             EntityManager.AddComponentData(effectSpawnEntity, new EffectSpawnComponent {
                                 pos = targetTranslation.Value,
                                 rot = quaternion.identity,
-                                scale = new float3(2.0f)
+                                scale = new float3(1.0f)
                             });
                         }
 

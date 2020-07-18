@@ -2,10 +2,6 @@
 
 using Unity.Entities;
 using UnityEngine;
-using Unity.Transforms;
-using Unity.Mathematics;
-using Unity.Physics;
-using UnityEditor;
 
 public class HitSystem : SystemBase {
 
@@ -21,7 +17,7 @@ public class HitSystem : SystemBase {
 
                 hitComp.elapsedTime += Time.DeltaTime;
                 if ((hitComp.elapsedTime >= hitComp.hitEffectTime) && (renderer.color == hitComp.hitEffectColor)) {
-                    renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                    renderer.color = Color.white;
                 }
                 else if (hitComp.elapsedTime >= hitComp.godTime) {
 
