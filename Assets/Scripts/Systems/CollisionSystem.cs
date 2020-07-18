@@ -76,7 +76,9 @@ public class CollisionSystem : SystemBase {
 
                             var hitComponent = new HitComponent() {
                                 damage = 10,
-                                godTime = 0.5f
+                                godTime = 0.5f,
+                                hitEffectColor = Color.black,
+                                hitEffectTime = 0.2f
                             };
                             EntityManager.AddComponentData<HitComponent>(hitTarget, hitComponent);
 
