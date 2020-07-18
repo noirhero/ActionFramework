@@ -20,7 +20,7 @@ public class CameraFollowSystem : SystemBase {
             .WithoutBurst()
             .WithAll<CameraFollowComponent>()
             .ForEach((in Translation pos) => {
-                camPos.x = math.lerp(pos.Value.x, camPos.x, deltaTime);
+                camPos.x = math.lerp(camPos.x, pos.Value.x, deltaTime);
             })
             .Run();
         _cameraTransform.position = camPos;
