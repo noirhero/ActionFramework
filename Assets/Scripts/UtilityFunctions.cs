@@ -20,6 +20,14 @@ public static class Utility {
     public const float stepOffset = 0.01f;
 }
 
+public static class IdUtility {
+    public enum Id {
+        Player,
+        Enemy,
+        NPC
+    }
+}
+
 public static class SoundUtility {
     public enum SourceKey {
         GhostTown
