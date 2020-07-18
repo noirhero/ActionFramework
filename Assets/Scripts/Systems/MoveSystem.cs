@@ -53,19 +53,16 @@ public class MoveSystem : ComponentSystem {
             return;
         }
 
-        var translation = EntityManager.GetComponentData<Translation>(_controlEntity);
-        var calcPos = translation.Value;
-        calcPos.x = GetPositionX(calcPos);
-        calcPos.y = GetPositionY(calcPos);
-        var dir = calcPos - translation.Value;
+        var currentPos = EntityManager.GetComponentData<Translation>(_controlEntity).Value;
+        var calcPos = new float3(GetPositionX(currentPos), GetPositionY(currentPos), currentPos.z);
+        var dir = calcPos - currentPos;
 
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
         var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
 
         // run
-        var bMovingX = moveComp.value.x != 0.0f;
-        var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
-                       (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
+        var bMovingX = math.FLT_MIN_NORMAL < math.abs(moveComp.value.x);
+        var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) || (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
         if (bMovingX || bRunning) {
             animComp.bFlipX = bMovingX ? moveComp.value.x < 0.0f : animComp.bFlipX;
 
@@ -80,7 +77,7 @@ public class MoveSystem : ComponentSystem {
         }
 
         // jump
-        var bMovingY = moveComp.value.y != Utility.terminalVelocity;
+        var bMovingY = math.FLT_MIN_NORMAL < math.abs(Utility.terminalVelocity - moveComp.value.y);
         var bFalling = (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
         var bJumping = (0.0f < dir.y) && (Utility.stepOffset < dir.y);
         if (bMovingY || bJumping || bFalling) {
@@ -109,39 +106,38 @@ public class MoveSystem : ComponentSystem {
         }
 
         EntityManager.SetComponentData(_controlEntity, animComp);
-
-        translation.Value = calcPos;
-        EntityManager.SetComponentData(_controlEntity, translation);
+        EntityManager.SetComponentData(_controlEntity, new Translation {
+            Value = calcPos
+        });
     }
 
     private float GetPositionX(float3 inPos) {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
 
-        if (0.0f != moveComp.value.x) {
-            var velocity = float3.zero;
-            velocity.x = moveComp.value.x;
-            velocity.x *= Utility.speedX;
-
-            //Debug.Log("GetPosition----- X ---------");
-            CollisionTest(velocity, ref inPos);
+        if (math.FLT_MIN_NORMAL >= math.abs(moveComp.value.x)) {
+            return inPos.x;
         }
 
+        var velocity = float3.zero;
+        velocity.x = moveComp.value.x * Time.fixedDeltaTime * Utility.speedX;
+
+        //Debug.Log("GetPosition----- X ---------");
+        CollisionTest(velocity, ref inPos);
         return inPos.x;
     }
 
     private float GetPositionY(float3 inPos) {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
 
-        if (0.0f != moveComp.value.y) {
-            var velocity = float3.zero;
-            velocity.y = moveComp.value.y;
-            velocity.y *= Time.fixedDeltaTime;
-            velocity.y *= Utility.speedY;
-
-            //Debug.Log("GetPosition----- Y ---------");
-            CollisionTest(velocity, ref inPos);
+        if (math.FLT_MIN_NORMAL >= math.abs(moveComp.value.y)) {
+            return inPos.y;
         }
 
+        var velocity = float3.zero;
+        velocity.y = moveComp.value.y * Utility.speedY * Time.DeltaTime;
+
+        //Debug.Log("GetPosition----- Y ---------");
+        CollisionTest(velocity, ref inPos);
         return inPos.y;
     }
 
@@ -162,7 +158,7 @@ public class MoveSystem : ComponentSystem {
 
         if (bIsHit) {
             newPos = math.lerp(startPos, newPos, hit.Fraction);
-            newPos -= math.normalizesafe(inVelocity) * Utility.skinWidth;
+            newPos -= math.normalize(inVelocity) * Utility.skinWidth;
         }
 
         outPos = newPos;

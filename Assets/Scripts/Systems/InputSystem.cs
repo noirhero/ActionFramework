@@ -30,8 +30,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.dir += -1.0f;
         }
 
-        if (InputUtility.HasState(dataComp, InputUtility.left) &&
-            context.canceled) {
+        if (InputUtility.HasState(dataComp, InputUtility.left) && context.canceled) {
             dataComp.state ^= InputUtility.left;
             dataComp.dir += 1.0f;
         }
@@ -51,8 +50,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.dir += 1.0f;
         }
 
-        if (InputUtility.HasState(dataComp, InputUtility.right) &&
-            context.canceled) {
+        if (InputUtility.HasState(dataComp, InputUtility.right) && context.canceled) {
             dataComp.state ^= InputUtility.right;
             dataComp.dir += -1.0f;
         }
@@ -90,8 +88,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.state |= InputUtility.attack;
         }
 
-        if (InputUtility.HasState(dataComp, InputUtility.attack) &&
-            context.canceled) {
+        if (InputUtility.HasState(dataComp, InputUtility.attack) && context.canceled) {
             dataComp.state ^= InputUtility.attack;
         }
 
@@ -106,10 +103,11 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         dataComp.dir = context.ReadValue<float>();
 
-        if (0.0f != dataComp.dir) {
+        if (context.started) {
             dataComp.state |= InputUtility.axis;
         }
-        else {
+
+        if (context.canceled) {
             dataComp.state ^= InputUtility.axis;
         }
 
