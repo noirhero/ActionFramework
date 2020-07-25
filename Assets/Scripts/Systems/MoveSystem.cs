@@ -8,7 +8,7 @@ using Unity.Transforms;
 
 public class MoveSystem : ComponentSystem {
     private Entity _inputEntity;
-    private Entity _controlEntity; // TODO : choice move control entity 
+    private Entity _controlEntity;
     private BuildPhysicsWorld _buildPhysSystem;
 
     protected override void OnStartRunning() {

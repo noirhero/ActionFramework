@@ -116,7 +116,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
     private InputActions _input;
     private Entity _inputEntity;
-    private Entity _controlEntity; // TODO : choice move control entity 
+    private Entity _controlEntity; 
 
     protected override void OnCreate() {
         _input = new InputActions();
