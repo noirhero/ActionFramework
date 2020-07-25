@@ -32,15 +32,7 @@ public class MoveSystem : ComponentSystem {
             return true;
         }
 
-        if (false == EntityManager.HasComponent<Translation>(_controlEntity)) {
-            return true;
-        }
-
         if (false == EntityManager.HasComponent<AnimationFrameComponent>(_controlEntity)) {
-            return true;
-        }
-
-        if (EntityManager.HasComponent<AttackComponent>(_inputEntity)) {
             return true;
         }
 

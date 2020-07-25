@@ -33,10 +33,6 @@ public class CombatSystem : ComponentSystem {
             return true;
         }
 
-        if (EntityManager.HasComponent<MoveComponent>(_inputEntity)) {
-            return true;
-        }
-
         // TODO : other condition
         return false;
     }
