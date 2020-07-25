@@ -11,9 +11,5 @@ public class SpriteProxy : MonoBehaviour, IConvertGameObjectToEntity {
         dstManager.AddComponentData(entity, new FindSpritePresetComponent() {
             value = Utility.GetHashCode(asePath)
         });
-
-        // TODO : temporary added
-        dstManager.AddComponentData(entity, new InputComponent());
-        dstManager.AddComponentData(entity, new MoveComponent());
     }
 }

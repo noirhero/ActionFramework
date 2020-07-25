@@ -2,20 +2,15 @@
 
 using System;
 using Unity.Entities;
-using UnityEngine;
 
 [Serializable]
+[GenerateAuthoringComponent]
 public struct InputComponent : IComponentData { }
 
 [Serializable]
 public struct InputDataComponent : IComponentData {
     public int state;
     public float dir;
-}
-
-[Serializable]
-public struct MoveComponent : IComponentData {
-    public Vector2 value;
 }
 
 [Serializable]
