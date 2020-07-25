@@ -15,10 +15,10 @@ public class AnimationFrameSystem : SystemBase {
                     animComp.currentAnim = animKey;
                     animComp.frame = 0.0f;
                     animComp.frameRate = 0.0f;
+                    return;
                 }
-                else {
-                    animComp.frame += deltaTime;
-                }
+
+                animComp.frame += deltaTime;
             })
             .ScheduleParallel(Dependency)
             .Complete();

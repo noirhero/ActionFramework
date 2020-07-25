@@ -151,7 +151,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         // jump
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.jump) &&
             InputUtility.HasState(inputDataComp, InputUtility.jump)) {
-            moveComp.value.y = Utility.force;
+            moveComp.value.y += Utility.jumpForce;
 
             // should be once play
             inputDataComp.state ^= InputUtility.jump;

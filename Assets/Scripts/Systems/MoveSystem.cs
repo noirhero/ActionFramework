@@ -46,7 +46,9 @@ public class MoveSystem : ComponentSystem {
         }
 
         var currentPos = EntityManager.GetComponentData<Translation>(_controlEntity).Value;
-        var calcPos = new float3(GetPositionX(currentPos), GetPositionY(currentPos), currentPos.z);
+        var calcPos = currentPos;
+        calcPos.x = GetPositionX(calcPos);
+        calcPos.y = GetPositionY(calcPos);
         var dir = calcPos - currentPos;
 
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
@@ -107,30 +109,26 @@ public class MoveSystem : ComponentSystem {
 
     private float GetPositionX(float3 inPos) {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-
         if (math.FLT_MIN_NORMAL >= math.abs(moveComp.value.x)) {
             return inPos.x;
         }
 
         var velocity = float3.zero;
-        velocity.x = moveComp.value.x * Time.fixedDeltaTime * Utility.speedX;
+        velocity.x = moveComp.value.x * Utility.speedX * Time.fixedDeltaTime;
 
-        //Debug.Log("GetPosition----- X ---------");
         CollisionTest(velocity, ref inPos);
         return inPos.x;
     }
 
     private float GetPositionY(float3 inPos) {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-
         if (math.FLT_MIN_NORMAL >= math.abs(moveComp.value.y)) {
             return inPos.y;
         }
 
         var velocity = float3.zero;
-        velocity.y = moveComp.value.y * Utility.speedY * Time.DeltaTime;
+        velocity.y = moveComp.value.y * Utility.speedY * Time.fixedDeltaTime;
 
-        //Debug.Log("GetPosition----- Y ---------");
         CollisionTest(velocity, ref inPos);
         return inPos.y;
     }
