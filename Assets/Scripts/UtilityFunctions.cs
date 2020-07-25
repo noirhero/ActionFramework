@@ -11,7 +11,7 @@ public static class Utility {
     public static int INDEX_NONE = -1;
 
     // TODO : temporary constant -> status 
-    public static readonly float jumpForce = 80.0f;
+    public static readonly float jumpForce = 70.0f;
     public static readonly float gravity = 2.0f;
     public static readonly float terminalVelocity = -30.0f;
     public static readonly float speedX = 1.0f;
