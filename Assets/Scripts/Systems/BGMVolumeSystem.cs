@@ -40,6 +40,15 @@ public class BGMVolumeSystem : SystemBase {
             .WithoutBurst()
             .WithStructuralChanges()
             .ForEach((ref AudioSourceControlComponent control, in BoxVolumeComponent volume) => {
+#if UNITY_EDITOR
+                var pos = volume.pos;
+                var extends = volume.extends;
+                Debug.DrawLine(new Vector3(pos.x - extends.x, pos.y - extends.y), new Vector3(pos.x + extends.x, pos.y - extends.y), Color.green);
+                Debug.DrawLine(new Vector3(pos.x + extends.x, pos.y - extends.y), new Vector3(pos.x + extends.x, pos.y + extends.y), Color.green);
+                Debug.DrawLine(new Vector3(pos.x + extends.x, pos.y + extends.y), new Vector3(pos.x - extends.x, pos.y + extends.y), Color.green);
+                Debug.DrawLine(new Vector3(pos.x - extends.x, pos.y + extends.y), new Vector3(pos.x - extends.x, pos.y - extends.y), Color.green);
+#endif
+
                 var isInX = volume.extends.x >= math.abs(volume.pos.x - cameraPos.x);
                 var isInY = volume.extends.y >= math.abs(volume.pos.y - cameraPos.y);
                 var delta = (isInX && isInY ? control.accume : -control.accume) * deltaTime;
