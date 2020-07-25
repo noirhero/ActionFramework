@@ -129,6 +129,11 @@ public class TAPCustomEditor : EditorWindow {
                     new GUIContent("Use Multi Collision"), bUseMultiCollision);
             }
 
+            // 사운드 클립
+            uiPositionRect.y += (EditorGUIUtility.singleLineHeight + 10);
+            animData.timelines[_currentTimelineIndex].soundClipKey = (SoundUtility.ClipKey)EditorGUI.EnumFlagsField(uiPositionRect, animData.timelines[_currentTimelineIndex].soundClipKey);
+
+
             // Reset
             var isClicked = GUILayout.Button("Reset this frame", GUILayout.MinWidth(110), GUILayout.MaxWidth(110),
                 GUILayout.MinHeight(20), GUILayout.MaxHeight(20));
