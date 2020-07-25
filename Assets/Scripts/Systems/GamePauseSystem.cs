@@ -26,7 +26,6 @@ public class GamePauseSystem : SystemBase {
         systemTypes[idx++] = typeof(CombatSystem);
         systemTypes[idx++] = typeof(FindSpritePresetSystem);
         systemTypes[idx++] = typeof(HitSystem);
-        systemTypes[idx++] = typeof(InputSystem);
         systemTypes[idx++] = typeof(MoveSystem);
         systemTypes[idx++] = typeof(SpriteChangeSystem);
         systemTypes[idx++] = typeof(TargetFollowSystem);

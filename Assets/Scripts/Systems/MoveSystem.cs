@@ -47,8 +47,8 @@ public class MoveSystem : ComponentSystem {
 
         var currentPos = EntityManager.GetComponentData<Translation>(_controlEntity).Value;
         var calcPos = currentPos;
-        calcPos.x = GetPositionX(calcPos);
         calcPos.y = GetPositionY(calcPos);
+        calcPos.x = GetPositionX(calcPos);
         var dir = calcPos - currentPos;
 
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
@@ -141,16 +141,17 @@ public class MoveSystem : ComponentSystem {
         var startPos = outPos;
         var newPos = outPos + inVelocity;
 
+        var skinWidth = math.normalize(inVelocity) * Utility.skinWidth;
         var bIsHit = physWorld.CastCollider(new ColliderCastInput {
             Collider = collider.ColliderPtr,
             Orientation = rotation.Value,
             Start = startPos,
-            End = newPos
+            End = newPos + skinWidth
         }, out var hit);
 
         if (bIsHit) {
             newPos = math.lerp(startPos, newPos, hit.Fraction);
-            newPos -= math.normalize(inVelocity) * Utility.skinWidth;
+            newPos -= skinWidth;
         }
 
         outPos = newPos;
