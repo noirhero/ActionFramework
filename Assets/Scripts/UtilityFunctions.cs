@@ -18,8 +18,6 @@ public static class Utility {
     public const float speedY = 0.1f;
     public const float skinWidth = 0.01f;
     public const float stepOffset = 0.01f;
-
-    public static float gamePauseTime = 0.0f;
 }
 
 public static class IdUtility {

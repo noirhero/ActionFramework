@@ -1,7 +1,14 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
-using UnityEngine;
 using Unity.Entities;
+
+public static class GamePause {
+    public static float time = 0.0f;
+
+    public static void Pause(float t) {
+        time = t;
+    }
+}
 
 public class GamePauseSystem : SystemBase {
     public bool hasBeenPaused = false;
@@ -26,13 +33,13 @@ public class GamePauseSystem : SystemBase {
     }
 
     protected override void OnUpdate() {
-        if (0.0f < Utility.gamePauseTime) {
+        if (0.0f < GamePause.time) {
             SetEnableSystems(false);
 
-            Utility.gamePauseTime -= Time.DeltaTime;
+            GamePause.time -= Time.DeltaTime;
 
-            if (0.0f >= Utility.gamePauseTime) {
-                Utility.gamePauseTime = 0.0f;
+            if (0.0f >= GamePause.time) {
+                GamePause.time = 0.0f;
                 SetEnableSystems(true);
             }
         }
