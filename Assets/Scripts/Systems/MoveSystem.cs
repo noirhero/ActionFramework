@@ -108,26 +108,26 @@ public class MoveSystem : ComponentSystem {
     }
 
     private float GetPositionX(float3 inPos) {
-        var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-        if (math.FLT_MIN_NORMAL >= math.abs(moveComp.value.x)) {
+        var moveValue = EntityManager.GetComponentData<MoveComponent>(_controlEntity).value;
+        if (math.FLT_MIN_NORMAL >= math.abs(moveValue.x)) {
             return inPos.x;
         }
 
         var velocity = float3.zero;
-        velocity.x = moveComp.value.x * Utility.speedX * Time.fixedDeltaTime;
+        velocity.x = moveValue.x * Utility.speedX * Time.fixedDeltaTime;
 
         CollisionTest(velocity, ref inPos);
         return inPos.x;
     }
 
     private float GetPositionY(float3 inPos) {
-        var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-        if (math.FLT_MIN_NORMAL >= math.abs(moveComp.value.y)) {
+        var moveValue = EntityManager.GetComponentData<MoveComponent>(_controlEntity).value;
+        if (math.FLT_MIN_NORMAL >= math.abs(moveValue.y)) {
             return inPos.y;
         }
 
         var velocity = float3.zero;
-        velocity.y = moveComp.value.y * Utility.speedY * Time.fixedDeltaTime;
+        velocity.y = moveValue.y * Utility.speedY * Time.fixedDeltaTime;
 
         CollisionTest(velocity, ref inPos);
         return inPos.y;
