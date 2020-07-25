@@ -112,7 +112,7 @@ public class TAPCustomEditor : EditorWindow {
             animData.timelines[_currentTimelineIndex].attackCollision.x = location[0];
             animData.timelines[_currentTimelineIndex].attackCollision.y = location[1];
 
-            uiPositionRect.y += (EditorGUIUtility.singleLineHeight + 10);
+            uiPositionRect.y += (EditorGUIUtility.singleLineHeight + 5);
 
             // 사이즈 조정
             var size = new float[2] {currentRect.width, currentRect.height};
@@ -122,17 +122,20 @@ public class TAPCustomEditor : EditorWindow {
 
             // 콜리전 사이즈가 있을 때 멀티플 체크
             if ((0 < size[0]) && (0 < size[1])) {
-                uiPositionRect.y += (EditorGUIUtility.singleLineHeight + 10);
+                uiPositionRect.y += (EditorGUIUtility.singleLineHeight + 5);
 
                 var bUseMultiCollision = animData.timelines[_currentTimelineIndex].bUseMultiCollision;
                 animData.timelines[_currentTimelineIndex].bUseMultiCollision = EditorGUI.ToggleLeft(uiPositionRect,
-                    new GUIContent("Use Multi Collision"), bUseMultiCollision);
+                    new GUIContent("Use Multi Collision", "do multi-check when colliding so that several objects can be hit in one frame"), bUseMultiCollision);
             }
 
             // 사운드 클립
             uiPositionRect.y += (EditorGUIUtility.singleLineHeight + 10);
-            animData.timelines[_currentTimelineIndex].soundClipKey = (SoundUtility.ClipKey)EditorGUI.EnumFlagsField(uiPositionRect, animData.timelines[_currentTimelineIndex].soundClipKey);
+            EditorGUI.LabelField(uiPositionRect, "Sound Clip", EditorStyles.boldLabel);
 
+            uiPositionRect.y += EditorGUIUtility.singleLineHeight;
+            animData.timelines[_currentTimelineIndex].soundClipKey = (SoundUtility.ClipKey)EditorGUI.EnumFlagsField(uiPositionRect, 
+                animData.timelines[_currentTimelineIndex].soundClipKey);
 
             // Reset
             var isClicked = GUILayout.Button("Reset this frame", GUILayout.MinWidth(110), GUILayout.MaxWidth(110),
