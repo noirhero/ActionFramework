@@ -69,5 +69,5 @@ MonoBehaviour:
     _keyValues: 0100000000000000
     _keys: 0100000000000000
     _values:
-    - clip: {fileID: 8300000, guid: fa4898cc188adee48974c7195fca1fcd, type: 3}
-    - clip: {fileID: 8300000, guid: 1409f3553c1f9e7409ac6908ec82c021, type: 3}
+    - {fileID: 8300000, guid: fa4898cc188adee48974c7195fca1fcd, type: 3}
+    - {fileID: 8300000, guid: 1409f3553c1f9e7409ac6908ec82c021, type: 3}

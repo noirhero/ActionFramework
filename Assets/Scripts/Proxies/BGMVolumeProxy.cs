@@ -9,6 +9,7 @@ using UnityEngine;
 [RequiresEntityConversion]
 public class BGMVolumeProxy : MonoBehaviour, IConvertGameObjectToEntity {
     public SoundUtility.SourceKey id;
+    public SoundUtility.ClipKey clipID;
     public float accume = 0.2f;
     public float minVolume = 0.0f;
     public float maxVolume = 1.0f;
@@ -34,6 +35,7 @@ public class BGMVolumeProxy : MonoBehaviour, IConvertGameObjectToEntity {
 
         dstManager.AddComponentData(entity, new AudioSourceControlComponent {
             id = id,
+            clipID = clipID,
             accume = accume,
             minVolume = minVolume,
             maxVolume = maxVolume

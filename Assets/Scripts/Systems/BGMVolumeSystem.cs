@@ -7,16 +7,26 @@ using UnityEngine;
 
 public class BGMVolumeSystem : SystemBase {
     private Transform _cameraTransform;
+    private AudioClipPreset _audioClipPreset = null;
+
     protected override void OnStartRunning() {
         if (Camera.main != null) {
             _cameraTransform = Camera.main.transform;
         }
+
+        Entities
+            .WithName("BGMVolumeSystem_AudioClip_Collecting")
+            .WithoutBurst()
+            .ForEach((in AudioClipPresetComponent presetComp) => {
+                _audioClipPreset = presetComp.preset;
+            })
+            .Run();
     }
 
     protected override void OnUpdate() {
         var audioSources = new Dictionary<SoundUtility.SourceKey, AudioSource>();
         Entities
-            .WithName("BGMVolumeSystem_Collecting")
+            .WithName("BGMVolumeSystem_AudioSource_Collecting")
             .WithoutBurst()
             .ForEach((in AudioSourceComponent source) => {
                 audioSources.Add(source.id, source.source);
@@ -41,6 +51,10 @@ public class BGMVolumeSystem : SystemBase {
 
                 if (false == audioSources.TryGetValue(control.id, out var source)) {
                     return;
+                }
+
+                if (_audioClipPreset.ClipDatas.TryGetValue(control.clipID, out var clip)) {
+                    source.clip = clip;
                 }
 
                 control.oldVolume = control.currentVolume = calcVolume;

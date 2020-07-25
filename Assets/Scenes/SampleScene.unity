@@ -727,6 +727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  clipID: 0
   accume: 0.1
   minVolume: 0
   maxVolume: 0.2
@@ -3001,7 +3002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConversionMode: 0
+  ConversionMode: 1
 --- !u!4 &2005343639
 Transform:
   m_ObjectHideFlags: 0

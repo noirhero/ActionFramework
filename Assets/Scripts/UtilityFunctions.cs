@@ -23,6 +23,9 @@ public static class Utility {
 public static class SoundUtility {
     public enum SourceKey {
         GhostTown,
+    }
+    public enum ClipKey {
+        GhostTown,
         FootStep,
     }
 }

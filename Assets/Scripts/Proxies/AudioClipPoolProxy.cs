@@ -11,10 +11,16 @@ public class AudioClipPoolProxy : MonoBehaviour, IDeclareReferencedPrefabs, ICon
     public AudioClipPreset _preset;
 
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs) {
-        referencedPrefabs.Add(_preset.gameObject);
+        if (false == ReferenceEquals(null, _preset)) {
+            referencedPrefabs.Add(_preset.gameObject);
+        }
     }
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
+        if (ReferenceEquals(null, _preset)) {
+            dstManager.DestroyEntity(entity);
+            return;
+        }
         
         dstManager.RemoveComponent<LocalToWorld>(entity);
         dstManager.RemoveComponent<Rotation>(entity);

@@ -89,10 +89,12 @@ public class MoveSystem : ComponentSystem {
             }
         }
         else {
-            animComp.state |= AnimUtility.jump;
-
             if (AnimUtility.HasState(animComp, AnimUtility.jump)) {
                 animComp.state ^= AnimUtility.jump;
+                EntityManager.AddComponentData(_controlEntity, new InstantAudioComponent() {
+                    playID = SoundUtility.ClipKey.FootStep,
+                    pos = calcPos,
+                });
             }
         }
 

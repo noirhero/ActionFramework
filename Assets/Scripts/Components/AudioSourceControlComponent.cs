@@ -6,6 +6,7 @@ using Unity.Entities;
 [Serializable]
 public struct AudioSourceControlComponent : IComponentData {
     public SoundUtility.SourceKey id;
+    public SoundUtility.ClipKey clipID;
     public float accume;
     public float minVolume;
     public float maxVolume;

@@ -5,12 +5,7 @@ using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
 
 [Serializable]
-public struct AudioClipPresetData {
-    public AudioClip clip;
-}
-
-[Serializable]
-public class AudioClipPresetDataDictionary : SerializableDictionaryBase<SoundUtility.SourceKey, AudioClipPresetData> {
+public class AudioClipPresetDataDictionary : SerializableDictionaryBase<SoundUtility.ClipKey, AudioClip> {
 }
 
 [Serializable]

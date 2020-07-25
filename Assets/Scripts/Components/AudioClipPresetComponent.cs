@@ -2,6 +2,7 @@
 
 using System;
 using Unity.Entities;
+using UnityEngine;
 
 [Serializable]
 public struct AudioClipPresetComponent : ISharedComponentData, IEquatable<AudioClipPresetComponent> {
@@ -18,4 +19,10 @@ public struct AudioClipPresetComponent : ISharedComponentData, IEquatable<AudioC
     public override int GetHashCode() {
         return ReferenceEquals(null, preset) ? 0 : preset.GetHashCode();
     }
+}
+
+[Serializable]
+public struct InstantAudioComponent : IComponentData {
+    public SoundUtility.ClipKey playID;
+    public Vector3 pos;
 }
