@@ -1,14 +1,13 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
-using Unity.Jobs;
-using UnityEngine;
 
-public class AnimationFrameSystem : JobComponentSystem {
-    protected override JobHandle OnUpdate(JobHandle inputDeps) {
+public class AnimationFrameSystem : SystemBase {
+    protected override void OnUpdate() {
         var deltaTime = Time.DeltaTime;
 
-        return Entities.WithBurst()
+        Entities
+            .WithBurst()
             .ForEach((ref AnimationFrameComponent animComp) => {
                 var animKey = AnimUtility.GetAnimKey(animComp);
 
@@ -21,6 +20,7 @@ public class AnimationFrameSystem : JobComponentSystem {
                     animComp.frame += deltaTime;
                 }
             })
-            .Schedule(inputDeps);
+            .ScheduleParallel(Dependency)
+            .Complete();
     }
 }

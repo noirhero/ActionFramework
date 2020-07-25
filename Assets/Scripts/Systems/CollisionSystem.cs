@@ -35,12 +35,12 @@ public class CollisionSystem : SystemBase {
 
                 var attackCollision = new Rect(scaledPos, scaledSize);
 
-#if UNITY_EDITOR
-                Debug.DrawLine(new Vector3(attackCollision.xMin, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMin), Color.red);   // top
-                Debug.DrawLine(new Vector3(attackCollision.xMin, attackCollision.yMax), new Vector3(attackCollision.xMax, attackCollision.yMax), Color.red);   // bottom
-                Debug.DrawLine(new Vector3(attackCollision.xMin, attackCollision.yMin), new Vector3(attackCollision.xMin, attackCollision.yMax), Color.red);   // left
-                Debug.DrawLine(new Vector3(attackCollision.xMax, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMax), Color.red);   // right
-#endif
+// #if UNITY_EDITOR
+//                 Debug.DrawLine(new Vector3(attackCollision.xMin, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMin), Color.red);   // top
+//                 Debug.DrawLine(new Vector3(attackCollision.xMin, attackCollision.yMax), new Vector3(attackCollision.xMax, attackCollision.yMax), Color.red);   // bottom
+//                 Debug.DrawLine(new Vector3(attackCollision.xMin, attackCollision.yMin), new Vector3(attackCollision.xMin, attackCollision.yMax), Color.red);   // left
+//                 Debug.DrawLine(new Vector3(attackCollision.xMax, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMax), Color.red);   // right
+// #endif
 
                 Entities.WithoutBurst().WithStructuralChanges().ForEach((Entity hitTarget, PhysicsCollider hitTargetCollider) => {
                     if (attacker == hitTarget)
@@ -68,7 +68,7 @@ public class CollisionSystem : SystemBase {
 
                         // 충돌 감지!
                         if (attackCollision.Overlaps(targetCollision)) {
-                            Debug.Log("Overlaps! '-^");
+                            //Debug.Log("Overlaps! '-^");
 
                             attackCollisionComp.bIsConsumed = true;
                             EntityManager.SetComponentData<AttackCollisionComponent>(attacker, attackCollisionComp);
@@ -89,12 +89,12 @@ public class CollisionSystem : SystemBase {
                             });
                         }
 
-#if UNITY_EDITOR
-                        Debug.DrawLine(new Vector3(targetCollision.xMin, targetCollision.yMin), new Vector3(targetCollision.xMax, targetCollision.yMin), Color.red);   // top
-                        Debug.DrawLine(new Vector3(targetCollision.xMax, targetCollision.yMin), new Vector3(targetCollision.xMax, targetCollision.yMax), Color.red);   // right
-                        Debug.DrawLine(new Vector3(targetCollision.xMin, targetCollision.yMax), new Vector3(targetCollision.xMax, targetCollision.yMax), Color.red);   // bottom
-                        Debug.DrawLine(new Vector3(targetCollision.xMin, targetCollision.yMin), new Vector3(targetCollision.xMin, targetCollision.yMax), Color.red);   // left
-#endif
+// #if UNITY_EDITOR
+//                         Debug.DrawLine(new Vector3(targetCollision.xMin, targetCollision.yMin), new Vector3(targetCollision.xMax, targetCollision.yMin), Color.red);   // top
+//                         Debug.DrawLine(new Vector3(targetCollision.xMax, targetCollision.yMin), new Vector3(targetCollision.xMax, targetCollision.yMax), Color.red);   // right
+//                         Debug.DrawLine(new Vector3(targetCollision.xMin, targetCollision.yMax), new Vector3(targetCollision.xMax, targetCollision.yMax), Color.red);   // bottom
+//                         Debug.DrawLine(new Vector3(targetCollision.xMin, targetCollision.yMin), new Vector3(targetCollision.xMin, targetCollision.yMax), Color.red);   // left
+// #endif
                     }
                 }).Run();
 
