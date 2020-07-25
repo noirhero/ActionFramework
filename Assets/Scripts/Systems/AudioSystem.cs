@@ -1,6 +1,5 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
-using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
