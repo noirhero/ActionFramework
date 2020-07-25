@@ -13,6 +13,7 @@ public class HitSystem : SystemBase {
                 if (false == AnimUtility.HasState(animComp, AnimUtility.hit)) {
                     animComp.state |= AnimUtility.hit;
                     renderer.color = hitComp.hitEffectColor;
+                    Utility.gamePauseTime = 0.2f;
                 }
 
                 hitComp.elapsedTime += Time.DeltaTime;

@@ -42,12 +42,8 @@ public class CollisionSystem : SystemBase {
                 Debug.DrawLine(new Vector3(attackCollision.xMax, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMax), Color.red);   // right
 #endif
 
-                Entities.WithoutBurst().WithStructuralChanges().ForEach((Entity hitTarget, PhysicsCollider hitTargetCollider) => {
+                Entities.WithoutBurst().WithStructuralChanges().WithNone<HitComponent>().ForEach((Entity hitTarget, PhysicsCollider hitTargetCollider) => {
                     if (attacker == hitTarget)
-                        return;
-
-                    // 이미 맞음
-                    if (EntityManager.HasComponent<HitComponent>(hitTarget))
                         return;
 
                     // 현재 같은 Controller 필터일 경우에만 충돌 감지 처리
