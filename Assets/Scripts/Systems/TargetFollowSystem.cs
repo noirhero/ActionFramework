@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 
 public class TargetFollowSystem : SystemBase {
-    private JobHandle _jobHandle;
-
     protected override void OnUpdate() {
         var idList = new List<IdUtility.Id>();
         var posList = new List<float3>();
@@ -38,8 +35,8 @@ public class TargetFollowSystem : SystemBase {
         Entities
             .WithName("TargetFollowSystem")
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
-            .ForEach((ref Translation pos, in TargetIdFollowComponent follow) => {
-                for (int i = 0; i < idArray.Length; ++i) {
+            .ForEach((int nativeThreadIndex, ref Translation pos, in TargetIdFollowComponent follow) => {
+                for (var i = 0; i < idArray.Length; ++i) {
                     if (follow.followId != idArray[i]) {
                         continue;
                     }

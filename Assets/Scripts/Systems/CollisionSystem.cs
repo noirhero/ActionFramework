@@ -68,7 +68,7 @@ public class CollisionSystem : SystemBase {
 
                         // 충돌 감지!
                         if (attackCollision.Overlaps(targetCollision)) {
-                            Debug.Log("Overlaps! '-^");
+                            //Debug.Log("Overlaps! '-^");
 
                             attackCollisionComp.bIsConsumed = true;
                             EntityManager.SetComponentData<AttackCollisionComponent>(attacker, attackCollisionComp);
