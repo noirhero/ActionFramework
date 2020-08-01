@@ -49,11 +49,12 @@ public static class AnimUtility {
         Dash,
         Hit,
     }
-
-    public const int run = 0x1;
-    public const int jump = 0x2;
-    public const int attack = 0x4;
-    public const int hit = 0x8;
+    
+    public const int run = 1<<0;
+    public const int jump = 1<<1;
+    public const int attack = 1<<2;
+    public const int hit = 1<<3;
+    public const int crouch = 1<<3;
 
     public static bool HasState(AnimationFrameComponent inAnimComp, int insState) {
         return 0 != (inAnimComp.state & insState);
@@ -93,14 +94,21 @@ public static class AnimUtility {
         // 조건 정리
         if (0 != (run & inState)) {
             if (AnimKey.Attack == inAnimComp.currentAnim ||
-                AnimKey.Hit == inAnimComp.currentAnim) {
+                AnimKey.Hit == inAnimComp.currentAnim ||
+                AnimKey.Crouch == inAnimComp.currentAnim) {
+                return false;
+            }
+        }
+        else if (0 != (crouch & inState)) {
+            if (AnimKey.Jump == inAnimComp.currentAnim) {
                 return false;
             }
         }
         else {
             if (AnimKey.Attack == inAnimComp.currentAnim ||
                 AnimKey.Hit == inAnimComp.currentAnim ||
-                AnimKey.Jump == inAnimComp.currentAnim) {
+                AnimKey.Jump == inAnimComp.currentAnim ||
+                AnimKey.Crouch == inAnimComp.currentAnim) {
                 return false;
             }
         }
@@ -132,11 +140,12 @@ public static class AnimUtility {
 }
 
 public static class InputUtility {
-    public const int left = 0x1;
-    public const int right = 0x2;
-    public const int jump = 0x4;
-    public const int attack = 0x8;
-    public const int axis = 0x10;
+    public const int left = 1<<0;
+    public const int right = 1<<1;
+    public const int jump = 1<<2;
+    public const int attack = 1<<3;
+    public const int axis = 1<<4;
+    public const int crouch = 1<<5;
 
     public static bool IsNone(int state) {
         return 0 == state;

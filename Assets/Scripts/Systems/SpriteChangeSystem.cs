@@ -35,14 +35,14 @@ public class SpriteChangeSystem : SystemBase {
                     }
                 }
 
-                animComp.bFirstChangeIndex = animComp.currentIndex != index;
-                animComp.currentIndex = index;
-
                 if (EntityManager.HasComponent<AnimationLockComponent>(entity)) {
                     var lockComp = EntityManager.GetComponentData<AnimationLockComponent>(entity);
                     index = index > lockComp.frameIndex ? lockComp.frameIndex : index;
                 }
 
+                animComp.bFirstChangeIndex = animComp.currentIndex != index;
+                animComp.currentIndex = index;
+                
                 renderer.sprite = animData.timelines[index].sprite;
                 renderer.flipX = animComp.bFlipX;
             })

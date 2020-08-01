@@ -17,6 +17,9 @@ public struct InputDataComponent : IComponentData {
 public struct JumpComponent : IComponentData { }
 
 [Serializable]
+public struct CrouchComponent : IComponentData { }
+
+[Serializable]
 public struct AttackComponent : IComponentData {
     public float accumTime;
 }

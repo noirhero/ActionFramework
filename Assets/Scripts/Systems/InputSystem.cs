@@ -115,16 +115,44 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnCrouch(InputAction.CallbackContext context) {
-        throw new System.NotImplementedException();
+        if (IsLocked()) {
+            return;
+        }
+
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        if (context.started) {
+            dataComp.state |= InputUtility.crouch;
+        }
+
+        if (context.canceled) {
+            dataComp.state ^= InputUtility.crouch;
+        }
+
+        EntityManager.SetComponentData(_inputEntity, dataComp);
     }
 
     public void OnCrouchAxis(InputAction.CallbackContext context) {
-        throw new System.NotImplementedException();
+        if (IsLocked()) {
+            return;
+        }
+
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        dataComp.dir = context.ReadValue<float>();
+
+        if (context.started) {
+            dataComp.state |= InputUtility.crouch;
+        }
+
+        if (context.canceled) {
+            dataComp.state ^= InputUtility.crouch;
+        }
+
+        EntityManager.SetComponentData(_inputEntity, dataComp);
     }
 
     private InputActions _input;
     private Entity _inputEntity;
-    private Entity _controlEntity; 
+    private Entity _controlEntity;
 
     protected override void OnCreate() {
         _input = new InputActions();
@@ -153,10 +181,11 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
 
-        // run
+#region Run
         moveComp.value.x = AnimUtility.IsChangeAnim(animComp, AnimUtility.run) ? inputDataComp.dir : 0.0f;
+#endregion
 
-        // jump
+#region Jump
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.jump) &&
             InputUtility.HasState(inputDataComp, InputUtility.jump)) {
             moveComp.value.y += Utility.jumpForce;
@@ -166,8 +195,9 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
             EntityManager.AddComponentData(_controlEntity, new JumpComponent());
         }
+#endregion
 
-        // attack
+#region Attack
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.attack) &&
             InputUtility.HasState(inputDataComp, InputUtility.attack)) {
             if (false == EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
@@ -177,11 +207,25 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             // should be once play
             inputDataComp.state ^= InputUtility.attack;
         }
+#endregion
 
-        // gravity
+#region Crouch
+        if (InputUtility.HasState(inputDataComp, InputUtility.crouch)) {
+            if (AnimUtility.IsChangeAnim(animComp, AnimUtility.crouch) &&
+                false == EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
+                EntityManager.AddComponentData(_controlEntity, new CrouchComponent());
+            }
+        }
+        else if (EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
+                EntityManager.RemoveComponent<CrouchComponent>(_controlEntity);
+        }
+#endregion
+
+#region Gravity
         moveComp.value.y = math.max(moveComp.value.y - Utility.gravity, Utility.terminalVelocity);
-        EntityManager.SetComponentData(_controlEntity, moveComp);
+#endregion
 
+        EntityManager.SetComponentData(_controlEntity, moveComp);
         EntityManager.SetComponentData(_inputEntity, inputDataComp);
     }
 }

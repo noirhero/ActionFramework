@@ -54,7 +54,7 @@ public class MoveSystem : ComponentSystem {
         var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
         var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
 
-        // run
+#region Run
         var bMovingX = math.FLT_MIN_NORMAL < math.abs(moveComp.value.x);
         var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
                        (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
@@ -70,8 +70,9 @@ public class MoveSystem : ComponentSystem {
                 animComp.state ^= AnimUtility.run;
             }
         }
+#endregion
 
-        // jump
+#region Jump
         var bMovingY = math.FLT_MIN_NORMAL < math.abs(Utility.terminalVelocity - moveComp.value.y);
         var bFalling = (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
         var bJumping = (0.0f < dir.y) && (Utility.stepOffset < dir.y);
@@ -101,6 +102,7 @@ public class MoveSystem : ComponentSystem {
                 EntityManager.RemoveComponent<AnimationLockComponent>(_controlEntity);
             }
         }
+#endregion
 
         EntityManager.SetComponentData(_controlEntity, animComp);
         EntityManager.SetComponentData(_controlEntity, new Translation {
@@ -153,6 +155,7 @@ public class MoveSystem : ComponentSystem {
         if (bIsHit) {
             newPos = math.lerp(startPos, newPos, hit.Fraction);
         }
+
         newPos -= skinWidth;
 
         outPos = newPos;
