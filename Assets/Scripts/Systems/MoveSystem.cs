@@ -152,8 +152,8 @@ public class MoveSystem : ComponentSystem {
 
         if (bIsHit) {
             newPos = math.lerp(startPos, newPos, hit.Fraction);
-            newPos -= skinWidth;
         }
+        newPos -= skinWidth;
 
         outPos = newPos;
     }
