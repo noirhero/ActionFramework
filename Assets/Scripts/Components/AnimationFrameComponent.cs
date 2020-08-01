@@ -11,6 +11,7 @@ public struct AnimationFrameComponent : IComponentData {
     public float frameRate;
     public bool bFlipX;
     public int currentIndex;
+    public bool bFirstChangeIndex;
 }
 
 [Serializable]

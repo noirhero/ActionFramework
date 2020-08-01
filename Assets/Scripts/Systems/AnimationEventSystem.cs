@@ -59,6 +59,26 @@ public class AnimationEventSystem : SystemBase {
 #endregion
 
 #region audioClip
+                if (animComp.bFirstChangeIndex &&
+                    animData.timelines[index].soundClipKey != 0) {
+                    var trans = EntityManager.GetComponentData<Translation>(entity);
+                    
+                    if (animData.timelines[index].soundClipKey < 0) {
+                        foreach(SoundUtility.ClipKey enumItem in SoundUtility.ClipKey.GetValues(typeof(SoundUtility.ClipKey))){
+                            EntityManager.AddComponentData(entity, new InstantAudioComponent() {
+                                playID = enumItem,
+                                pos = trans.Value,
+                            });
+                        }
+                    }
+                    else{ 
+                        EntityManager.AddComponentData(entity, new InstantAudioComponent() {
+                            playID = animData.timelines[index].soundClipKey,
+                            pos = trans.Value,
+                        });
+                    }
+                }
+                
 #endregion
             })
             .Run();
