@@ -22,7 +22,8 @@ public class AnimData {
 }
 
 [Serializable]
-public class AnimDatas : SerializableDictionaryBase<AnimUtility.AnimKey, AnimData> { }
+public class AnimDatas : SerializableDictionaryBase<AnimUtility.AnimKey, AnimData> {
+}
 
 public class SpritePreset : MonoBehaviour {
     public List<AnimationClip> clips = new List<AnimationClip>();

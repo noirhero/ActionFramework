@@ -43,15 +43,13 @@ public class SpritePresetInspector : Editor {
             }
 
             for (var i = 0; i < animData.timelines.Count - 1; ++i) {
-                animData.timelines[i]
-                        .end = animData.timelines[i + 1]
-                                       .start;
+                animData.timelines[i].end = animData.timelines[i + 1].start;
             }
 
-            animData.timelines[animData.timelines.Count - 1]
-                    .end = clip.length;
+            animData.timelines[animData.timelines.Count - 1].end = clip.length;
 
-            if (false == Enum.TryParse(clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1), out AnimUtility.AnimKey animID)) {
+            if (false == Enum.TryParse(clip.name.Substring(clip.name.LastIndexOf(".", StringComparison.Ordinal) + 1),
+                out AnimUtility.AnimKey animID)) {
                 Debug.LogError("!!!! Check Anim Name");
             }
             else {

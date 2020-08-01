@@ -44,6 +44,9 @@ public static class AnimUtility {
         Run,
         Jump,
         Attack,
+        Crouch,
+        Block,
+        Dash,
         Hit,
     }
 
