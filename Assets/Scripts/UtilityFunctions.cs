@@ -34,7 +34,8 @@ public static class SoundUtility {
     }
     public enum ClipKey {
         GhostTown = 1 << 0,
-        FootStep = 1 << 1
+        FootStep = 1 << 1,
+        Sword = 1 << 2,
     }
 }
 
