@@ -57,6 +57,22 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d15fe7d-9964-4876-bb11-8630d83d6b67"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""CrouchAxis"",
+                    ""type"": ""Value"",
+                    ""id"": ""52f9a910-9a8d-4642-80aa-d64e1918fa3f"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -158,6 +174,39 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""LeftRightAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c584780c-14a0-4ad8-9656-0c1502b81d4e"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""67696cf3-61a9-44d6-bfa2-1fe65b79f1d4"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""96ff6078-0673-4a3a-b3df-2f3264fb9901"",
+                    ""path"": ""<Gamepad>/leftStick/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CrouchAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -171,6 +220,8 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_CharacterControl_Jump = m_CharacterControl.FindAction("Jump", throwIfNotFound: true);
         m_CharacterControl_Attack = m_CharacterControl.FindAction("Attack", throwIfNotFound: true);
         m_CharacterControl_LeftRightAxis = m_CharacterControl.FindAction("LeftRightAxis", throwIfNotFound: true);
+        m_CharacterControl_Crouch = m_CharacterControl.FindAction("Crouch", throwIfNotFound: true);
+        m_CharacterControl_CrouchAxis = m_CharacterControl.FindAction("CrouchAxis", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -225,6 +276,8 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_CharacterControl_Jump;
     private readonly InputAction m_CharacterControl_Attack;
     private readonly InputAction m_CharacterControl_LeftRightAxis;
+    private readonly InputAction m_CharacterControl_Crouch;
+    private readonly InputAction m_CharacterControl_CrouchAxis;
     public struct CharacterControlActions
     {
         private @InputActions m_Wrapper;
@@ -234,6 +287,8 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_CharacterControl_Jump;
         public InputAction @Attack => m_Wrapper.m_CharacterControl_Attack;
         public InputAction @LeftRightAxis => m_Wrapper.m_CharacterControl_LeftRightAxis;
+        public InputAction @Crouch => m_Wrapper.m_CharacterControl_Crouch;
+        public InputAction @CrouchAxis => m_Wrapper.m_CharacterControl_CrouchAxis;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +313,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @LeftRightAxis.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnLeftRightAxis;
                 @LeftRightAxis.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnLeftRightAxis;
                 @LeftRightAxis.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnLeftRightAxis;
+                @Crouch.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouch;
+                @Crouch.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouch;
+                @Crouch.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouch;
+                @CrouchAxis.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouchAxis;
+                @CrouchAxis.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouchAxis;
+                @CrouchAxis.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouchAxis;
             }
             m_Wrapper.m_CharacterControlActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,6 +338,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @LeftRightAxis.started += instance.OnLeftRightAxis;
                 @LeftRightAxis.performed += instance.OnLeftRightAxis;
                 @LeftRightAxis.canceled += instance.OnLeftRightAxis;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
+                @CrouchAxis.started += instance.OnCrouchAxis;
+                @CrouchAxis.performed += instance.OnCrouchAxis;
+                @CrouchAxis.canceled += instance.OnCrouchAxis;
             }
         }
     }
@@ -288,5 +355,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnLeftRightAxis(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
+        void OnCrouchAxis(InputAction.CallbackContext context);
     }
 }
