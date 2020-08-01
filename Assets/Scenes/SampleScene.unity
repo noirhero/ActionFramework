@@ -3204,16 +3204,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1800926448886847523, guid: 37bdc1a096862aa4d9a8c1351d705c3c,
-        type: 3}
-      propertyPath: datas.isExpanded
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1800926448886847523, guid: 37bdc1a096862aa4d9a8c1351d705c3c,
-        type: 3}
-      propertyPath: datas.reorderableList.isExpanded
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6145591884492036204, guid: 37bdc1a096862aa4d9a8c1351d705c3c,
         type: 3}
       propertyPath: m_Name
