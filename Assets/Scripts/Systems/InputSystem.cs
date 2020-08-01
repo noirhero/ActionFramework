@@ -114,6 +114,14 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         EntityManager.SetComponentData(_inputEntity, dataComp);
     }
 
+    public void OnCrouch(InputAction.CallbackContext context) {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnCrouchAxis(InputAction.CallbackContext context) {
+        throw new System.NotImplementedException();
+    }
+
     private InputActions _input;
     private Entity _inputEntity;
     private Entity _controlEntity; 
