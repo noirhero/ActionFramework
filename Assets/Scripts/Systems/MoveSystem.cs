@@ -56,7 +56,8 @@ public class MoveSystem : ComponentSystem {
 
         // run
         var bMovingX = math.FLT_MIN_NORMAL < math.abs(moveComp.value.x);
-        var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) || (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
+        var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
+                       (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
         if (bMovingX || bRunning) {
             animComp.bFlipX = bMovingX ? moveComp.value.x < 0.0f : animComp.bFlipX;
 

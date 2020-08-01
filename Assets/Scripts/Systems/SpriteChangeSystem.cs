@@ -34,7 +34,7 @@ public class SpriteChangeSystem : SystemBase {
                         break;
                     }
                 }
-                
+
                 animComp.bFirstChangeIndex = animComp.currentIndex != index;
                 animComp.currentIndex = index;
 
