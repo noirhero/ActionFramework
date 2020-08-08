@@ -36,6 +36,8 @@ public static class SoundUtility {
         GhostTown = 1 << 0,
         FootStep = 1 << 1,
         Sword = 1 << 2,
+        Landing = 1 << 3,
+        Hit = 1 << 4,
     }
 }
 

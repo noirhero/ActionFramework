@@ -67,7 +67,7 @@ public class CollisionSystem : SystemBase {
                             //Debug.Log("Overlaps! '-^");
 
                             attackCollisionComp.bIsConsumed = true;
-                            EntityManager.SetComponentData<AttackCollisionComponent>(attacker, attackCollisionComp);
+                            EntityManager.SetComponentData(attacker, attackCollisionComp);
 
                             var hitComponent = new HitComponent() {
                                 damage = 10,
@@ -75,7 +75,11 @@ public class CollisionSystem : SystemBase {
                                 hitEffectColor = Color.black,
                                 hitEffectTime = 0.1f
                             };
-                            EntityManager.AddComponentData<HitComponent>(hitTarget, hitComponent);
+                            EntityManager.AddComponentData(hitTarget, hitComponent);
+                            EntityManager.AddComponentData(hitTarget, new InstantAudioComponent() {
+                                playID = SoundUtility.ClipKey.Hit,
+                                pos = targetTranslation.Value,
+                            });
 
                             var effectSpawnEntity = EntityManager.CreateEntity();
                             EntityManager.AddComponentData(effectSpawnEntity, new EffectSpawnComponent {
