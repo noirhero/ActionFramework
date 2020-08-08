@@ -71,6 +71,13 @@ public class MoveSystem : ComponentSystem {
                         playID = SoundUtility.ClipKey.Landing,
                         pos = calcPos,
                     });
+                    var effectSpawnEntity = EntityManager.CreateEntity();
+                    EntityManager.AddComponentData(effectSpawnEntity, new EffectSpawnComponent {
+                        id = EffectUtility.Key.Landing,
+                        pos = calcPos,
+                        rot = quaternion.identity,
+                        scale = new float3(1.0f)
+                    });
                 }
             }
 #endregion

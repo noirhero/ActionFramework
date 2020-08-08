@@ -6,7 +6,7 @@ using Unity.Mathematics;
 
 [Serializable]
 public struct EffectSpawnComponent : IComponentData {
-    public int id;
+    public EffectUtility.Key id;
     public float3 scale;
     public float3 pos;
     public quaternion rot;

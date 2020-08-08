@@ -2,9 +2,15 @@
 
 using System;
 using Unity.Entities;
+using UnityEngine;
+using RotaryHeart.Lib.SerializableDictionary;
+
+[Serializable]
+public class EffectPresetDataDictionary : SerializableDictionaryBase<EffectUtility.Key, GameObject> {
+}
 
 [Serializable]
 public struct EffectGuidComponent : IComponentData {
-    public int id;
+    public EffectUtility.Key id;
     public Entity prefab;
 }

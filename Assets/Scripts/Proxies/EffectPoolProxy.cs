@@ -7,19 +7,20 @@ using UnityEngine;
 [DisallowMultipleComponent]
 [RequiresEntityConversion]
 public class EffectPoolProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity {
-    public List<GameObject> effectObjects = new List<GameObject>();
+    public EffectPresetDataDictionary effectObjects = new EffectPresetDataDictionary();
 
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs) {
         foreach (var effectObject in effectObjects) {
-            referencedPrefabs.Add(effectObject);
+            referencedPrefabs.Add(effectObject.Value);
         }
     }
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-        for (var i = 0; i < effectObjects.Count; ++i) {
+        
+        foreach (var effectObject in effectObjects) {
             dstManager.AddComponentData(dstManager.CreateEntity(), new EffectGuidComponent {
-                id = i,
-                prefab =  conversionSystem.GetPrimaryEntity(effectObjects[i])
+                id = effectObject.Key,
+                prefab =  conversionSystem.GetPrimaryEntity(effectObject.Value)
             });
         }
         dstManager.DestroyEntity(entity);

@@ -1,0 +1,223 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2972024339652297813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9220408313265447421}
+  - component: {fileID: 1871267133621817292}
+  - component: {fileID: 7900736515979174017}
+  - component: {fileID: 1296009023178220874}
+  m_Layer: 0
+  m_Name: LandingEffectPrefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9220408313265447421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972024339652297813}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1871267133621817292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972024339652297813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
+--- !u!114 &7900736515979174017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972024339652297813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e8071e72b8c8646b6e9545b682ae5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guidSource: Assets/Resources/Effects/Landing.ase
+--- !u!114 &1296009023178220874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972024339652297813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d88420319e69943a5edbe0b29c67a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: -1536148048500726220, guid: ea1ccc06c157e4c4bb99f172ad67e195, type: 3}
+  datas:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues: 01000000
+    _keys: 01000000
+    _values:
+    - length: 0.7500001
+      timelines:
+      - start: 0
+        end: 0.3
+        sprite: {fileID: 6407908689697250046, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.3
+        end: 0.35000002
+        sprite: {fileID: 5564346769513425801, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.35000002
+        end: 0.40000004
+        sprite: {fileID: -5912547492461337054, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.40000004
+        end: 0.45000005
+        sprite: {fileID: 1520617516743607870, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.45000005
+        end: 0.50000006
+        sprite: {fileID: 6847557706128493554, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.50000006
+        end: 0.5500001
+        sprite: {fileID: 5431614882833322796, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.5500001
+        end: 0.6000001
+        sprite: {fileID: -4682567146021879599, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.6000001
+        end: 0.6500001
+        sprite: {fileID: -4874666739505735505, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.6500001
+        end: 0.7000001
+        sprite: {fileID: 4762242028801914910, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0
+      - start: 0.7000001
+        end: 0.7500001
+        sprite: {fileID: 6237994678867924947, guid: ea1ccc06c157e4c4bb99f172ad67e195,
+          type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        bUseMultiCollision: 0
+        soundClipKey: 0

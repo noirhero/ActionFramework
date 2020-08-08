@@ -28,6 +28,14 @@ public static class IdUtility {
     }
 }
 
+public static class EffectUtility {
+    public enum Key {
+        Hit = 1 << 0,
+        FootStep = 1 << 1,
+        Landing = 1 << 2,
+    }
+}
+
 public static class SoundUtility {
     public enum SourceKey {
         GhostTown,

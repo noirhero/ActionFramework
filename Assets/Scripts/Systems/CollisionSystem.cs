@@ -91,6 +91,7 @@ public class CollisionSystem : SystemBase {
 
                             var effectSpawnEntity = EntityManager.CreateEntity();
                             EntityManager.AddComponentData(effectSpawnEntity, new EffectSpawnComponent {
+                                id = EffectUtility.Key.Hit,
                                 pos = targetTranslation.Value,
                                 rot = quaternion.identity,
                                 scale = new float3(1.0f)
