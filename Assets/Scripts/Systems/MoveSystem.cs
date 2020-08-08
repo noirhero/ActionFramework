@@ -129,22 +129,21 @@ public class MoveSystem : ComponentSystem {
         var rotation = EntityManager.GetComponentData<Rotation>(entity);
 
         var startPos = outPos;
-        var newPos = outPos + inVelocity;
-
         var skinWidth = math.normalize(inVelocity) * Utility.skinWidth;
+        var newPos = outPos + inVelocity + skinWidth;
+
         var bIsHit = physWorld.CastCollider(new ColliderCastInput {
             Collider = collider.ColliderPtr,
             Orientation = rotation.Value,
             Start = startPos,
-            End = newPos + skinWidth
+            End = newPos
         }, out var hit);
 
         if (bIsHit) {
             newPos = math.lerp(startPos, newPos, hit.Fraction);
         }
-
+        
         newPos -= skinWidth;
-
         outPos = newPos;
     }
 }
