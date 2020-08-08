@@ -80,7 +80,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 1
+      isExpanded: 0
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -95,14 +95,14 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 1
+    isExpanded: 0
     _keyValues: 01000000
     _keys: 01000000
     _values:
-    - length: 0.7500001
+    - length: 0.25
       timelines:
       - start: 0
-        end: 0.3
+        end: 0.05
         sprite: {fileID: 6407908689697250046, guid: ea1ccc06c157e4c4bb99f172ad67e195,
           type: 3}
         attackCollision:
@@ -113,8 +113,8 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
-      - start: 0.3
-        end: 0.35000002
+      - start: 0.05
+        end: 0.1
         sprite: {fileID: 5564346769513425801, guid: ea1ccc06c157e4c4bb99f172ad67e195,
           type: 3}
         attackCollision:
@@ -125,8 +125,8 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
-      - start: 0.35000002
-        end: 0.40000004
+      - start: 0.1
+        end: 0.15
         sprite: {fileID: -5912547492461337054, guid: ea1ccc06c157e4c4bb99f172ad67e195,
           type: 3}
         attackCollision:
@@ -137,8 +137,8 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
-      - start: 0.40000004
-        end: 0.45000005
+      - start: 0.15
+        end: 0.2
         sprite: {fileID: 1520617516743607870, guid: ea1ccc06c157e4c4bb99f172ad67e195,
           type: 3}
         attackCollision:
@@ -149,69 +149,9 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
-      - start: 0.45000005
-        end: 0.50000006
+      - start: 0.2
+        end: 0.25
         sprite: {fileID: 6847557706128493554, guid: ea1ccc06c157e4c4bb99f172ad67e195,
-          type: 3}
-        attackCollision:
-          serializedVersion: 2
-          x: 0
-          y: 0
-          width: 0
-          height: 0
-        bUseMultiCollision: 0
-        soundClipKey: 0
-      - start: 0.50000006
-        end: 0.5500001
-        sprite: {fileID: 5431614882833322796, guid: ea1ccc06c157e4c4bb99f172ad67e195,
-          type: 3}
-        attackCollision:
-          serializedVersion: 2
-          x: 0
-          y: 0
-          width: 0
-          height: 0
-        bUseMultiCollision: 0
-        soundClipKey: 0
-      - start: 0.5500001
-        end: 0.6000001
-        sprite: {fileID: -4682567146021879599, guid: ea1ccc06c157e4c4bb99f172ad67e195,
-          type: 3}
-        attackCollision:
-          serializedVersion: 2
-          x: 0
-          y: 0
-          width: 0
-          height: 0
-        bUseMultiCollision: 0
-        soundClipKey: 0
-      - start: 0.6000001
-        end: 0.6500001
-        sprite: {fileID: -4874666739505735505, guid: ea1ccc06c157e4c4bb99f172ad67e195,
-          type: 3}
-        attackCollision:
-          serializedVersion: 2
-          x: 0
-          y: 0
-          width: 0
-          height: 0
-        bUseMultiCollision: 0
-        soundClipKey: 0
-      - start: 0.6500001
-        end: 0.7000001
-        sprite: {fileID: 4762242028801914910, guid: ea1ccc06c157e4c4bb99f172ad67e195,
-          type: 3}
-        attackCollision:
-          serializedVersion: 2
-          x: 0
-          y: 0
-          width: 0
-          height: 0
-        bUseMultiCollision: 0
-        soundClipKey: 0
-      - start: 0.7000001
-        end: 0.7500001
-        sprite: {fileID: 6237994678867924947, guid: ea1ccc06c157e4c4bb99f172ad67e195,
           type: 3}
         attackCollision:
           serializedVersion: 2
