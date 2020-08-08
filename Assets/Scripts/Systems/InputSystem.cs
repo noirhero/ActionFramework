@@ -210,14 +210,16 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 #endregion
 
 #region Crouch
-        if (InputUtility.HasState(inputDataComp, InputUtility.crouch)) {
-            if (AnimUtility.IsChangeAnim(animComp, AnimUtility.crouch) &&
-                false == EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
+        if (AnimUtility.IsChangeAnim(animComp, AnimUtility.crouch) &&
+            InputUtility.HasState(inputDataComp, InputUtility.crouch)) {
+            if (false == EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
                 EntityManager.AddComponentData(_controlEntity, new CrouchComponent());
             }
         }
-        else if (EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
+        else {
+            if (EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
                 EntityManager.RemoveComponent<CrouchComponent>(_controlEntity);
+            }
         }
 #endregion
 

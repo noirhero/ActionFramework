@@ -68,15 +68,14 @@ public class MoveSystem : ComponentSystem {
             }
 #endregion
 
-// #region Crouch
-//             if (EntityManager.HasComponent<CrouchComponent>(entity) &&
-//                 false == AnimUtility.HasState(animComp, AnimUtility.crouch)) {
-//                 animComp.state |= AnimUtility.crouch;
-//             }
-//             else {
-//                 animComp.state ^= AnimUtility.crouch;
-//             }
-// #endregion
+#region Crouch
+            if (EntityManager.HasComponent<CrouchComponent>(entity)) {
+                animComp.state |= AnimUtility.crouch;
+            }
+            else if(AnimUtility.HasState(animComp, AnimUtility.crouch)){
+                animComp.state ^= AnimUtility.crouch;
+            }
+#endregion
 
 #region FrameLock
             // jump anim lock
