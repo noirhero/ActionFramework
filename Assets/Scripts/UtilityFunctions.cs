@@ -55,7 +55,7 @@ public static class AnimUtility {
     public const int jump = 1<<1;
     public const int attack = 1<<2;
     public const int hit = 1<<3;
-    public const int crouch = 1<<3;
+    public const int crouch = 1<<4;
 
     public static bool HasState(AnimationFrameComponent inAnimComp, int insState) {
         return 0 != (inAnimComp.state & insState);
@@ -72,6 +72,10 @@ public static class AnimUtility {
 
     public static AnimKey GetAnimKey(AnimationFrameComponent inAnimComp) {
         // 우선 순위별
+        if (HasState(inAnimComp, crouch)) {
+            return AnimKey.Crouch;
+        }
+        
         if (HasState(inAnimComp, jump)) {
             return AnimKey.Jump;
         }
@@ -136,6 +140,10 @@ public static class AnimUtility {
             cachedStr += " hit";
         }
 
+        if (0 != (crouch & animComp.state)) {
+            cachedStr += " crouch";
+        }
+
         return cachedStr;
     }
 }
@@ -177,6 +185,10 @@ public static class InputUtility {
 
         if (0 != (axis & inputComp.state)) {
             cachedStr += " Axis";
+        }
+
+        if (0 != (crouch & inputComp.state)) {
+            cachedStr += " Crouch";
         }
 
         return cachedStr;

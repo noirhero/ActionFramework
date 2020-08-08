@@ -22,63 +22,78 @@ public class MoveSystem : ComponentSystem {
         if (IsLocked()) {
             return;
         }
-        
-        Entities.ForEach((Entity entity, ref Translation transComp, ref MoveComponent moveComp,
-            ref AnimationFrameComponent animComp) => {
+
+        Entities.ForEach((Entity entity, ref Translation transComp, ref MoveComponent moveComp, ref AnimationFrameComponent animComp) => {
 
             var calcPos = transComp.Value;
             calcPos.y = GetPositionY(entity, calcPos);
             calcPos.x = GetPositionX(entity, calcPos);
             var dir = calcPos - transComp.Value;
 
-        #region Run
-                var bMovingX = math.FLT_MIN_NORMAL < math.abs(moveComp.value.x);
-                var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) || (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
-                if (bMovingX || bRunning) {
-                    animComp.bFlipX = bMovingX ? moveComp.value.x < 0.0f : animComp.bFlipX;
+#region Run
+            var bMovingX = math.FLT_MIN_NORMAL < math.abs(moveComp.value.x);
+            var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
+                           (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
+            if (bMovingX || bRunning) {
+                animComp.bFlipX = bMovingX ? moveComp.value.x < 0.0f : animComp.bFlipX;
 
-                    if (false == AnimUtility.HasState(animComp, AnimUtility.run)) {
-                        animComp.state |= AnimUtility.run;
-                    }
+                if (false == AnimUtility.HasState(animComp, AnimUtility.run)) {
+                    animComp.state |= AnimUtility.run;
                 }
-                else {
-                    if (AnimUtility.HasState(animComp, AnimUtility.run)) {
-                        animComp.state ^= AnimUtility.run;
-                    }
+            }
+            else {
+                if (AnimUtility.HasState(animComp, AnimUtility.run)) {
+                    animComp.state ^= AnimUtility.run;
                 }
-        #endregion
+            }
+#endregion
 
-        #region Jump
-                var bMovingY = math.FLT_MIN_NORMAL < math.abs(Utility.terminalVelocity - moveComp.value.y);
-                var bFalling = (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
-                var bJumping = (0.0f < dir.y) && (Utility.stepOffset < dir.y);
-                if (bMovingY || bJumping || bFalling) {
-                    if (false == AnimUtility.HasState(animComp, AnimUtility.jump)) {
-                        animComp.state |= AnimUtility.jump;
-                    }
+#region Jump
+            var bMovingY = math.FLT_MIN_NORMAL < math.abs(Utility.terminalVelocity - moveComp.value.y);
+            var bFalling = (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
+            var bJumping = (0.0f < dir.y) && (Utility.stepOffset < dir.y);
+            if (bMovingY || bJumping || bFalling) {
+                if (false == AnimUtility.HasState(animComp, AnimUtility.jump)) {
+                    animComp.state |= AnimUtility.jump;
                 }
-                else {
-                    if (AnimUtility.HasState(animComp, AnimUtility.jump)) {
-                        animComp.state ^= AnimUtility.jump;
-                        EntityManager.AddComponentData(entity, new InstantAudioComponent() {
-                            playID = SoundUtility.ClipKey.FootStep,
-                            pos = calcPos,
-                        });
-                    }
+            }
+            else {
+                if (AnimUtility.HasState(animComp, AnimUtility.jump)) {
+                    animComp.state ^= AnimUtility.jump;
+                    EntityManager.AddComponentData(entity, new InstantAudioComponent() {
+                        playID = SoundUtility.ClipKey.FootStep,
+                        pos = calcPos,
+                    });
                 }
+            }
+#endregion
 
-                // jump anim lock
-                if (bJumping) {
-                    if (false == EntityManager.HasComponent<AnimationLockComponent>(entity)) {
-                        EntityManager.AddComponentData(entity, new AnimationLockComponent(2));
-                    }
+// #region Crouch
+//             if (EntityManager.HasComponent<CrouchComponent>(entity) &&
+//                 false == AnimUtility.HasState(animComp, AnimUtility.crouch)) {
+//                 animComp.state |= AnimUtility.crouch;
+//             }
+//             else {
+//                 animComp.state ^= AnimUtility.crouch;
+//             }
+// #endregion
+
+#region FrameLock
+            // jump anim lock
+            if (EntityManager.HasComponent<CrouchComponent>(entity)) {
+                EntityManager.AddComponentData(entity, new AnimationLockComponent(1));
+            }
+            else if (bJumping) {
+                if (false == EntityManager.HasComponent<AnimationLockComponent>(entity)) {
+                    EntityManager.AddComponentData(entity, new AnimationLockComponent(2));
                 }
-                else {
-                    if (EntityManager.HasComponent<AnimationLockComponent>(entity)) {
-                        EntityManager.RemoveComponent<AnimationLockComponent>(entity);
-                    }
+            }
+            else {
+                if (EntityManager.HasComponent<AnimationLockComponent>(entity)) {
+                    EntityManager.RemoveComponent<AnimationLockComponent>(entity);
                 }
-        #endregion
+            }
+#endregion
             transComp.Value = calcPos;
         });
     }
