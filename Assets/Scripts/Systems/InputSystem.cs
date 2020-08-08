@@ -89,7 +89,8 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.state |= InputUtility.attack;
         }
 
-        if (InputUtility.HasState(dataComp, InputUtility.attack) && context.canceled) {
+        if (InputUtility.HasState(dataComp, InputUtility.attack) &&
+            context.canceled) {
             dataComp.state ^= InputUtility.attack;
         }
 
@@ -103,12 +104,14 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
         dataComp.dir = context.ReadValue<float>();
-
-        if (context.started) {
+        
+        if (false == InputUtility.HasState(dataComp, InputUtility.axis) &&
+            context.started) {
             dataComp.state |= InputUtility.axis;
         }
 
-        if (context.canceled) {
+        if (InputUtility.HasState(dataComp, InputUtility.axis) &&
+            context.canceled) {
             dataComp.state ^= InputUtility.axis;
         }
 
@@ -138,13 +141,13 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         }
 
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-        dataComp.dir = context.ReadValue<float>();
-
-        if (context.started) {
+        if (-0.5f > context.ReadValue<float>() &&
+            false == InputUtility.HasState(dataComp, InputUtility.crouch)) {
             dataComp.state |= InputUtility.crouch;
         }
-
-        if (context.canceled) {
+        
+        if (InputUtility.HasState(dataComp, InputUtility.crouch) &&
+            context.canceled) {
             dataComp.state ^= InputUtility.crouch;
         }
 
