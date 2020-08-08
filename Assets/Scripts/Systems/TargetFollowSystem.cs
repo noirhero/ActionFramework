@@ -35,17 +35,19 @@ public class TargetFollowSystem : SystemBase {
         Entities
             .WithName("TargetFollowSystem")
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
-            .ForEach((int nativeThreadIndex, ref Translation pos, ref
-                AnimationFrameComponent anim, in TargetIdFollowComponent follow) => {
+            .ForEach((ref Translation pos, ref AnimationFrameComponent anim, in TargetIdFollowComponent follow) => {
                 for (var i = 0; i < idArray.Length; ++i) {
                     if (follow.followId != idArray[i]) {
                         continue;
                     }
 
-                    var transX = posArray[i].x - pos.Value.x;
-                    anim.bFlipX = transX != 0.0f ? transX > 0.0f : anim.bFlipX;
-                    
-                    pos.Value = math.lerp(pos.Value, posArray[i], deltaTime * follow.speed);
+                    var targetPos = posArray[i];
+                    targetPos.y += 0.4f;
+
+                    var at = targetPos - pos.Value;
+                    anim.bFlipX = at.x > 0.0f ? true : false;
+
+                    pos.Value = math.lerp(pos.Value, targetPos, deltaTime * follow.speed);
                     break;
                 }
             })
