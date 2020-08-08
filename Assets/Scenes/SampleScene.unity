@@ -2613,8 +2613,8 @@ MonoBehaviour:
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
     isExpanded: 1
-    _keyValues: 0100000008000000
-    _keys: 0100000008000000
+    _keyValues: 0100000004000000
+    _keys: 0100000004000000
     _values:
     - {fileID: 6873378637064874546, guid: a598cea536998a047b6fb04245e05616, type: 3}
     - {fileID: 8514321304948658352, guid: 190cac8c3fc2f3e40844f580af1ca5b6, type: 3}
