@@ -69,6 +69,14 @@ public class CollisionSystem : SystemBase {
                             attackCollisionComp.bIsConsumed = true;
                             EntityManager.SetComponentData(attacker, attackCollisionComp);
 
+                            var renderer = EntityManager.GetComponentObject<SpriteRenderer>(attacker);
+                            var dir = renderer.flipX ? -1.0f : 1.0f;
+                            var moveComponent = new MoveComponent() {
+                                impulseDir = new Vector2(dir, 0.0f),
+                                impulseForce = 1.0f
+                            };
+                            EntityManager.AddComponentData<MoveComponent>(hitTarget, moveComponent);
+
                             var hitComponent = new HitComponent() {
                                 damage = 10,
                                 godTime = 0.5f,

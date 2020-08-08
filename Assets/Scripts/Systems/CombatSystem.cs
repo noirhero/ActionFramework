@@ -5,8 +5,14 @@ using Unity.Entities;
 public class CombatSystem : ComponentSystem {
     private Entity _inputEntity;
     private Entity _controlEntity;
+    private bool _hasBeenInitialized = false;
 
     protected override void OnStartRunning() {
+        if (_hasBeenInitialized) {
+            return;
+        }
+        _hasBeenInitialized = true;
+
         Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => {
             _inputEntity = inputEntity;
         });

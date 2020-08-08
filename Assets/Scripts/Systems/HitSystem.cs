@@ -26,6 +26,7 @@ public class HitSystem : SystemBase {
 
                     animComp.state ^= AnimUtility.hit;
                     EntityManager.RemoveComponent<HitComponent>(entity);
+                    EntityManager.RemoveComponent<MoveComponent>(entity);
                 }
             }).Run();
     }

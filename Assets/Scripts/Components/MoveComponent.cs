@@ -8,4 +8,6 @@ using UnityEngine;
 [GenerateAuthoringComponent]
 public struct MoveComponent : IComponentData {
     public Vector2 value;
+    public Vector2 impulseDir;
+    public float impulseForce;
 }

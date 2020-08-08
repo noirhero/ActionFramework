@@ -8,8 +8,14 @@ using Unity.Transforms;
 
 public class MoveSystem : ComponentSystem {
     private BuildPhysicsWorld _buildPhysSystem;
+    private bool _hasBeenInitialized = false;
 
     protected override void OnStartRunning() {
+        if (_hasBeenInitialized) {
+            return;
+        }
+
+        _hasBeenInitialized = true;
         _buildPhysSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
 
@@ -30,6 +36,7 @@ public class MoveSystem : ComponentSystem {
             calcPos.x = GetPositionX(entity, calcPos);
             var dir = calcPos - transComp.Value;
 
+        if (false == EntityManager.HasComponent<TargetIdFollowComponent>(entity)) {
 #region Run
             var bMovingX = math.FLT_MIN_NORMAL < math.abs(moveComp.value.x);
             var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
@@ -93,18 +100,22 @@ public class MoveSystem : ComponentSystem {
                 }
             }
 #endregion
+            }
             transComp.Value = calcPos;
         });
     }
 
     private float GetPositionX(Entity entity, float3 inPos) {
-        var moveValue = EntityManager.GetComponentData<MoveComponent>(entity).value;
-        if (math.FLT_MIN_NORMAL >= math.abs(moveValue.x)) {
-            return inPos.x;
-        }
+        var moveComp = EntityManager.GetComponentData<MoveComponent>(entity);
+        var moveValue = moveComp.value;
 
         var velocity = float3.zero;
         velocity.x = moveValue.x * Utility.speedX * Time.fixedDeltaTime;
+
+        // add impulse
+        if (0.0f < moveComp.impulseForce) {
+            velocity.x += moveComp.impulseForce * moveComp.impulseDir.x * Time.fixedDeltaTime;
+        }
 
         CollisionTest(entity, velocity, ref inPos);
         return inPos.x;
@@ -124,6 +135,11 @@ public class MoveSystem : ComponentSystem {
     }
 
     private unsafe void CollisionTest(Entity entity, float3 inVelocity, ref float3 outPos) {
+        var isVelocityNaN = math.isnan(math.normalize(inVelocity));
+        if (isVelocityNaN.x | isVelocityNaN.y | isVelocityNaN.z) {
+            return;
+        }
+
         var physWorld = _buildPhysSystem.PhysicsWorld;
         var collider = EntityManager.GetComponentData<PhysicsCollider>(entity);
         var rotation = EntityManager.GetComponentData<Rotation>(entity);
