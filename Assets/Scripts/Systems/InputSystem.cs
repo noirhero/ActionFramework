@@ -2,6 +2,7 @@
 
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using UnityEngine.InputSystem;
 
 public class InputSystem : ComponentSystem, InputActions.ICharacterControlActions {
@@ -182,10 +183,13 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
 
 #region Run
+
         moveComp.value.x = AnimUtility.IsChangeAnim(animComp, AnimUtility.run) ? inputDataComp.dir : 0.0f;
+
 #endregion
 
 #region Jump
+
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.jump) &&
             InputUtility.HasState(inputDataComp, InputUtility.jump)) {
             moveComp.value.y += Utility.jumpForce;
@@ -195,9 +199,11 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
             EntityManager.AddComponentData(_controlEntity, new JumpComponent());
         }
+
 #endregion
 
 #region Attack
+
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.attack) &&
             InputUtility.HasState(inputDataComp, InputUtility.attack)) {
             if (false == EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
@@ -207,24 +213,49 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             // should be once play
             inputDataComp.state ^= InputUtility.attack;
         }
+
 #endregion
 
 #region Crouch
+
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.crouch) &&
             InputUtility.HasState(inputDataComp, InputUtility.crouch)) {
             if (false == EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
                 EntityManager.AddComponentData(_controlEntity, new CrouchComponent());
+
+                var colliderComponent = EntityManager.GetComponentData<PhysicsCollider>(_controlEntity);
+                unsafe {
+                    var grabCollider = (CapsuleCollider*) colliderComponent.ColliderPtr;
+                    var at = grabCollider->Vertex1 - grabCollider->Vertex0;
+
+                    var geometry = grabCollider->Geometry;
+                    geometry.Vertex1 = geometry.Vertex0 + at * 0.5f;
+                    grabCollider->Geometry = geometry;
+                }
             }
         }
         else {
             if (EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
                 EntityManager.RemoveComponent<CrouchComponent>(_controlEntity);
+
+                var colliderComponent = EntityManager.GetComponentData<PhysicsCollider>(_controlEntity);
+                unsafe {
+                    var grabCollider = (CapsuleCollider*) colliderComponent.ColliderPtr;
+                    var at = grabCollider->Vertex1 - grabCollider->Vertex0;
+
+                    var geometry = grabCollider->Geometry;
+                    geometry.Vertex1 = geometry.Vertex0 + at * 2.0f;
+                    grabCollider->Geometry = geometry;
+                }
             }
         }
+
 #endregion
 
 #region Gravity
+
         moveComp.value.y = math.max(moveComp.value.y - Utility.gravity, Utility.terminalVelocity);
+
 #endregion
 
         EntityManager.SetComponentData(_controlEntity, moveComp);
