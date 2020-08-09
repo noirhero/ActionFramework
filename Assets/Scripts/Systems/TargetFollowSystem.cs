@@ -32,10 +32,13 @@ public class TargetFollowSystem : SystemBase {
         }
 
         var deltaTime = Time.DeltaTime;
+        var velocityMin = new float3(-10.0f);
+        var velocityMax = new float3(10.0f);
         Entities
             .WithName("TargetFollowSystem")
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
-            .ForEach((ref Translation pos, ref AnimationFrameComponent anim, in TargetIdFollowComponent follow) => {
+            .WithNone<HitComponent>()
+            .ForEach((ref Translation pos, ref AnimationFrameComponent anim, ref VelocityComponent velocity, in TargetIdFollowComponent follow) => {
                 for (var i = 0; i < idArray.Length; ++i) {
                     if (follow.followId != idArray[i]) {
                         continue;
@@ -47,7 +50,10 @@ public class TargetFollowSystem : SystemBase {
                     var at = targetPos - pos.Value;
                     anim.bFlipX = at.x > 0.0f ? true : false;
 
-                    pos.Value = math.lerp(pos.Value, targetPos, deltaTime * follow.speed);
+                    velocity.Value += at;
+                    velocity.Value = math.clamp(velocity.Value, velocityMin, velocityMax);
+
+                    pos.Value += velocity.Value * (deltaTime * follow.speed);
                     break;
                 }
             })
