@@ -31,7 +31,7 @@ public class EffectSpawnSystem : SystemBase {
         }
 
         var oneUniformScale = new float3(1.0f, 1.0f, 1.0f);
-        var cmdBuf = _cmdBufSystem.CreateCommandBuffer().ToConcurrent();
+        var cmdBuf = _cmdBufSystem.CreateCommandBuffer().AsParallelWriter();
         Entities
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, in EffectSpawnComponent spawnInfo) => {

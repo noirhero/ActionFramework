@@ -64,3 +64,4 @@ crashlytics-build.properties
 # Project settings user files
 ProjectSettings/*.json
 packages-lock.json
+UserSettings/

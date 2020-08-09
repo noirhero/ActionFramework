@@ -11,7 +11,7 @@ public class AutoDestroySystem : SystemBase {
 
     protected override void OnUpdate() {
         var deltaTime = Time.DeltaTime;
-        var cmdBuf = _cmdBufSystem.CreateCommandBuffer().ToConcurrent();
+        var cmdBuf = _cmdBufSystem.CreateCommandBuffer().AsParallelWriter();
         Entities
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, ref AutoDestroyComponent autoDestroy) => {
