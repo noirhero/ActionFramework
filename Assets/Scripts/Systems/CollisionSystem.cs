@@ -42,7 +42,7 @@ public class CollisionSystem : SystemBase {
                 Debug.DrawLine(new Vector3(attackCollision.xMax, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMax), Color.red);   // right
 #endif
 
-                Entities.WithoutBurst().WithStructuralChanges().WithNone<HitComponent>().ForEach((Entity hitTarget, PhysicsCollider hitTargetCollider) => {
+                Entities.WithoutBurst().WithStructuralChanges().WithNone<HitComponent>().ForEach((Entity hitTarget, in PhysicsCollider hitTargetCollider) => {
                     if (attacker == hitTarget)
                         return;
 

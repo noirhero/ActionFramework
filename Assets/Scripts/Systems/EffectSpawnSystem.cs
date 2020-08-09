@@ -63,7 +63,7 @@ public class EffectSpawnSystem : SystemBase {
 
                 cmdBuf.DestroyEntity(entityInQueryIndex, entity);
             })
-            .WithDeallocateOnJobCompletion(effectGuidArray)
+            .WithDisposeOnCompletion(effectGuidArray)
             .ScheduleParallel();
 
         _cmdBufSystem.AddJobHandleForProducer(Dependency);

@@ -51,8 +51,8 @@ public class TargetFollowSystem : SystemBase {
                     break;
                 }
             })
-            .WithDeallocateOnJobCompletion(idArray)
-            .WithDeallocateOnJobCompletion(posArray)
+            .WithDisposeOnCompletion(idArray)
+            .WithDisposeOnCompletion(posArray)
             .ScheduleParallel(Dependency)
             .Complete();
     }
