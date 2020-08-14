@@ -120,6 +120,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: -8878513221033722082, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -132,6 +133,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: -5807987444940971551, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -144,6 +146,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.3
         end: 0.4
         sprite: {fileID: -4546570782930855285, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -156,6 +159,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
     - length: 0.70000005
       timelines:
       - start: 0
@@ -170,6 +174,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: -4106701637606726508, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -182,6 +187,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: 2877802243737411288, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -194,6 +200,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.3
         end: 0.4
         sprite: {fileID: 826915476319844909, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -206,6 +213,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 2
+        effectKey: 2
       - start: 0.4
         end: 0.5
         sprite: {fileID: -4326640719568627971, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -218,6 +226,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.5
         end: 0.6
         sprite: {fileID: -1333346045318347873, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -230,6 +239,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.6
         end: 0.70000005
         sprite: {fileID: 1411975621794697470, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -242,6 +252,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
     - length: 0.5
       timelines:
       - start: 0
@@ -256,6 +267,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: 55197829868330041, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -268,6 +280,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: -3660464499730203126, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -280,6 +293,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.3
         end: 0.4
         sprite: {fileID: -4478718038025743936, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -292,6 +306,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.4
         end: 0.5
         sprite: {fileID: -4117283221497647301, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -304,6 +319,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
     - length: 0.6
       timelines:
       - start: 0
@@ -318,6 +334,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: 2520600477053507983, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -330,6 +347,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: 5950981911402367957, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -342,6 +360,7 @@ MonoBehaviour:
           height: 61.68
         bUseMultiCollision: 0
         soundClipKey: 4
+        effectKey: 0
       - start: 0.3
         end: 0.4
         sprite: {fileID: -3087437913550365998, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -354,6 +373,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.4
         end: 0.5
         sprite: {fileID: -8147110920315076209, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -366,6 +386,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.5
         end: 0.6
         sprite: {fileID: -4001651174186438304, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -378,6 +399,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
     - length: 0.6
       timelines:
       - start: 0
@@ -392,6 +414,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: 9216110817254888849, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -404,6 +427,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.2
         end: 0.6
         sprite: {fileID: 1882483471356225347, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -416,6 +440,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
     - length: 0.2
       timelines:
       - start: 0
@@ -430,6 +455,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: 1973389510344687347, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -442,6 +468,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
     - length: 0.2
       timelines:
       - start: 0
@@ -456,6 +483,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: -6559954073283047471, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -468,6 +496,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
     - length: 0.2
       timelines:
       - start: 0
@@ -482,6 +511,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: -7484437157874607199, guid: b79fe9f5991a52e469b2ec895125f6ae,
@@ -494,3 +524,4 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 0
+        effectKey: 0

@@ -1,6 +1,7 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -62,20 +63,36 @@ public class AnimationEventSystem : SystemBase {
                 if (animComp.bFirstChangeIndex &&
                     animData.timelines[index].soundClipKey != 0) {
                     var trans = EntityManager.GetComponentData<Translation>(entity);
-
-                    if (animData.timelines[index].soundClipKey < 0) {
-                        foreach (SoundUtility.ClipKey enumItem in SoundUtility.ClipKey.GetValues(
-                            typeof(SoundUtility.ClipKey))) {
-                            EntityManager.AddComponentData(entity, new InstantAudioComponent() {
-                                playID = enumItem,
-                                pos = trans.Value,
-                            });
+                    foreach (SoundUtility.ClipKey enumItem in SoundUtility.ClipKey.GetValues(
+                        typeof(SoundUtility.ClipKey))) {
+                        if (0 == (animData.timelines[index].soundClipKey & enumItem)) {
+                            continue;
                         }
-                    }
-                    else {
+
                         EntityManager.AddComponentData(entity, new InstantAudioComponent() {
-                            playID = animData.timelines[index].soundClipKey,
+                            id = enumItem,
                             pos = trans.Value,
+                        });
+                    }
+                }
+#endregion
+
+#region effect
+                if (animComp.bFirstChangeIndex &&
+                    animData.timelines[index].effectKey != 0) {
+                    var trans = EntityManager.GetComponentData<Translation>(entity);
+                    foreach (EffectUtility.Key enumItem in EffectUtility.Key.GetValues(
+                        typeof(EffectUtility.Key))) {
+                        if (0 == (animData.timelines[index].effectKey & enumItem)) {
+                            continue;
+                        }
+
+                        var effectSpawnEntity = EntityManager.CreateEntity();
+                        EntityManager.AddComponentData(effectSpawnEntity, new EffectSpawnComponent {
+                            id = enumItem,
+                            pos = trans.Value,
+                            rot = quaternion.identity,
+                            scale = new float3(1.0f)
                         });
                     }
                 }

@@ -68,7 +68,7 @@ public class MoveSystem : ComponentSystem {
                 if (AnimUtility.HasState(animComp, AnimUtility.jump)) {
                     animComp.state ^= AnimUtility.jump;
                     EntityManager.AddComponentData(entity, new InstantAudioComponent() {
-                        playID = SoundUtility.ClipKey.Landing,
+                        id = SoundUtility.ClipKey.Landing,
                         pos = calcPos,
                     });
                     var effectSpawnEntity = EntityManager.CreateEntity();

@@ -19,7 +19,7 @@ public class AudioSystem : SystemBase {
             .WithoutBurst()
             .WithStructuralChanges()
             .ForEach((Entity entity, int entityInQueryIndex, in InstantAudioComponent instantComp) => {
-                if (_audioClipPreset.ClipDatas.TryGetValue(instantComp.playID, out var clip)) {
+                if (_audioClipPreset.ClipDatas.TryGetValue(instantComp.id, out var clip)) {
                     AudioSource.PlayClipAtPoint(clip, instantComp.pos);
                     EntityManager.RemoveComponent<InstantAudioComponent>(entity);
                 }

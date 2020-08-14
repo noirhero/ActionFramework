@@ -13,6 +13,7 @@ public class AnimTimeline {
     public Rect attackCollision;
     public bool bUseMultiCollision;
     public SoundUtility.ClipKey soundClipKey;
+    public EffectUtility.Key effectKey;
 }
 
 [Serializable]

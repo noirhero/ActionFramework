@@ -23,6 +23,6 @@ public struct AudioClipPresetComponent : ISharedComponentData, IEquatable<AudioC
 
 [Serializable]
 public struct InstantAudioComponent : IComponentData {
-    public SoundUtility.ClipKey playID;
+    public SoundUtility.ClipKey id;
     public Vector3 pos;
 }

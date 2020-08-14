@@ -85,7 +85,7 @@ public class CollisionSystem : SystemBase {
                             };
                             EntityManager.AddComponentData(hitTarget, hitComponent);
                             EntityManager.AddComponentData(hitTarget, new InstantAudioComponent() {
-                                playID = SoundUtility.ClipKey.Hit,
+                                id = SoundUtility.ClipKey.Hit,
                                 pos = targetTranslation.Value,
                             });
 

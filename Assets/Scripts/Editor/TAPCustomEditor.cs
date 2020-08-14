@@ -137,6 +137,15 @@ public class TAPCustomEditor : EditorWindow {
             animData.timelines[_currentTimelineIndex].soundClipKey = (SoundUtility.ClipKey)EditorGUI.EnumFlagsField(uiPositionRect, 
                 animData.timelines[_currentTimelineIndex].soundClipKey);
 
+            // 이펙트
+            uiPositionRect.y += (EditorGUIUtility.singleLineHeight + 10);
+            EditorGUI.LabelField(uiPositionRect, "Effect", EditorStyles.boldLabel);
+
+            uiPositionRect.y += EditorGUIUtility.singleLineHeight;
+            animData.timelines[_currentTimelineIndex].effectKey = (EffectUtility.Key) EditorGUI.EnumFlagsField
+            (uiPositionRect,
+                animData.timelines[_currentTimelineIndex].effectKey);
+
             // Reset
             var isClicked = GUILayout.Button("Reset this frame", GUILayout.MinWidth(110), GUILayout.MaxWidth(110),
                 GUILayout.MinHeight(20), GUILayout.MaxHeight(20));
