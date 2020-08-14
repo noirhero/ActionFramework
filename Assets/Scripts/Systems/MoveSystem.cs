@@ -76,7 +76,7 @@ public class MoveSystem : ComponentSystem {
                         id = EffectUtility.Key.Landing,
                         pos = calcPos,
                         rot = quaternion.identity,
-                        scale = new float3(1.0f)
+                        scale = new float3(0.5f)
                     });
                 }
             }

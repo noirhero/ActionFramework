@@ -213,7 +213,7 @@ MonoBehaviour:
           height: 0
         bUseMultiCollision: 0
         soundClipKey: 2
-        effectKey: 2
+        effectKey: 0
       - start: 0.4
         end: 0.5
         sprite: {fileID: -4326640719568627971, guid: b79fe9f5991a52e469b2ec895125f6ae,
