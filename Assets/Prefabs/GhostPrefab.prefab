@@ -105,15 +105,51 @@ MonoBehaviour:
         end: 0.1
         sprite: {fileID: 1818293444894172383, guid: 06f8c48f15dd9e447a25858face104cd,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 4
+          y: 3
+          width: 33
+          height: 33
+        bUseMultiCollision: 0
+        soundClipKey: 0
+        effectKey: 0
       - start: 0.1
         end: 0.2
         sprite: {fileID: 9120678972460308940, guid: 06f8c48f15dd9e447a25858face104cd,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 3
+          y: 3
+          width: 30
+          height: 33
+        bUseMultiCollision: 0
+        soundClipKey: 0
+        effectKey: 0
       - start: 0.2
         end: 0.3
         sprite: {fileID: 4813362493378460210, guid: 06f8c48f15dd9e447a25858face104cd,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 1
+          y: 1
+          width: 27
+          height: 35
+        bUseMultiCollision: 0
+        soundClipKey: 0
+        effectKey: 0
       - start: 0.3
         end: 0.4
         sprite: {fileID: -3719144073846576041, guid: 06f8c48f15dd9e447a25858face104cd,
           type: 3}
+        attackCollision:
+          serializedVersion: 2
+          x: 3
+          y: 4
+          width: 30
+          height: 33
+        bUseMultiCollision: 0
+        soundClipKey: 0
+        effectKey: 0

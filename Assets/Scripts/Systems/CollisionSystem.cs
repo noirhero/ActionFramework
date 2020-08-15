@@ -64,7 +64,13 @@ public class CollisionSystem : SystemBase {
 
                         // 충돌 감지!
                         if (attackCollision.Overlaps(targetCollision)) {
-                            //Debug.Log("Overlaps! '-^");
+                            if (EntityManager.HasComponent<TargetIdComponent>(hitTarget)) {
+                                var targetIDComp = EntityManager.GetComponentData<TargetIdComponent>(hitTarget);
+                                if (IdUtility.Id.Player == targetIDComp.value) {
+                                    GamePause.Pause(1.0f);  // TODO 게임 오버
+                                    return;
+                                }
+                            }
 
                             attackCollisionComp.bIsConsumed = true;
                             EntityManager.SetComponentData(attacker, attackCollisionComp);
