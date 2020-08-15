@@ -67,7 +67,7 @@ public class CollisionSystem : SystemBase {
                             if (EntityManager.HasComponent<TargetIdComponent>(hitTarget)) {
                                 var targetIDComp = EntityManager.GetComponentData<TargetIdComponent>(hitTarget);
                                 if (IdUtility.Id.Player == targetIDComp.value) {
-                                    GamePause.Pause(1.0f);  // TODO 게임 오버
+                                    GameOver.Over();
                                     return;
                                 }
                             }
