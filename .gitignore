@@ -65,3 +65,5 @@ crashlytics-build.properties
 ProjectSettings/*.json
 packages-lock.json
 UserSettings/
+SceneDependencyCache/
+SceneDependencyCache.meta
