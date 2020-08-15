@@ -7,6 +7,8 @@ using UnityEngine;
 [RequiresEntityConversion]
 public class EffectProxy : MonoBehaviour, IConvertGameObjectToEntity {
     public string asePath;
+    public int loopingCount;
+    
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         dstManager.AddComponentData(entity, new FindSpritePresetComponent() {
             value = Utility.GetHashCode(asePath)
@@ -14,6 +16,10 @@ public class EffectProxy : MonoBehaviour, IConvertGameObjectToEntity {
 
         dstManager.AddComponentData(entity,  new AnimationFrameComponent {
             state = AnimUtility.run,
+        });
+        
+        dstManager.AddComponentData(entity,  new FindAutoDestroyComponent {
+            loopingCount = loopingCount,
         });
     }
 }

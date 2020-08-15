@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3294976643123208113}
   - component: {fileID: 5192226411113036144}
   - component: {fileID: 8691243195575557756}
-  - component: {fileID: 4143798746761820134}
   m_Layer: 0
   m_Name: LandingEffectObject
   m_TagString: Untagged
@@ -112,16 +111,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   asePath: Assets/Resources/Effects/Landing.ase
---- !u!114 &4143798746761820134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8514321304948658352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48f67dfc87ff8cc4a8f87a9fc192e616, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeTime: 0.25
+  loopingCount: 1
