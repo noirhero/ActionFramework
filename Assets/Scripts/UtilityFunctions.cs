@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using Unity.Entities;
 
 public static class Utility {
     public static int GetHashCode(in string path) {
@@ -18,6 +19,14 @@ public static class Utility {
     public static readonly float speedY = 0.1f;
     public static readonly float skinWidth = 0.01f;
     public static readonly float stepOffset = 0.01f;
+
+    public static Entity SystemEntity { get; private set; }
+
+    public static void SetSystemEntity(Entity entity) {
+        if (Entity.Null == SystemEntity) {
+            SystemEntity = entity;
+        }
+    }
 }
 
 public static class IdUtility {
@@ -40,6 +49,7 @@ public static class SoundUtility {
     public enum SourceKey {
         GhostTown,
     }
+
     public enum ClipKey {
         GhostTown = 1 << 0,
         FootStep = 1 << 1,
@@ -60,12 +70,12 @@ public static class AnimUtility {
         Dash,
         Hit,
     }
-    
-    public const int run = 1<<0;
-    public const int jump = 1<<1;
-    public const int attack = 1<<2;
-    public const int hit = 1<<3;
-    public const int crouch = 1<<4;
+
+    public const int run = 1 << 0;
+    public const int jump = 1 << 1;
+    public const int attack = 1 << 2;
+    public const int hit = 1 << 3;
+    public const int crouch = 1 << 4;
 
     public static bool HasState(AnimationFrameComponent inAnimComp, int insState) {
         return 0 != (inAnimComp.state & insState);
@@ -85,7 +95,7 @@ public static class AnimUtility {
         if (HasState(inAnimComp, crouch)) {
             return AnimKey.Crouch;
         }
-        
+
         if (HasState(inAnimComp, jump)) {
             return AnimKey.Jump;
         }
@@ -159,12 +169,12 @@ public static class AnimUtility {
 }
 
 public static class InputUtility {
-    public const int left = 1<<0;
-    public const int right = 1<<1;
-    public const int jump = 1<<2;
-    public const int attack = 1<<3;
-    public const int axis = 1<<4;
-    public const int crouch = 1<<5;
+    public const int left = 1 << 0;
+    public const int right = 1 << 1;
+    public const int jump = 1 << 2;
+    public const int attack = 1 << 3;
+    public const int axis = 1 << 4;
+    public const int crouch = 1 << 5;
 
     public static bool IsNone(int state) {
         return 0 == state;

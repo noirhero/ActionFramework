@@ -8,6 +8,7 @@ public static class GameOver {
     public static void Over() {
         bIsOvered = true;
     }
+
     public static void Play() {
         bIsOvered = false;
     }
@@ -17,10 +18,10 @@ public class GameOverSystem : SystemBase {
     public bool hasBeenOvered = false;
     public System.Type[] systemTypes = null;
     public int systemsMaxNum = 15;
-    
+
     protected override void OnCreate() {
         GameOver.Play();
-        
+
         var idx = 0;
         systemTypes = new System.Type[systemsMaxNum];
         systemTypes[idx++] = typeof(CollisionSystem);
@@ -29,12 +30,14 @@ public class GameOverSystem : SystemBase {
         systemTypes[idx++] = typeof(MoveSystem);
         systemTypes[idx++] = typeof(TargetFollowSystem);
     }
-    
+
     protected override void OnUpdate() {
         if (GameOver.bIsOvered == hasBeenOvered) {
             return;
         }
-            
+
+        hasBeenOvered = GameOver.bIsOvered;
+
         if (GameOver.bIsOvered) {
             SetEnableSystems(false);
             Entities.WithName("GameOverSystem")
@@ -44,9 +47,15 @@ public class GameOverSystem : SystemBase {
                     if (IdUtility.Id.Player != idComp.value) {
                         return;
                     }
-                
+
                     if (false == AnimUtility.HasState(animComp, AnimUtility.hit)) {
                         animComp.state |= AnimUtility.hit;
+                    }
+
+                    if (false == EntityManager.HasComponent<FadeInComponent>(Utility.SystemEntity)) {
+                        EntityManager.AddComponentData(Utility.SystemEntity, new FadeInComponent() {
+                            time = 1.0f
+                        });
                     }
                 })
                 .Run();
@@ -55,7 +64,7 @@ public class GameOverSystem : SystemBase {
             SetEnableSystems(true);
         }
     }
-    
+
     private void SetEnableSystems(bool enabled) {
         foreach (var system in World.DefaultGameObjectInjectionWorld.Systems) {
             foreach (var type in systemTypes) {
