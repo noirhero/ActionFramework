@@ -2527,10 +2527,75 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6146557929429556510, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_DetectChunkCullingBounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5625362724444431528, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_DetectChunkCullingBounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5625362724444431528, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5625362724444431528, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -3077263016961944056, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_DetectChunkCullingBounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3077263016961944056, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -3077263016961944056, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: -2909278559584889283, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
         type: 3}
       propertyPath: m_Name
       value: CountryRoad
+      objectReference: {fileID: 0}
+    - target: {fileID: -928836031010906435, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_DetectChunkCullingBounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -928836031010906435, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -928836031010906435, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485001022783710288, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_DetectChunkCullingBounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485001022783710288, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 0.14999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485001022783710288, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 1.11
       objectReference: {fileID: 0}
     - target: {fileID: 1773008122156368410, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
         type: 3}
@@ -2586,6 +2651,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752502213522618133, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_DetectChunkCullingBounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752502213522618133, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752502213522618133, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4906786253574004356, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_DetectChunkCullingBounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4906786253574004356, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4906786253574004356, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: -2695619058785784247, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
