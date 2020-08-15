@@ -1093,7 +1093,7 @@ Camera:
   far clip plane: 10
   field of view: 60
   orthographic: 1
-  orthographic size: 1
+  orthographic size: 0.98
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1412,7 +1412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &666774377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1666,7 +1666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &802602665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1920,7 +1920,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &874284156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2535,12 +2535,12 @@ PrefabInstance:
     - target: {fileID: 1773008122156368410, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.277
+      value: -11.81
       objectReference: {fileID: 0}
     - target: {fileID: 1773008122156368410, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.998
+      value: 1.06
       objectReference: {fileID: 0}
     - target: {fileID: 1773008122156368410, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
         type: 3}
@@ -2763,7 +2763,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1577422939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3477,7 +3477,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1862582143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3985,7 +3985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1978388508
 MonoBehaviour:
   m_ObjectHideFlags: 0
