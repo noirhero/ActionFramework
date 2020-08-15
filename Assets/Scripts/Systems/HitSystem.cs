@@ -21,9 +21,6 @@ public class HitSystem : SystemBase {
                     renderer.color = Color.white;
                 }
                 else if (hitComp.elapsedTime >= hitComp.godTime) {
-
-                    /* TODO : 데미지 처리! */
-
                     animComp.state ^= AnimUtility.hit;
                     EntityManager.RemoveComponent<HitComponent>(entity);
                     EntityManager.RemoveComponent<MoveComponent>(entity);
