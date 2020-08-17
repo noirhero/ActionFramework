@@ -7,11 +7,19 @@ using UnityEngine.InputSystem;
 
 public class InputSystem : ComponentSystem, InputActions.ICharacterControlActions {
     private bool IsLocked() {
-        if (false == EntityManager.HasComponent<InputDataComponent>(_inputEntity)) {
+        if (Entity.Null == Utility.SystemEntity) {
             return true;
         }
 
-        if (false == EntityManager.HasComponent<AnimationFrameComponent>(_controlEntity)) {
+        if (false == EntityManager.HasComponent<InputDataComponent>(Utility.SystemEntity)) {
+            return true;
+        }
+
+        if (Entity.Null == Utility.ControlEntity) {
+            return true;
+        }
+
+        if (false == EntityManager.HasComponent<AnimationFrameComponent>(Utility.ControlEntity)) {
             return true;
         }
 
@@ -24,7 +32,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
 
         if (context.started) {
             dataComp.state |= InputUtility.left;
@@ -36,7 +44,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.dir += 1.0f;
         }
 
-        EntityManager.SetComponentData(_inputEntity, dataComp);
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnRight(InputAction.CallbackContext context) {
@@ -44,7 +52,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
 
         if (context.started) {
             dataComp.state |= InputUtility.right;
@@ -56,7 +64,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.dir += -1.0f;
         }
 
-        EntityManager.SetComponentData(_inputEntity, dataComp);
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnJump(InputAction.CallbackContext context) {
@@ -64,7 +72,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
 
         if (context.started) {
             dataComp.state |= InputUtility.jump;
@@ -75,7 +83,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.state ^= InputUtility.jump;
         }
 
-        EntityManager.SetComponentData(_inputEntity, dataComp);
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnAttack(InputAction.CallbackContext context) {
@@ -83,7 +91,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
 
         if (context.started) {
             dataComp.state |= InputUtility.attack;
@@ -94,7 +102,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.state ^= InputUtility.attack;
         }
 
-        EntityManager.SetComponentData(_inputEntity, dataComp);
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnLeftRightAxis(InputAction.CallbackContext context) {
@@ -102,9 +110,9 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         dataComp.dir = context.ReadValue<float>();
-        
+
         if (false == InputUtility.HasState(dataComp, InputUtility.axis) &&
             context.started) {
             dataComp.state |= InputUtility.axis;
@@ -115,7 +123,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.state ^= InputUtility.axis;
         }
 
-        EntityManager.SetComponentData(_inputEntity, dataComp);
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnCrouch(InputAction.CallbackContext context) {
@@ -123,7 +131,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         if (context.started) {
             dataComp.state |= InputUtility.crouch;
         }
@@ -132,7 +140,7 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             dataComp.state ^= InputUtility.crouch;
         }
 
-        EntityManager.SetComponentData(_inputEntity, dataComp);
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnCrouchAxis(InputAction.CallbackContext context) {
@@ -140,36 +148,29 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         if (-0.5f > context.ReadValue<float>() &&
             false == InputUtility.HasState(dataComp, InputUtility.crouch)) {
             dataComp.state |= InputUtility.crouch;
         }
-        
+
         if (InputUtility.HasState(dataComp, InputUtility.crouch) &&
             context.canceled) {
             dataComp.state ^= InputUtility.crouch;
         }
 
-        EntityManager.SetComponentData(_inputEntity, dataComp);
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     private InputActions _input;
-    private Entity _inputEntity;
-    private Entity _controlEntity;
 
     protected override void OnCreate() {
         _input = new InputActions();
         _input.CharacterControl.SetCallbacks(this);
-
-        _inputEntity = EntityManager.CreateEntity();
-        EntityManager.AddComponentData(_inputEntity, new InputDataComponent());
     }
 
     protected override void OnStartRunning() {
         _input.Enable();
-
-        Entities.ForEach((Entity controlEntity, ref MoveComponent moveComp) => { _controlEntity = controlEntity; });
     }
 
     protected override void OnStopRunning() {
@@ -181,18 +182,15 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             return;
         }
 
-        var moveComp = EntityManager.GetComponentData<MoveComponent>(_controlEntity);
-        var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(_inputEntity);
-        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+        var moveComp = EntityManager.GetComponentData<MoveComponent>(Utility.ControlEntity);
+        var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(Utility.ControlEntity);
 
 #region Run
-
         moveComp.value.x = AnimUtility.IsChangeAnim(animComp, AnimUtility.run) ? inputDataComp.dir : 0.0f;
-
 #endregion
 
 #region Jump
-
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.jump) &&
             InputUtility.HasState(inputDataComp, InputUtility.jump)) {
             moveComp.value.y += Utility.jumpForce;
@@ -200,33 +198,29 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             // should be once play
             inputDataComp.state ^= InputUtility.jump;
 
-            EntityManager.AddComponentData(_controlEntity, new JumpComponent());
+            EntityManager.AddComponentData(Utility.ControlEntity, new JumpComponent());
         }
-
 #endregion
 
 #region Attack
-
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.attack) &&
             InputUtility.HasState(inputDataComp, InputUtility.attack)) {
-            if (false == EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
-                EntityManager.AddComponentData(_controlEntity, new AttackComponent());
+            if (false == EntityManager.HasComponent<AttackComponent>(Utility.ControlEntity)) {
+                EntityManager.AddComponentData(Utility.ControlEntity, new AttackComponent());
             }
 
             // should be once play
             inputDataComp.state ^= InputUtility.attack;
         }
-
 #endregion
 
 #region Crouch
-
         if (AnimUtility.IsChangeAnim(animComp, AnimUtility.crouch) &&
             InputUtility.HasState(inputDataComp, InputUtility.crouch)) {
-            if (false == EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
-                EntityManager.AddComponentData(_controlEntity, new CrouchComponent());
+            if (false == EntityManager.HasComponent<CrouchComponent>(Utility.ControlEntity)) {
+                EntityManager.AddComponentData(Utility.ControlEntity, new CrouchComponent());
 
-                var colliderComponent = EntityManager.GetComponentData<PhysicsCollider>(_controlEntity);
+                var colliderComponent = EntityManager.GetComponentData<PhysicsCollider>(Utility.ControlEntity);
                 unsafe {
                     var grabCollider = (CapsuleCollider*) colliderComponent.ColliderPtr;
                     var at = grabCollider->Vertex1 - grabCollider->Vertex0;
@@ -238,10 +232,10 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
             }
         }
         else {
-            if (EntityManager.HasComponent<CrouchComponent>(_controlEntity)) {
-                EntityManager.RemoveComponent<CrouchComponent>(_controlEntity);
+            if (EntityManager.HasComponent<CrouchComponent>(Utility.ControlEntity)) {
+                EntityManager.RemoveComponent<CrouchComponent>(Utility.ControlEntity);
 
-                var colliderComponent = EntityManager.GetComponentData<PhysicsCollider>(_controlEntity);
+                var colliderComponent = EntityManager.GetComponentData<PhysicsCollider>(Utility.ControlEntity);
                 unsafe {
                     var grabCollider = (CapsuleCollider*) colliderComponent.ColliderPtr;
                     var at = grabCollider->Vertex1 - grabCollider->Vertex0;
@@ -252,16 +246,13 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
                 }
             }
         }
-
 #endregion
 
 #region Gravity
-
         moveComp.value.y = math.max(moveComp.value.y - Utility.gravity, Utility.terminalVelocity);
-
 #endregion
 
-        EntityManager.SetComponentData(_controlEntity, moveComp);
-        EntityManager.SetComponentData(_inputEntity, inputDataComp);
+        EntityManager.SetComponentData(Utility.ControlEntity, moveComp);
+        EntityManager.SetComponentData(Utility.SystemEntity, inputDataComp);
     }
 }

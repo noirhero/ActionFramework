@@ -3,39 +3,30 @@
 using Unity.Entities;
 
 public class CombatSystem : ComponentSystem {
-    private Entity _inputEntity;
-    private Entity _controlEntity;
     private bool _hasBeenInitialized = false;
 
     protected override void OnStartRunning() {
         if (_hasBeenInitialized) {
             return;
         }
+
         _hasBeenInitialized = true;
-
-        Entities.ForEach((Entity inputEntity, ref InputDataComponent dataComp) => {
-            _inputEntity = inputEntity;
-        });
-
-        Entities.ForEach((Entity controlEntity, ref InputComponent inputComp) => {
-            _controlEntity = controlEntity;
-        });
     }
 
     private bool IsLocked() {
-        if (Entity.Null == _inputEntity) {
+        if (Entity.Null == Utility.SystemEntity) {
             return true;
         }
 
-        if (false == EntityManager.HasComponent<InputDataComponent>(_inputEntity)) {
+        if (false == EntityManager.HasComponent<InputDataComponent>(Utility.SystemEntity)) {
             return true;
         }
 
-        if (Entity.Null == _controlEntity) {
+        if (Entity.Null == Utility.ControlEntity) {
             return true;
         }
 
-        if (false == EntityManager.HasComponent<AnimationFrameComponent>(_controlEntity)) {
+        if (false == EntityManager.HasComponent<AnimationFrameComponent>(Utility.ControlEntity)) {
             return true;
         }
 
@@ -48,11 +39,11 @@ public class CombatSystem : ComponentSystem {
             return;
         }
 
-        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(_controlEntity);
+        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(Utility.ControlEntity);
 
-        if (EntityManager.HasComponent<AttackComponent>(_controlEntity)) {
+        if (EntityManager.HasComponent<AttackComponent>(Utility.ControlEntity)) {
             if (1.0f <= animComp.frameRate) {
-                EntityManager.RemoveComponent<AttackComponent>(_controlEntity);
+                EntityManager.RemoveComponent<AttackComponent>(Utility.ControlEntity);
             }
 
             if (false == AnimUtility.HasState(animComp, AnimUtility.attack)) {
@@ -65,6 +56,6 @@ public class CombatSystem : ComponentSystem {
             }
         }
 
-        EntityManager.SetComponentData(_controlEntity, animComp);
+        EntityManager.SetComponentData(Utility.ControlEntity, animComp);
     }
 }

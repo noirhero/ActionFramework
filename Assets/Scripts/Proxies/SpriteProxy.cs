@@ -11,5 +11,9 @@ public class SpriteProxy : MonoBehaviour, IConvertGameObjectToEntity {
         dstManager.AddComponentData(entity, new FindSpritePresetComponent() {
             value = Utility.GetHashCode(asePath)
         });
+
+        if (this.name == "Player") {
+            Utility.SetControlEntity(entity);
+        }
     }
 }
