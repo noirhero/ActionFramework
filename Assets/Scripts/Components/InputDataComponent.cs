@@ -4,5 +4,7 @@ using System;
 using Unity.Entities;
 
 [Serializable]
-[GenerateAuthoringComponent]
-public struct InputComponent : IComponentData { }
+public struct InputDataComponent : IComponentData {
+    public int state;
+    public float dir;
+}

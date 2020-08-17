@@ -9,9 +9,3 @@ public struct FadeInComponent : IComponentData {
     public float time;
     [HideInInspector] public float elapsedTime;
 }
-
-[Serializable]
-public struct FadeOutComponent : IComponentData {
-    public float time;
-    [HideInInspector] public float elapsedTime;
-}

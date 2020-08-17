@@ -13,12 +13,3 @@ public struct AnimationFrameComponent : IComponentData {
     public int currentIndex;
     public bool bFirstChangeIndex;
 }
-
-[Serializable]
-public struct AnimationLockComponent : IComponentData {
-    public int frameIndex;
-
-    public AnimationLockComponent(int inIndex) {
-        frameIndex = inIndex;
-    }
-}

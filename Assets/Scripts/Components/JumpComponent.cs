@@ -4,5 +4,4 @@ using System;
 using Unity.Entities;
 
 [Serializable]
-[GenerateAuthoringComponent]
-public struct InputComponent : IComponentData { }
+public struct JumpComponent : IComponentData { }
