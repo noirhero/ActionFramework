@@ -12,8 +12,11 @@ public class SpriteProxy : MonoBehaviour, IConvertGameObjectToEntity {
             value = Utility.GetHashCode(asePath)
         });
 
-        if (this.name == "Player") {
-            Utility.SetControlEntity(entity);
+        if (dstManager.HasComponent<TargetIdComponent>(entity)) {
+            var idComp = dstManager.GetComponentData<TargetIdComponent>(entity);
+            if (idComp.value == IdUtility.Id.Player) {
+                Utility.SetControlEntity(entity);                
+            }
         }
     }
 }
