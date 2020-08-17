@@ -3103,9 +3103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1695498129}
-  - component: {fileID: 1695498128}
   - component: {fileID: 1695498127}
-  - component: {fileID: 1695498130}
   - component: {fileID: 1695498132}
   - component: {fileID: 1695498131}
   - component: {fileID: 1695498133}
@@ -3113,6 +3111,8 @@ GameObject:
   - component: {fileID: 1695498135}
   - component: {fileID: 1695498136}
   - component: {fileID: 1695498137}
+  - component: {fileID: 1695498130}
+  - component: {fileID: 1695498128}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
