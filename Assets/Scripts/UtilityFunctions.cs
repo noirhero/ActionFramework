@@ -100,6 +100,10 @@ public static class AnimUtility {
 
     public static AnimKey GetAnimKey(AnimationFrameComponent inAnimComp) {
         // 우선 순위별
+        if (HasState(inAnimComp, hit)) {
+            return AnimKey.Hit;
+        }
+
         if (HasState(inAnimComp, crouch)) {
             return AnimKey.Crouch;
         }
@@ -114,10 +118,6 @@ public static class AnimUtility {
 
         if (HasState(inAnimComp, run)) {
             return AnimKey.Run;
-        }
-
-        if (HasState(inAnimComp, hit)) {
-            return AnimKey.Hit;
         }
 
         return AnimKey.Idle;
