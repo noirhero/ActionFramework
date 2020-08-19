@@ -12,7 +12,7 @@ public class CollisionSystem : SystemBase {
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
-            .ForEach((Entity attacker, AttackCollisionComponent attackCollisionComp, PhysicsCollider attackerCollider) => {
+            .ForEach((Entity attacker, in AttackCollisionComponent attackCollisionComp, in PhysicsCollider attackerCollider) => {
                 if (attackCollisionComp.bIsConsumed && (false == attackCollisionComp.bShouldMultiCollide))
                     return;
 
@@ -42,12 +42,14 @@ public class CollisionSystem : SystemBase {
                 Debug.DrawLine(new Vector3(attackCollision.xMax, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMax), Color.red);   // right
 #endif
 
+                var localAttackCollisionComp = attackCollisionComp;
+                var attackColliderFilter = attackerCollider.Value.Value.Filter.BelongsTo;
                 Entities.WithoutBurst().WithStructuralChanges().WithNone<HitComponent>().ForEach((Entity hitTarget, in PhysicsCollider hitTargetCollider) => {
                     if (attacker == hitTarget)
                         return;
 
                     // 현재 같은 Controller 필터일 경우에만 충돌 감지 처리
-                    if (hitTargetCollider.Value.Value.Filter.BelongsTo != attackerCollider.Value.Value.Filter.BelongsTo)
+                    if (hitTargetCollider.Value.Value.Filter.BelongsTo != attackColliderFilter)
                         return;
 
                     var targetTranslation = EntityManager.GetComponentData<Translation>(hitTarget);
@@ -72,8 +74,8 @@ public class CollisionSystem : SystemBase {
                                 }
                             }
 
-                            attackCollisionComp.bIsConsumed = true;
-                            EntityManager.SetComponentData(attacker, attackCollisionComp);
+                            localAttackCollisionComp.bIsConsumed = true;
+                            EntityManager.SetComponentData(attacker, localAttackCollisionComp);
 
                             var renderer = EntityManager.GetComponentObject<SpriteRenderer>(attacker);
                             var dir = renderer.flipX ? -1.0f : 1.0f;
