@@ -178,6 +178,14 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     protected override void OnUpdate() {
+        if (Entity.Null == Utility.ControlEntity) {
+            Entities.ForEach((Entity entity, ref TargetIdComponent targetId) => {
+                if (IdUtility.Id.Player == targetId.value) {
+                    Utility.SetControlEntity(entity);
+                }
+            });
+        }
+
         if (IsLocked()) {
             return;
         }
