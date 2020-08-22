@@ -35,6 +35,13 @@ public static class IdUtility {
         Enemy,
         NPC
     }
+    
+    public enum GUIId {
+        None,
+        Title,
+        InGame,
+        Result,
+    }
 }
 
 public static class EffectUtility {

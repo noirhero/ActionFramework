@@ -16,20 +16,6 @@ public static class GameOver {
 
 public class GameOverSystem : SystemBase {
     public bool hasBeenOvered = false;
-    public System.Type[] systemTypes = null;
-    public int systemsMaxNum = 15;
-
-    protected override void OnCreate() {
-        GameOver.Play();
-
-        var idx = 0;
-        systemTypes = new System.Type[systemsMaxNum];
-        systemTypes[idx++] = typeof(CollisionSystem);
-        systemTypes[idx++] = typeof(CombatSystem);
-        systemTypes[idx++] = typeof(HitSystem);
-        systemTypes[idx++] = typeof(MoveSystem);
-        systemTypes[idx++] = typeof(TargetFollowSystem);
-    }
 
     protected override void OnUpdate() {
         if (GameOver.bIsOvered == hasBeenOvered) {
@@ -39,7 +25,6 @@ public class GameOverSystem : SystemBase {
         hasBeenOvered = GameOver.bIsOvered;
 
         if (GameOver.bIsOvered) {
-            SetEnableSystems(false);
             Entities.WithName("GameOverSystem")
                 .WithoutBurst()
                 .WithStructuralChanges()
@@ -52,26 +37,13 @@ public class GameOverSystem : SystemBase {
                         animComp.state |= AnimUtility.hit;
                     }
 
-                    if (false == EntityManager.HasComponent<FadeInComponent>(Utility.SystemEntity)) {
-                        EntityManager.AddComponentData(Utility.SystemEntity, new FadeInComponent() {
-                            time = 1.0f
+                    if (false == EntityManager.HasComponent<GUIComponent>(Utility.SystemEntity)) {
+                        EntityManager.AddComponentData(Utility.SystemEntity, new GUIComponent() {
+                            id = IdUtility.GUIId.Result
                         });
                     }
                 })
                 .Run();
-        }
-        else {
-            SetEnableSystems(true);
-        }
-    }
-
-    private void SetEnableSystems(bool enabled) {
-        foreach (var system in World.DefaultGameObjectInjectionWorld.Systems) {
-            foreach (var type in systemTypes) {
-                if (system.GetType() == type) {
-                    system.Enabled = enabled;
-                }
-            }
         }
     }
 }
