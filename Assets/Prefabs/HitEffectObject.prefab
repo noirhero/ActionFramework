@@ -110,5 +110,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a40ee8c3e4af63a44a376dd7654dfd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  asePath: Assets/Resources/Effects/Hit.ase
-  loopingCount: 1
+  asePath: 
+  loopingCount: 0

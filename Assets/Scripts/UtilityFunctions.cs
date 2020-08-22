@@ -49,6 +49,8 @@ public static class SoundUtility {
     public enum SourceKey {
         Title,
         GhostTown,
+        End1,
+        End2,
     }
 
     public enum ClipKey {
@@ -58,6 +60,8 @@ public static class SoundUtility {
         Landing = 1 << 3,
         Hit = 1 << 4,
         Button = 1 << 5,
+        Damage = 1 << 6,
+        GhostSpawn = 1 << 7,
     }
 }
 
