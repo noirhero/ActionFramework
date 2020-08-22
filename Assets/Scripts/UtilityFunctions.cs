@@ -27,14 +27,6 @@ public static class Utility {
             SystemEntity = entity;
         }
     }
-
-    public static Entity ControlEntity { get; private set; }
-
-    public static void SetControlEntity(Entity entity) {
-        if (Entity.Null == ControlEntity) {
-            ControlEntity = entity;
-        }
-    }
 }
 
 public static class IdUtility {

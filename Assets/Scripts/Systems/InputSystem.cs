@@ -1,37 +1,10 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Physics;
 using UnityEngine.InputSystem;
 
 public class InputSystem : ComponentSystem, InputActions.ICharacterControlActions {
-    private bool IsLocked() {
-        if (Entity.Null == Utility.SystemEntity) {
-            return true;
-        }
-
-        if (false == EntityManager.HasComponent<InputDataComponent>(Utility.SystemEntity)) {
-            return true;
-        }
-
-        if (Entity.Null == Utility.ControlEntity) {
-            return true;
-        }
-
-        if (false == EntityManager.HasComponent<AnimationFrameComponent>(Utility.ControlEntity)) {
-            return true;
-        }
-
-        // TODO : other condition
-        return false;
-    }
-
     public void OnLeft(InputAction.CallbackContext context) {
-        if (IsLocked()) {
-            return;
-        }
-
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
 
         if (context.started) {
@@ -48,10 +21,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnRight(InputAction.CallbackContext context) {
-        if (IsLocked()) {
-            return;
-        }
-
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
 
         if (context.started) {
@@ -68,10 +37,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnJump(InputAction.CallbackContext context) {
-        if (IsLocked()) {
-            return;
-        }
-
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
 
         if (context.started) {
@@ -87,10 +52,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnAttack(InputAction.CallbackContext context) {
-        if (IsLocked()) {
-            return;
-        }
-
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
 
         if (context.started) {
@@ -106,10 +67,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnLeftRightAxis(InputAction.CallbackContext context) {
-        if (IsLocked()) {
-            return;
-        }
-
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         dataComp.dir = context.ReadValue<float>();
 
@@ -127,10 +84,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnCrouch(InputAction.CallbackContext context) {
-        if (IsLocked()) {
-            return;
-        }
-
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         if (context.started) {
             dataComp.state |= InputUtility.crouch;
@@ -144,10 +97,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     public void OnCrouchAxis(InputAction.CallbackContext context) {
-        if (IsLocked()) {
-            return;
-        }
-
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         if (-0.5f > context.ReadValue<float>() &&
             false == InputUtility.HasState(dataComp, InputUtility.crouch)) {
@@ -178,89 +127,5 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     protected override void OnUpdate() {
-        if (Entity.Null == Utility.ControlEntity) {
-            Entities.ForEach((Entity entity, ref TargetIdComponent targetId) => {
-                if (IdUtility.Id.Player == targetId.value) {
-                    Utility.SetControlEntity(entity);
-                }
-            });
-        }
-
-        if (IsLocked()) {
-            return;
-        }
-
-        var moveComp = EntityManager.GetComponentData<MoveComponent>(Utility.ControlEntity);
-        var inputDataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(Utility.ControlEntity);
-
-#region Run
-        moveComp.value.x = AnimUtility.IsChangeAnim(animComp, AnimUtility.run) ? inputDataComp.dir : 0.0f;
-#endregion
-
-#region Jump
-        if (AnimUtility.IsChangeAnim(animComp, AnimUtility.jump) &&
-            InputUtility.HasState(inputDataComp, InputUtility.jump)) {
-            moveComp.value.y += Utility.jumpForce;
-
-            // should be once play
-            inputDataComp.state ^= InputUtility.jump;
-
-            EntityManager.AddComponentData(Utility.ControlEntity, new JumpComponent());
-        }
-#endregion
-
-#region Attack
-        if (AnimUtility.IsChangeAnim(animComp, AnimUtility.attack) &&
-            InputUtility.HasState(inputDataComp, InputUtility.attack)) {
-            if (false == EntityManager.HasComponent<AttackComponent>(Utility.ControlEntity)) {
-                EntityManager.AddComponentData(Utility.ControlEntity, new AttackComponent());
-            }
-
-            // should be once play
-            inputDataComp.state ^= InputUtility.attack;
-        }
-#endregion
-
-#region Crouch
-        if (AnimUtility.IsChangeAnim(animComp, AnimUtility.crouch) &&
-            InputUtility.HasState(inputDataComp, InputUtility.crouch)) {
-            if (false == EntityManager.HasComponent<CrouchComponent>(Utility.ControlEntity)) {
-                EntityManager.AddComponentData(Utility.ControlEntity, new CrouchComponent());
-
-                var colliderComponent = EntityManager.GetComponentData<PhysicsCollider>(Utility.ControlEntity);
-                unsafe {
-                    var grabCollider = (CapsuleCollider*) colliderComponent.ColliderPtr;
-                    var at = grabCollider->Vertex1 - grabCollider->Vertex0;
-
-                    var geometry = grabCollider->Geometry;
-                    geometry.Vertex1 = geometry.Vertex0 + at * 0.5f;
-                    grabCollider->Geometry = geometry;
-                }
-            }
-        }
-        else {
-            if (EntityManager.HasComponent<CrouchComponent>(Utility.ControlEntity)) {
-                EntityManager.RemoveComponent<CrouchComponent>(Utility.ControlEntity);
-
-                var colliderComponent = EntityManager.GetComponentData<PhysicsCollider>(Utility.ControlEntity);
-                unsafe {
-                    var grabCollider = (CapsuleCollider*) colliderComponent.ColliderPtr;
-                    var at = grabCollider->Vertex1 - grabCollider->Vertex0;
-
-                    var geometry = grabCollider->Geometry;
-                    geometry.Vertex1 = geometry.Vertex0 + at * 2.0f;
-                    grabCollider->Geometry = geometry;
-                }
-            }
-        }
-#endregion
-
-#region Gravity
-        moveComp.value.y = math.max(moveComp.value.y - Utility.gravity, Utility.terminalVelocity);
-#endregion
-
-        EntityManager.SetComponentData(Utility.ControlEntity, moveComp);
-        EntityManager.SetComponentData(Utility.SystemEntity, inputDataComp);
     }
 }

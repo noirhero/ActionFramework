@@ -22,14 +22,6 @@ public class CombatSystem : ComponentSystem {
             return true;
         }
 
-        if (Entity.Null == Utility.ControlEntity) {
-            return true;
-        }
-
-        if (false == EntityManager.HasComponent<AnimationFrameComponent>(Utility.ControlEntity)) {
-            return true;
-        }
-
         // TODO : other condition
         return false;
     }
@@ -39,23 +31,21 @@ public class CombatSystem : ComponentSystem {
             return;
         }
 
-        var animComp = EntityManager.GetComponentData<AnimationFrameComponent>(Utility.ControlEntity);
+        Entities.ForEach((Entity entity, ref ControlComponent controlComp, ref AnimationFrameComponent animComp) => {
+            if (EntityManager.HasComponent<AttackComponent>(entity)) {
+                if (1.0f <= animComp.frameRate) {
+                    EntityManager.RemoveComponent<AttackComponent>(entity);
+                }
 
-        if (EntityManager.HasComponent<AttackComponent>(Utility.ControlEntity)) {
-            if (1.0f <= animComp.frameRate) {
-                EntityManager.RemoveComponent<AttackComponent>(Utility.ControlEntity);
+                if (false == AnimUtility.HasState(animComp, AnimUtility.attack)) {
+                    animComp.state |= AnimUtility.attack;
+                }
             }
-
-            if (false == AnimUtility.HasState(animComp, AnimUtility.attack)) {
-                animComp.state |= AnimUtility.attack;
+            else {
+                if (AnimUtility.HasState(animComp, AnimUtility.attack)) {
+                    animComp.state ^= AnimUtility.attack;
+                }
             }
-        }
-        else {
-            if (AnimUtility.HasState(animComp, AnimUtility.attack)) {
-                animComp.state ^= AnimUtility.attack;
-            }
-        }
-
-        EntityManager.SetComponentData(Utility.ControlEntity, animComp);
+        });
     }
 }
