@@ -25,12 +25,12 @@ public class FadeInOutSystem : SystemBase {
                     if (fadeInComp.time <= fadeInComp.elapsedTime) {
                         valueParam.value = 0.0f;
                         EntityManager.RemoveComponent<FadeInComponent>(entity);
-                        return;
                     }
-
-                    float time = fadeInComp.elapsedTime / fadeInComp.time;
-                    valueParam.value = Mathf.Lerp(1.0f, 0.0f, time);
-                    EntityManager.SetComponentData<FadeInComponent>(entity, fadeInComp);
+                    else {
+                        float time = fadeInComp.elapsedTime / fadeInComp.time;
+                        valueParam.value = Mathf.Lerp(1.0f, 0.0f, time);
+                        EntityManager.SetComponentData<FadeInComponent>(entity, fadeInComp);
+                    }
                 }
                 else {
                     var fadeOutComp = EntityManager.GetComponentData<FadeOutComponent>(entity);
@@ -40,12 +40,12 @@ public class FadeInOutSystem : SystemBase {
                     if (fadeOutComp.time <= fadeOutComp.elapsedTime) {
                         valueParam.value = 1.0f;
                         EntityManager.RemoveComponent<FadeOutComponent>(entity);
-                        return;
                     }
-
-                    float time = fadeOutComp.elapsedTime / fadeOutComp.time;
-                    valueParam.value = Mathf.Lerp(0.0f, 1.0f, time);
-                    EntityManager.SetComponentData<FadeOutComponent>(entity, fadeOutComp);
+                    else {
+                        float time = fadeOutComp.elapsedTime / fadeOutComp.time;
+                        valueParam.value = Mathf.Lerp(0.0f, 1.0f, time);
+                        EntityManager.SetComponentData<FadeOutComponent>(entity, fadeOutComp);
+                    }
                 }
 
                 var volume = Camera.main.GetComponent<PostProcessVolume>();
