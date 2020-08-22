@@ -6,7 +6,12 @@ using UnityEngine;
 [DisallowMultipleComponent]
 [RequiresEntityConversion]
 public class SystemProxy : MonoBehaviour, IConvertGameObjectToEntity {
+    public GUIPreset guiPreset;
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         Utility.SetSystemEntity(entity);
+
+        if (null != guiPreset) {
+            dstManager.AddSharedComponentData(entity, new GUIPresetComponent(guiPreset));
+        }
     }
 }
