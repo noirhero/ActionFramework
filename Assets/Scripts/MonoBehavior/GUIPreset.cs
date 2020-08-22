@@ -12,6 +12,8 @@ public class GUIPreset : MonoBehaviour {
 
     private EntityManager _entManager;
 
+    private long _playTime;
+    
     public void Awake() {
         gameObject.SetActive(false);
 
@@ -34,12 +36,16 @@ public class GUIPreset : MonoBehaviour {
             case IdUtility.GUIId.InGame:
                 Button_Start.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(false);
+                _playTime = System.DateTime.Now.Ticks;
                 break;
             case IdUtility.GUIId.Result:
+                var time = System.DateTime.Now.Ticks - _playTime;
+                var result = System.TimeSpan.FromTicks(time).TotalSeconds;
+                
                 Button_Start.gameObject.SetActive(true);
                 Text_Start.text = "Restart";
                 Text_Message.gameObject.SetActive(true);
-                Text_Message.text = "Playtime : ~ ";
+                Text_Message.text = "Playtime : " + result.ToString();
                 break;
         }
     }
