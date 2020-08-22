@@ -47,6 +47,7 @@ public static class EffectUtility {
 
 public static class SoundUtility {
     public enum SourceKey {
+        Title,
         GhostTown,
     }
 
@@ -56,6 +57,7 @@ public static class SoundUtility {
         Sword = 1 << 2,
         Landing = 1 << 3,
         Hit = 1 << 4,
+        Button = 1 << 5,
     }
 }
 
