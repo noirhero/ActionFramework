@@ -3,8 +3,7 @@
 using Unity.Entities;
 
 public class GUISystem : ComponentSystem {
-    public IdUtility.GUIId _uiState { get; private set; }
-
+    private IdUtility.GUIId _uiState = IdUtility.GUIId.None;
     protected override void OnUpdate() {
         Entities.ForEach((Entity entity, ref GUIComponent guiComp) => {
             if (guiComp.id == _uiState) {
