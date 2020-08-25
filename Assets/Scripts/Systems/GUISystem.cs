@@ -39,15 +39,15 @@ public class GUISystem : ComponentSystem {
 
                     EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneUnLoadComponent {
                         id = IdUtility.GUIId.Title,
-                        delay = 0.5f
+                        delay = 0.0f
                     });
                     EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneUnLoadComponent {
                         id = IdUtility.GUIId.Result,
-                        delay = 0.5f
+                        delay = 0.0f
                     });
                     EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneLoadComponent {
                         id = IdUtility.GUIId.InGame,
-                        delay = 0.5f
+                        delay = 0.0f
                     });
                     break;
                 case IdUtility.GUIId.Result:

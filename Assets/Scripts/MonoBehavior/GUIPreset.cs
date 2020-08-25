@@ -59,6 +59,10 @@ public class GUIPreset : MonoBehaviour {
     }
 
     public void OnClickStart() {
+        _entManager.AddComponentData(Utility.SystemEntity, new InstantAudioComponent() {
+            id = SoundUtility.ClipKey.Button,
+        });
+
         if (false == _entManager.HasComponent<GUIComponent>(Utility.SystemEntity)) {
             _entManager.AddComponentData(Utility.SystemEntity, new GUIComponent() {
                 id = IdUtility.GUIId.InGame
