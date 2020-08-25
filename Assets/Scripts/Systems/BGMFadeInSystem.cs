@@ -21,15 +21,19 @@ public class BGMFadeInSystem : SystemBase {
             .WithName("BGMFadeInSystem")
             .WithoutBurst()
             .WithStructuralChanges()
-            .ForEach((Entity entity, in AudioSourceControlComponent audioSourceControl) => {
-                if (false == audioSources.TryGetValue(audioSourceControl.id, out var audioSource)) {
+            .ForEach((Entity entity, in BGMFadeInComponent fadeIn) => {
+                if (false == audioSources.TryGetValue(fadeIn.id, out var audioSource)) {
                     return;
                 }
 
-                var delta = audioSourceControl.accume * deltaTime;
-                audioSource.volume = math.min(audioSourceControl.maxVolume, audioSource.volume + delta);
-                if (audioSourceControl.maxVolume <= audioSource.volume) {
+                var delta = fadeIn.accum * deltaTime;
+                audioSource.volume = math.min(fadeIn.dest, audioSource.volume + delta);
+                if (fadeIn.dest <= audioSource.volume) {
                     EntityManager.DestroyEntity(entity);
+                }
+
+                if (false == audioSource.isPlaying) {
+                    audioSource.Play();
                 }
             })
             .Run();

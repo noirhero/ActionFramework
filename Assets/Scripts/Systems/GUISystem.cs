@@ -12,6 +12,7 @@ public class GUISystem : ComponentSystem {
 
             var guiPreset = EntityManager.GetSharedComponentData<GUIPresetComponent>(Utility.SystemEntity);
             guiPreset.preset.GUIUpdate(guiComp.id);
+
             switch (guiComp.id) {
                 case IdUtility.GUIId.Title:
                     GameStart.Stop();
@@ -21,6 +22,11 @@ public class GUISystem : ComponentSystem {
                             time = 0.0f
                         });
                     }
+
+                    EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneLoadComponent {
+                        id = IdUtility.GUIId.Title,
+                        delay = 0.0f
+                    });
                     break;
                 case IdUtility.GUIId.InGame:
                     GameStart.Play();
@@ -30,6 +36,19 @@ public class GUISystem : ComponentSystem {
                             time = 0.5f
                         });
                     }
+
+                    EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneUnLoadComponent {
+                        id = IdUtility.GUIId.Title,
+                        delay = 0.5f
+                    });
+                    EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneUnLoadComponent {
+                        id = IdUtility.GUIId.Result,
+                        delay = 0.5f
+                    });
+                    EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneLoadComponent {
+                        id = IdUtility.GUIId.InGame,
+                        delay = 0.5f
+                    });
                     break;
                 case IdUtility.GUIId.Result:
                     GameStart.Stop();
@@ -39,6 +58,15 @@ public class GUISystem : ComponentSystem {
                             time = 1.0f
                         });
                     }
+
+                    EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneUnLoadComponent {
+                        id = IdUtility.GUIId.InGame,
+                        delay = 1.0f
+                    });
+                    EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneLoadComponent {
+                        id = IdUtility.GUIId.Result,
+                        delay = 1.0f
+                    });
                     break;
             }
 

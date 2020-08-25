@@ -1,5 +1,6 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
+using System.Collections;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class GUIPreset : MonoBehaviour {
     private EntityManager _entManager;
 
     private long _playTime;
-    
+
     public void Awake() {
         gameObject.SetActive(false);
 
@@ -22,6 +23,13 @@ public class GUIPreset : MonoBehaviour {
         }
 
         _entManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+    }
+
+    private IEnumerator DelayEnableGUI() {
+        yield return new WaitForSeconds(1);
+
+        Button_Start.gameObject.SetActive(true);
+        Text_Message.gameObject.SetActive(true);
     }
 
     public void GUIUpdate(IdUtility.GUIId inId) {
@@ -41,11 +49,11 @@ public class GUIPreset : MonoBehaviour {
             case IdUtility.GUIId.Result:
                 var time = System.DateTime.Now.Ticks - _playTime;
                 var result = System.TimeSpan.FromTicks(time).TotalSeconds;
-                
-                Button_Start.gameObject.SetActive(true);
-                Text_Start.text = "Restart";
-                Text_Message.gameObject.SetActive(true);
+
                 Text_Message.text = "Playtime : " + result.ToString();
+                Text_Start.text = "Restart";
+
+                StartCoroutine(DelayEnableGUI());
                 break;
         }
     }

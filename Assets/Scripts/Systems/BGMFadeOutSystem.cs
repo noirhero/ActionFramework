@@ -21,15 +21,19 @@ public class BGMFadeOutSystem : SystemBase {
             .WithName("BGMFadeOutSystem")
             .WithoutBurst()
             .WithStructuralChanges()
-            .ForEach((Entity entity, in AudioSourceControlComponent audioSourceControl) => {
-                if (false == audioSources.TryGetValue(audioSourceControl.id, out var audioSource)) {
+            .ForEach((Entity entity, in BGMFadeOutComponent fadeOut) => {
+                if (false == audioSources.TryGetValue(fadeOut.id, out var audioSource)) {
                     return;
                 }
 
-                var delta = audioSourceControl.accume * deltaTime;
-                audioSource.volume = math.max(audioSourceControl.minVolume, audioSource.volume - delta);
-                if (audioSourceControl.minVolume >= audioSource.volume) {
+                var delta = fadeOut.accum * deltaTime;
+                audioSource.volume = math.max(fadeOut.dest, audioSource.volume - delta);
+                if (fadeOut.dest >= audioSource.volume) {
                     EntityManager.DestroyEntity(entity);
+                }
+
+                if (0.0f >= audioSource.volume && audioSource.isPlaying) {
+                    audioSource.Pause();
                 }
             })
             .Run();
