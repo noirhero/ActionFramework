@@ -4,6 +4,7 @@ using System.Collections;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Mathematics;
 
 public class GUIPreset : MonoBehaviour {
     public Text Text_Message;
@@ -48,9 +49,9 @@ public class GUIPreset : MonoBehaviour {
                 break;
             case IdUtility.GUIId.Result:
                 var time = System.DateTime.Now.Ticks - _playTime;
-                var result = System.TimeSpan.FromTicks(time).TotalSeconds;
+                var result = math.trunc(System.TimeSpan.FromTicks(time).TotalSeconds * 10) / 10;
 
-                Text_Message.text = "Playtime : " + result.ToString();
+                Text_Message.text = "Playtime : " + result.ToString() + " sec";
                 Text_Start.text = "Restart";
 
                 StartCoroutine(DelayEnableGUI());

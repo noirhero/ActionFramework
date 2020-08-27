@@ -69,12 +69,14 @@ public class CollisionSystem : SystemBase {
                             if (EntityManager.HasComponent<TargetIdComponent>(hitTarget)) {
                                 var targetIDComp = EntityManager.GetComponentData<TargetIdComponent>(hitTarget);
                                 if (IdUtility.Id.Player == targetIDComp.value) {
-                                    GameOver.Over();
+                                    if (false == GameOver.bIsOvered) {
+                                        EntityManager.AddComponentData(hitTarget, new InstantAudioComponent() {
+                                            id = SoundUtility.ClipKey.Damage,
+                                            pos = targetTranslation.Value,
+                                        });
+                                    }
 
-                                    EntityManager.AddComponentData(hitTarget, new InstantAudioComponent() {
-                                        id = SoundUtility.ClipKey.Damage,
-                                        pos = targetTranslation.Value,
-                                    });
+                                    GameOver.Over();
                                     return;
                                 }
                             }
