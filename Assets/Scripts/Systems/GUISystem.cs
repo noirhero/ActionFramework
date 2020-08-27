@@ -55,13 +55,13 @@ public class GUISystem : ComponentSystem {
 
                     if (false == EntityManager.HasComponent<FadeInComponent>(Utility.SystemEntity)) {
                         EntityManager.AddComponentData(Utility.SystemEntity, new FadeInComponent() {
-                            time = 1.0f
+                            time = 2.0f
                         });
                     }
 
                     EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneUnLoadComponent {
                         id = IdUtility.GUIId.InGame,
-                        delay = 1.0f
+                        delay = 2.0f
                     });
                     EntityManager.AddComponentData(EntityManager.CreateEntity(), new SubSceneLoadComponent {
                         id = IdUtility.GUIId.Result,

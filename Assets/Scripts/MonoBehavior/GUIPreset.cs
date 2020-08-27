@@ -26,7 +26,7 @@ public class GUIPreset : MonoBehaviour {
     }
 
     private IEnumerator DelayEnableGUI() {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(5);
 
         Button_Start.gameObject.SetActive(true);
         Text_Message.gameObject.SetActive(true);
