@@ -16,7 +16,6 @@ public class EffectPoolProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConver
     }
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-        
         foreach (var effectObject in effectObjects) {
             dstManager.AddComponentData(dstManager.CreateEntity(), new EffectGuidComponent {
                 id = effectObject.Key,
