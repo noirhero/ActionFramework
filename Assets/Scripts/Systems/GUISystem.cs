@@ -30,6 +30,7 @@ public class GUISystem : ComponentSystem {
                     break;
                 case IdUtility.GUIId.InGame:
                     GameStart.Play();
+                    GameOver.Play();
 
                     if (false == EntityManager.HasComponent<FadeOutComponent>(Utility.SystemEntity)) {
                         EntityManager.AddComponentData(Utility.SystemEntity, new FadeOutComponent() {
