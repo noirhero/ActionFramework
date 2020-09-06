@@ -48,6 +48,7 @@ public class SubSceneUnLoadSystem : SystemBase {
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
+            .WithAll<SceneSectionData>()
             .ForEach((Entity subSceneEntity, SubScene subScene) => {
                 foreach (var id in requestLoadIds) {
                     var checkSubScene = GetIdBySubScene(id, subSceneComp);

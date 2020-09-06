@@ -48,6 +48,7 @@ public class SubSceneLoadSystem : SystemBase {
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
+            .WithAll<SceneSectionData>()
             .ForEach((Entity subSceneEntity, SubScene subScene) => {
                 foreach (var id in requestLoadIds) {
                     var checkSubScene = GetIdBySubScene(id, subSceneComp);
@@ -56,7 +57,8 @@ public class SubSceneLoadSystem : SystemBase {
                             return;
                         }
 
-                        EntityManager.AddComponent<RequestSceneLoaded>(subSceneEntity);
+                        EntityManager.AddComponentData(subSceneEntity, new RequestSceneLoaded {
+                        });
                         return;
                     }
                 }
