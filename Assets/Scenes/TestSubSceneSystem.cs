@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TestSubSceneSystem : SystemBase {
     protected override void OnCreate() {
-        //Enabled = false;
+        Enabled = false;
     }
 
     private float _accumTime = 0.0f;
