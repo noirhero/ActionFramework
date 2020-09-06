@@ -33,7 +33,7 @@ public class BGMFadeOutSystem : SystemBase {
                 }
 
                 if (0.0f >= audioSource.volume && audioSource.isPlaying) {
-                    audioSource.Pause();
+                    audioSource.Stop();
                 }
             })
             .Run();
