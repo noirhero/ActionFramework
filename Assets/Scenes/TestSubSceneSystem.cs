@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TestSubSceneSystem : SystemBase {
     protected override void OnCreate() {
-        Enabled = false;
+        //Enabled = false;
     }
 
     private float _accumTime = 0.0f;
@@ -17,17 +17,21 @@ public class TestSubSceneSystem : SystemBase {
         }
         _accumTime = 0.0f;
 
+        var subSceneComp = EntityManager.GetSharedComponentData<SubSceneComponent>(Utility.SystemEntity);
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
-            .ForEach((Entity entity, in SceneSectionData subScene) => {
+            .ForEach((Entity entity, SceneSectionData sectionData) => {
+                if (subSceneComp.title.SceneGUID != sectionData.SceneGUID) {
+                    return;
+                }
+
                 if (EntityManager.HasComponent<RequestSceneLoaded>(entity)) {
                     EntityManager.RemoveComponent<RequestSceneLoaded>(entity);
                     Debug.Log("Unload");
                 }
                 else {
                     EntityManager.AddComponentData(entity, new RequestSceneLoaded {
-                        //LoadFlags = SceneLoadFlags.NewInstance
                     });
                     Debug.Log("Load");
                 }
