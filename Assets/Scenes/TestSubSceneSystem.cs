@@ -1,12 +1,11 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
-using Unity.Scenes;
 using UnityEngine;
 
 public class TestSubSceneSystem : SystemBase {
     protected override void OnCreate() {
-        //Enabled = false;
+        Enabled = false;
     }
 
     private float _accumTime = 0.0f;
@@ -21,7 +20,7 @@ public class TestSubSceneSystem : SystemBase {
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
-            .ForEach((Entity entity, SceneSectionData sectionData) => {
+            .ForEach((Entity entity, in SceneSectionData sectionData) => {
                 if (subSceneComp.title.SceneGUID != sectionData.SceneGUID) {
                     return;
                 }

@@ -1,7 +1,6 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using System.Collections.Generic;
-using SuperTiled2Unity;
 using Unity.Entities;
 using Unity.Scenes;
 
@@ -40,7 +39,7 @@ public class SubSceneUnLoadSystem : SystemBase {
                 EntityManager.DestroyEntity(entity);
             })
             .Run();
-        if (requestLoadIds.IsEmpty()) {
+        if (0 == requestLoadIds.Count) {
             return;
         }
 
@@ -48,11 +47,10 @@ public class SubSceneUnLoadSystem : SystemBase {
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
-            .WithAll<SceneSectionData>()
-            .ForEach((Entity subSceneEntity, SubScene subScene) => {
+            .ForEach((Entity subSceneEntity, in SceneSectionData sectionData) => {
                 foreach (var id in requestLoadIds) {
                     var checkSubScene = GetIdBySubScene(id, subSceneComp);
-                    if (checkSubScene == subScene) {
+                    if (checkSubScene.SceneGUID == sectionData.SceneGUID) {
                         if (false == EntityManager.HasComponent<RequestSceneLoaded>(subSceneEntity)) {
                             return;
                         }
