@@ -5,7 +5,7 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Mathematics;
-using Unity.Serialization.Json;
+using Random = UnityEngine.Random;
 
 public class GUIPreset : MonoBehaviour {
     public Text Text_Message;
@@ -59,7 +59,7 @@ public class GUIPreset : MonoBehaviour {
                 
                 ScoreData scoreData;
                 if (PlayerPrefs.HasKey("Score")) {
-                    scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString("ResultList"));
+                    scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString("Score"));
                     scoreData.RecordScore(result);
                 }
                 else {
@@ -75,20 +75,34 @@ public class GUIPreset : MonoBehaviour {
             }
                 break;
             case IdUtility.GUIId.Result: {
+                string scoreMsg = string.Empty;
                 if (PlayerPrefs.HasKey("Score")) {
                     ScoreData scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString("Score"));
-                    Text_Message.text = "HighScore : " + scoreData.HighScore.ToString() + " sec \n";
+
+                    scoreMsg = "HighScore : ";
+                    scoreMsg += scoreData.HighScore.ToString();
+                    scoreMsg += "sec \n";
+                    
                     if (scoreData.bNewHighScore) {
-                        Text_Message.text += "<color=lime>Socre : " 
-                                             + scoreData.lastScore.ToString() + " sec</color>";
+                        string MakeMsg= string.Empty;
+                        for (int i = 0; i < scoreMsg.Length; ++i) {
+                            MakeMsg += "<color=#";
+                            MakeMsg += ColorUtility.ToHtmlStringRGB(new Color(Random.Range(0f,1f), Random.Range(0, 1f), Random.Range(0, 1f)));
+                            MakeMsg += ">";
+                            MakeMsg += scoreMsg[i];
+                            MakeMsg += "</color>";
+                        }
+                        scoreMsg = MakeMsg;
                     }
-                    else {
-                        Text_Message.text += "Socre : " + scoreData.lastScore.ToString() + " sec";
-                    }
+                    
+                    scoreMsg += "Score : ";
+                    scoreMsg += "<color=#"+ColorUtility.ToHtmlStringRGB(scoreData.bNewHighScore ? Color.yellow : Color.white)+">";
+                    scoreMsg += scoreData.lastScore.ToString();
+                    scoreMsg += " </color> sec";
                 }
-                else {
-                    Text_Message.text = "Unknown";
-                }
+
+                Text_Message.text = scoreMsg;
+                    
                 Text_Start.text = "Restart";
                 
                 Button_Start.gameObject.SetActive(true);
