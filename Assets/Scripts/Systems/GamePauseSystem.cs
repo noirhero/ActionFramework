@@ -18,7 +18,6 @@ public class GamePauseSystem : SystemBase {
     protected override void OnCreate() {
         var idx = 0;
         systemTypes = new System.Type[systemsMaxNum];
-        systemTypes[idx++] = typeof(ControllerSystem);
         systemTypes[idx++] = typeof(AnimationFrameSystem);
         systemTypes[idx++] = typeof(AutoDestroySystem);
         systemTypes[idx++] = typeof(CameraFollowSystem);
