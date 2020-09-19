@@ -5,6 +5,7 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Mathematics;
+using Unity.Serialization.Json;
 
 public class GUIPreset : MonoBehaviour {
     public Text Text_Message;
@@ -39,33 +40,60 @@ public class GUIPreset : MonoBehaviour {
     public void GUIUpdate(IdUtility.GUIId inId) {
         gameObject.SetActive(true);
         switch (inId) {
-            case IdUtility.GUIId.Title:
+            case IdUtility.GUIId.Title: {
                 Button_Start.gameObject.SetActive(true);
                 Text_Start.text = "Start";
                 Text_Message.gameObject.SetActive(true);
                 Text_Message.text = "LuisZuno";
+            }
                 break;
-            case IdUtility.GUIId.InGame:
+            case IdUtility.GUIId.InGame: {
                 Button_Start.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(false);
                 _playTime = System.DateTime.Now.Ticks;
+            }
                 break;
-            case IdUtility.GUIId.Over:
+            case IdUtility.GUIId.Over: {
                 var time = System.DateTime.Now.Ticks - _playTime;
                 var result = math.trunc(System.TimeSpan.FromTicks(time).TotalSeconds * 10) / 10;
-
-                Button_Start.gameObject.SetActive(false);
                 
-                Text_Message.text = "Playtime : " + result.ToString() + " sec";
-                Text_Start.text = "Restart";
+                ScoreData scoreData;
+                if (PlayerPrefs.HasKey("Score")) {
+                    scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString("ResultList"));
+                    scoreData.RecordScore(result);
+                }
+                else {
+                    scoreData = new ScoreData(result);
+                }
+                PlayerPrefs.SetString("Score", JsonUtility.ToJson(scoreData));
+                
+                Button_Start.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(false);
                 
                 StartCoroutine(DelayEnableGUI());
-                
+
+            }
                 break;
-            case IdUtility.GUIId.Result:
+            case IdUtility.GUIId.Result: {
+                if (PlayerPrefs.HasKey("Score")) {
+                    ScoreData scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString("Score"));
+                    Text_Message.text = "HighScore : " + scoreData.HighScore.ToString() + " sec \n";
+                    if (scoreData.bNewHighScore) {
+                        Text_Message.text += "<color=lime>Socre : " 
+                                             + scoreData.lastScore.ToString() + " sec</color>";
+                    }
+                    else {
+                        Text_Message.text += "Socre : " + scoreData.lastScore.ToString() + " sec";
+                    }
+                }
+                else {
+                    Text_Message.text = "Unknown";
+                }
+                Text_Start.text = "Restart";
+                
                 Button_Start.gameObject.SetActive(true);
                 Text_Message.gameObject.SetActive(true);
+            }
                 break;
         }
     }

@@ -275,3 +275,21 @@ public static class InputUtility {
         return cachedStr;
     }
 }
+
+public struct ScoreData {
+    public double lastScore;
+    public double HighScore;
+    public bool bNewHighScore;
+    
+    public ScoreData(double inScore) {
+        lastScore = inScore;
+        HighScore = inScore;
+        bNewHighScore = true;
+    }
+
+    public void RecordScore(double inTime) {
+        bNewHighScore = inTime > HighScore;
+        lastScore = inTime;
+        HighScore = bNewHighScore ? lastScore : HighScore;
+    }
+}
