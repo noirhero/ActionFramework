@@ -23,13 +23,19 @@ public class CharacterLoadSystem : SystemBase {
                 foreach (var prefab in prefabs) {
                     if (prefab.id == load.id) {
                         var loadEntity = EntityManager.Instantiate(prefab.prefab);
-                        EntityManager.SetComponentData(entity, new Translation {
+                        EntityManager.SetComponentData(loadEntity, new Translation {
                             Value = load.pos
                         });
                         break;
                     }
                 }
-                EntityManager.DestroyEntity(entity);
+
+                if (EntityManager.HasComponent<CharacterLoadTimerComponent>(entity)) {
+                    EntityManager.RemoveComponent<CharacterLoadComponent>(entity);
+                }
+                else {
+                    EntityManager.DestroyEntity(entity);
+                }
             })
             .Run();
     }
