@@ -8,7 +8,7 @@ using Unity.Physics;
 
 public class CollisionSystem : SystemBase {
 
-    protected override unsafe void OnUpdate() {
+    protected override void OnUpdate() {
         Entities
             .WithoutBurst()
             .WithStructuralChanges()
@@ -42,6 +42,7 @@ public class CollisionSystem : SystemBase {
                 Debug.DrawLine(new Vector3(attackCollision.xMax, attackCollision.yMin), new Vector3(attackCollision.xMax, attackCollision.yMax), Color.red);   // right
 #endif
 
+                var attackerId = EntityManager.GetComponentData<TargetIdComponent>(attacker).value;
                 var localAttackCollisionComp = attackCollisionComp;
                 var attackColliderFilter = attackerCollider.Value.Value.Filter.BelongsTo;
                 Entities.WithoutBurst().WithStructuralChanges().WithNone<HitComponent>().ForEach((Entity hitTarget, in PhysicsCollider hitTargetCollider) => {
@@ -51,6 +52,11 @@ public class CollisionSystem : SystemBase {
                     // 현재 같은 Controller 필터일 경우에만 충돌 감지 처리
                     if (hitTargetCollider.Value.Value.Filter.BelongsTo != attackColliderFilter)
                         return;
+
+                    var targetId = EntityManager.GetComponentData<TargetIdComponent>(hitTarget).value;
+                    if (attackerId == targetId) {
+                        return;
+                    }
 
                     var targetTranslation = EntityManager.GetComponentData<Translation>(hitTarget);
 
@@ -67,15 +73,13 @@ public class CollisionSystem : SystemBase {
                         // 충돌 감지!
                         if (attackCollision.Overlaps(targetCollision)) {
                             if (EntityManager.HasComponent<TargetIdComponent>(hitTarget)) {
-                                var targetIDComp = EntityManager.GetComponentData<TargetIdComponent>(hitTarget);
-                                if (IdUtility.Id.Player == targetIDComp.value) {
+                                if (IdUtility.Id.Player == targetId) {
                                     if (false == GameOver.bIsOvered) {
                                         EntityManager.AddComponentData(hitTarget, new InstantAudioComponent() {
                                             id = SoundUtility.ClipKey.Damage,
                                             pos = targetTranslation.Value,
                                         });
                                     }
-
                                     GameOver.Over();
                                     return;
                                 }
@@ -90,7 +94,7 @@ public class CollisionSystem : SystemBase {
                                 impulseDir = new Vector2(dir, 0.0f),
                                 impulseForce = 1.0f
                             };
-                            EntityManager.AddComponentData<MoveComponent>(hitTarget, moveComponent);
+                            EntityManager.AddComponentData(hitTarget, moveComponent);
 
                             var hitComponent = new HitComponent() {
                                 damage = 10,
