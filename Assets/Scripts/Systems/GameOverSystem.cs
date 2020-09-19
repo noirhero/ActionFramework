@@ -39,7 +39,7 @@ public class GameOverSystem : SystemBase {
 
                     if (false == EntityManager.HasComponent<GUIComponent>(Utility.SystemEntity)) {
                         EntityManager.AddComponentData(Utility.SystemEntity, new GUIComponent() {
-                            id = IdUtility.GUIId.Result
+                            id = IdUtility.GUIId.Over
                         });
                     }
                 })

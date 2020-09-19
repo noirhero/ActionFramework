@@ -27,6 +27,44 @@ public static class Utility {
             SystemEntity = entity;
         }
     }
+
+    // TODO : temporary 
+    public static IdUtility.GameStateId GetGameState() {
+        GUISystem guiSystem = null;
+        
+        foreach (var system in World.DefaultGameObjectInjectionWorld.Systems) {
+            if (system.GetType() == typeof(GUISystem)) {
+                guiSystem = (GUISystem) system;
+            }
+        }
+
+        if (null == guiSystem) {
+            return IdUtility.GameStateId.Unknown;
+        }
+
+        switch (guiSystem.uiState) {
+            case IdUtility.GUIId.Title: {
+                return IdUtility.GameStateId.Title;
+            }
+            case IdUtility.GUIId.InGame: {
+                if (GameStart.bIsPlayed) {
+                    return IdUtility.GameStateId.Play;
+                }
+                else {
+                    return IdUtility.GameStateId.Pause;
+                }
+            }
+            case IdUtility.GUIId.Result: {
+                return IdUtility.GameStateId.Result;
+            }
+            case IdUtility.GUIId.Over: {
+                return IdUtility.GameStateId.Over;
+            }
+            default: {
+                return IdUtility.GameStateId.Unknown;
+            }
+        }
+    } 
 }
 
 public static class IdUtility {
@@ -40,6 +78,16 @@ public static class IdUtility {
         None,
         Title,
         InGame,
+        Over,
+        Result,
+    }
+    
+    public enum GameStateId {
+        Unknown,
+        Title,
+        Play,
+        Pause,
+        Over,
         Result,
     }
 }

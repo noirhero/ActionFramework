@@ -111,6 +111,14 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
+    public void OnConfirm(InputAction.CallbackContext context) {
+        if (context.canceled) {
+            if (false == EntityManager.HasComponent<ConfirmComponent>(Utility.SystemEntity)) {
+                EntityManager.AddComponentData(Utility.SystemEntity, new ConfirmComponent());
+            }
+        }
+    }
+
     private InputActions _input;
 
     protected override void OnCreate() {

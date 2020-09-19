@@ -3,10 +3,10 @@
 using Unity.Entities;
 
 public class GUISystem : ComponentSystem {
-    private IdUtility.GUIId _uiState = IdUtility.GUIId.None;
+    public IdUtility.GUIId uiState { get; private set; }
     protected override void OnUpdate() {
         Entities.ForEach((Entity entity, ref GUIComponent guiComp) => {
-            if (guiComp.id == _uiState) {
+            if (guiComp.id == uiState) {
                 return;
             }
 
@@ -51,9 +51,8 @@ public class GUISystem : ComponentSystem {
                         delay = 0.0f
                     });
                     break;
-                case IdUtility.GUIId.Result:
+                case IdUtility.GUIId.Over:
                     GameStart.Stop();
-
                     if (false == EntityManager.HasComponent<FadeInComponent>(Utility.SystemEntity)) {
                         EntityManager.AddComponentData(Utility.SystemEntity, new FadeInComponent() {
                             time = 2.0f
@@ -69,9 +68,11 @@ public class GUISystem : ComponentSystem {
                         delay = 1.0f
                     });
                     break;
+                case IdUtility.GUIId.Result:
+                    break;
             }
 
-            _uiState = guiComp.id;
+            uiState = guiComp.id;
 
             EntityManager.RemoveComponent<GUIComponent>(entity);
         });

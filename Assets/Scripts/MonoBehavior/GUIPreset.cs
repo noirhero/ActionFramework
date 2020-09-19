@@ -29,8 +29,11 @@ public class GUIPreset : MonoBehaviour {
     private IEnumerator DelayEnableGUI() {
         yield return new WaitForSeconds(5);
 
-        Button_Start.gameObject.SetActive(true);
-        Text_Message.gameObject.SetActive(true);
+        if (false == _entManager.HasComponent<GUIComponent>(Utility.SystemEntity)) {
+            _entManager.AddComponentData(Utility.SystemEntity, new GUIComponent() {
+                id = IdUtility.GUIId.Result
+            });
+        }
     }
 
     public void GUIUpdate(IdUtility.GUIId inId) {
@@ -47,27 +50,29 @@ public class GUIPreset : MonoBehaviour {
                 Text_Message.gameObject.SetActive(false);
                 _playTime = System.DateTime.Now.Ticks;
                 break;
-            case IdUtility.GUIId.Result:
+            case IdUtility.GUIId.Over:
                 var time = System.DateTime.Now.Ticks - _playTime;
                 var result = math.trunc(System.TimeSpan.FromTicks(time).TotalSeconds * 10) / 10;
 
+                Button_Start.gameObject.SetActive(false);
+                
                 Text_Message.text = "Playtime : " + result.ToString() + " sec";
                 Text_Start.text = "Restart";
-
+                Text_Message.gameObject.SetActive(false);
+                
                 StartCoroutine(DelayEnableGUI());
+                
+                break;
+            case IdUtility.GUIId.Result:
+                Button_Start.gameObject.SetActive(true);
+                Text_Message.gameObject.SetActive(true);
                 break;
         }
     }
 
     public void OnClickStart() {
-        _entManager.AddComponentData(Utility.SystemEntity, new InstantAudioComponent() {
-            id = SoundUtility.ClipKey.Button,
-        });
-
-        if (false == _entManager.HasComponent<GUIComponent>(Utility.SystemEntity)) {
-            _entManager.AddComponentData(Utility.SystemEntity, new GUIComponent() {
-                id = IdUtility.GUIId.InGame
-            });
+        if (false == _entManager.HasComponent<ConfirmComponent>(Utility.SystemEntity)) {
+            _entManager.AddComponentData(Utility.SystemEntity, new ConfirmComponent());
         }
     }
 }

@@ -73,6 +73,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""85ffcda8-4190-4309-b597-492d8b1fb77c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -240,6 +248,39 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""CrouchAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5fa3d4c6-0e4c-4d06-922c-55ebc35eeab2"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5847d20a-48dc-4880-934c-e296c02f51c4"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66d30ff4-8bff-4d40-81c5-a4bed0291d45"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -255,6 +296,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_CharacterControl_LeftRightAxis = m_CharacterControl.FindAction("LeftRightAxis", throwIfNotFound: true);
         m_CharacterControl_Crouch = m_CharacterControl.FindAction("Crouch", throwIfNotFound: true);
         m_CharacterControl_CrouchAxis = m_CharacterControl.FindAction("CrouchAxis", throwIfNotFound: true);
+        m_CharacterControl_Confirm = m_CharacterControl.FindAction("Confirm", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -311,6 +353,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_CharacterControl_LeftRightAxis;
     private readonly InputAction m_CharacterControl_Crouch;
     private readonly InputAction m_CharacterControl_CrouchAxis;
+    private readonly InputAction m_CharacterControl_Confirm;
     public struct CharacterControlActions
     {
         private @InputActions m_Wrapper;
@@ -322,6 +365,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @LeftRightAxis => m_Wrapper.m_CharacterControl_LeftRightAxis;
         public InputAction @Crouch => m_Wrapper.m_CharacterControl_Crouch;
         public InputAction @CrouchAxis => m_Wrapper.m_CharacterControl_CrouchAxis;
+        public InputAction @Confirm => m_Wrapper.m_CharacterControl_Confirm;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -352,6 +396,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @CrouchAxis.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouchAxis;
                 @CrouchAxis.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouchAxis;
                 @CrouchAxis.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnCrouchAxis;
+                @Confirm.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnConfirm;
+                @Confirm.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnConfirm;
+                @Confirm.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnConfirm;
             }
             m_Wrapper.m_CharacterControlActionsCallbackInterface = instance;
             if (instance != null)
@@ -377,6 +424,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @CrouchAxis.started += instance.OnCrouchAxis;
                 @CrouchAxis.performed += instance.OnCrouchAxis;
                 @CrouchAxis.canceled += instance.OnCrouchAxis;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
             }
         }
     }
@@ -390,5 +440,6 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnLeftRightAxis(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnCrouchAxis(InputAction.CallbackContext context);
+        void OnConfirm(InputAction.CallbackContext context);
     }
 }
