@@ -19,6 +19,12 @@
             "Platform": "Windows",
             "Configuration": 3,
             "Incremental": false
+        },
+        {
+            "$type": "Unity.Build.Classic.ClassicScriptingSettings, Unity.Build.Classic",
+            "ScriptingBackend": 1,
+            "Il2CppCompilerConfiguration": 1,
+            "UseIncrementalGC": false
         }
     ]
 }

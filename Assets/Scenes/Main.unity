@@ -704,10 +704,10 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 10
+  far clip plane: 1
   field of view: 60
   orthographic: 1
-  orthographic size: 0.98
+  orthographic size: 1.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1254,7 +1254,7 @@ PrefabInstance:
     - target: {fileID: 5132228956029020331, guid: 4c2b815450d9d684895d0ea3a308cbf8,
         type: 3}
       propertyPath: datas.isExpanded
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5132228956029020331, guid: 4c2b815450d9d684895d0ea3a308cbf8,
         type: 3}
@@ -1433,6 +1433,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DetectChunkCullingBounds
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6146557929429556510, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 0.23000002
+      objectReference: {fileID: 0}
+    - target: {fileID: -6146557929429556510, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 0.18
       objectReference: {fileID: 0}
     - target: {fileID: -5625362724444431528, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
         type: 3}
@@ -2400,6 +2410,11 @@ PrefabInstance:
     - target: {fileID: 206986005713746565, guid: 37bdc1a096862aa4d9a8c1351d705c3c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1800926448886847523, guid: 37bdc1a096862aa4d9a8c1351d705c3c,
+        type: 3}
+      propertyPath: datas.isExpanded
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6145591884492036204, guid: 37bdc1a096862aa4d9a8c1351d705c3c,
