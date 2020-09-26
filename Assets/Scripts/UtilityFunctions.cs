@@ -19,7 +19,8 @@ public static class Utility {
     public static readonly float speedY = 0.1f;
     public static readonly float skinWidth = 0.01f;
     public static readonly float stepOffset = 0.01f;
-
+    public static readonly string SaveDataName = "Score";
+    
     public static Entity SystemEntity { get; private set; }
 
     public static void SetSystemEntity(Entity entity) {

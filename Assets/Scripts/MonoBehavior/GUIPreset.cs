@@ -58,14 +58,14 @@ public class GUIPreset : MonoBehaviour {
                 var result = math.trunc(System.TimeSpan.FromTicks(time).TotalSeconds * 10) / 10;
                 
                 ScoreData scoreData;
-                if (PlayerPrefs.HasKey("Score")) {
-                    scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString("Score"));
+                if (PlayerPrefs.HasKey(Utility.SaveDataName)) {
+                    scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString(Utility.SaveDataName));
                     scoreData.RecordScore(result);
                 }
                 else {
                     scoreData = new ScoreData(result);
                 }
-                PlayerPrefs.SetString("Score", JsonUtility.ToJson(scoreData));
+                PlayerPrefs.SetString(Utility.SaveDataName, JsonUtility.ToJson(scoreData));
                 
                 Button_Start.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(false);
@@ -76,8 +76,8 @@ public class GUIPreset : MonoBehaviour {
                 break;
             case IdUtility.GUIId.Result: {
                 string scoreMsg = string.Empty;
-                if (PlayerPrefs.HasKey("Score")) {
-                    ScoreData scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString("Score"));
+                if (PlayerPrefs.HasKey(Utility.SaveDataName)) {
+                    ScoreData scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString(Utility.SaveDataName));
 
                     scoreMsg = "HighScore : ";
                     scoreMsg += scoreData.HighScore.ToString();
