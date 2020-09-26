@@ -109,13 +109,13 @@ public class MoveSystem : ComponentSystem {
         var moveValue = moveComp.value;
 
         var velocity = float3.zero;
-        velocity.x = moveValue.x * Utility.speedX * Time.fixedDeltaTime;
+        velocity.x = moveValue.x * Utility.speedX * Time.DeltaTime;
 
         // add impulse
         if (0.0f < moveComp.impulseForce) {
-            velocity.x += moveComp.impulseForce * moveComp.impulseDir.x * Time.fixedDeltaTime;
+            velocity.x += moveComp.impulseForce * moveComp.impulseDir.x * Time.DeltaTime;
         }
-
+        
         CollisionTest(entity, velocity, ref inPos);
         return inPos.x;
     }
@@ -127,7 +127,7 @@ public class MoveSystem : ComponentSystem {
         }
 
         var velocity = float3.zero;
-        velocity.y = moveValue.y * Utility.speedY * Time.fixedDeltaTime;
+        velocity.y = moveValue.y * Utility.speedY * Time.DeltaTime;
 
         CollisionTest(entity, velocity, ref inPos);
         return inPos.y;
