@@ -12,11 +12,11 @@ public static class Utility {
     public static int INDEX_NONE = -1;
 
     // TODO : temporary constant -> status 
-    public static readonly float jumpForce = 70.0f;
-    public static readonly float gravity = 2.0f;
+    public static float jumpForce = 70.0f;
+    public static float gravity = 2.0f;
+    public static float speedX = 2.0f;
+    public static float speedY = 0.1f;
     public static readonly float terminalVelocity = -30.0f;
-    public static readonly float speedX = 2.0f;
-    public static readonly float speedY = 0.1f;
     public static readonly float skinWidth = 0.01f;
     public static readonly float stepOffset = 0.01f;
     public static readonly string SaveDataName = "Score";

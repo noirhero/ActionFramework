@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEditor;
 
 public class TAPCustomEditor : EditorWindow {
-    public bool bClearSaveData;
     public SpritePreset preset;
     public bool[] foldedClipDatas = null;
 
@@ -37,15 +36,9 @@ public class TAPCustomEditor : EditorWindow {
         EditorGUI.BeginChangeCheck();
         preset = (SpritePreset) (EditorGUILayout.ObjectField("preset", preset, typeof(SpritePreset), true,
             GUILayout.Width(400), GUILayout.ExpandWidth(false)));
-        bClearSaveData = EditorGUILayout.Toggle("Clear Score", bClearSaveData);
         if (EditorGUI.EndChangeCheck()) {
             if (preset) {
                 InitPresetData();
-            }
-
-            if (bClearSaveData) {
-                bClearSaveData = false;
-                PlayerPrefs.DeleteKey(Utility.SaveDataName);
             }
         }
 
