@@ -12,7 +12,10 @@ public class GUIPreset : MonoBehaviour {
 
     public Button Button_Start;
     public Text Text_Start;
-
+    
+    public Button Button_Attack;
+    public Button Button_Jump;
+    
     private EntityManager _entManager;
 
     private long _playTime;
@@ -22,6 +25,14 @@ public class GUIPreset : MonoBehaviour {
 
         if (null != Button_Start) {
             Button_Start.onClick.AddListener(delegate { OnClickStart(); });
+        }
+
+        if (null != Button_Attack) {
+            Button_Attack.onClick.AddListener(delegate { OnClickAttack(); });
+        }
+
+        if (null != Button_Jump) {
+            Button_Jump.onClick.AddListener(delegate { OnClickJump(); });
         }
 
         _entManager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -43,12 +54,20 @@ public class GUIPreset : MonoBehaviour {
             case IdUtility.GUIId.Title: {
                 Button_Start.gameObject.SetActive(true);
                 Text_Start.text = "Start";
+                
+                Button_Attack.gameObject.SetActive(false);
+                Button_Jump.gameObject.SetActive(false);
+                
                 Text_Message.gameObject.SetActive(true);
                 Text_Message.text = "LuisZuno";
             }
                 break;
             case IdUtility.GUIId.InGame: {
                 Button_Start.gameObject.SetActive(false);
+                
+                Button_Attack.gameObject.SetActive(true);
+                Button_Jump.gameObject.SetActive(true);
+                
                 Text_Message.gameObject.SetActive(false);
                 _playTime = System.DateTime.Now.Ticks;
             }
@@ -68,6 +87,8 @@ public class GUIPreset : MonoBehaviour {
                 PlayerPrefs.SetString(Utility.SaveDataName, JsonUtility.ToJson(scoreData));
                 
                 Button_Start.gameObject.SetActive(false);
+                Button_Attack.gameObject.SetActive(false);
+                Button_Jump.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(false);
                 
                 StartCoroutine(DelayEnableGUI());
@@ -97,6 +118,8 @@ public class GUIPreset : MonoBehaviour {
                 Text_Start.text = "Restart";
                 
                 Button_Start.gameObject.SetActive(true);
+                Button_Attack.gameObject.SetActive(false);
+                Button_Jump.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(true);
             }
                 break;
@@ -106,6 +129,22 @@ public class GUIPreset : MonoBehaviour {
     public void OnClickStart() {
         if (false == _entManager.HasComponent<ConfirmComponent>(Utility.SystemEntity)) {
             _entManager.AddComponentData(Utility.SystemEntity, new ConfirmComponent());
+        }
+    }
+
+    public void OnClickAttack() {
+        var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        if (false == InputUtility.HasState(dataComp, InputUtility.attack)) {
+            dataComp.state |= InputUtility.attack;
+            _entManager.SetComponentData(Utility.SystemEntity, dataComp);
+        }
+    }
+
+    public void OnClickJump() {
+        var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        if (false == InputUtility.HasState(dataComp, InputUtility.jump)) {
+            dataComp.state |= InputUtility.jump;
+            _entManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
     }
 }
