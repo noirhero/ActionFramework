@@ -1069,6 +1069,76 @@ MonoBehaviour:
   Text_Start: {fileID: 1530828916}
   Button_Attack: {fileID: 1013740307}
   Button_Jump: {fileID: 622396582}
+--- !u!1001 &742168459
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.8678765
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4319715
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4191857327861610, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_Name
+      value: Temple
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: -2695619058785784247, guid: 90a0f4926ece59a49a9025a032e7a64a,
+    type: 3}
 --- !u!1 &852477188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1798,6 +1868,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CountryRoad
       objectReference: {fileID: 0}
+    - target: {fileID: -2909278559584889283, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -928836031010906435, guid: fe42c7f87467ba44aaea51e10bc3e6b5,
         type: 3}
       propertyPath: m_DetectChunkCullingBounds
@@ -2051,7 +2126,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1435100274
 GameObject:
@@ -2474,7 +2549,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1963630559
 GameObject:
@@ -2526,7 +2601,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2005343636
 GameObject:
