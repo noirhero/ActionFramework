@@ -79,26 +79,17 @@ public class GUIPreset : MonoBehaviour {
                 if (PlayerPrefs.HasKey(Utility.SaveDataName)) {
                     ScoreData scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString(Utility.SaveDataName));
 
-                    scoreMsg = "HighScore : ";
+                    scoreMsg = scoreData.bNewHighScore ? "<color=orange>" : "<color=white>";
+                    scoreMsg += "HighScore : ";
                     scoreMsg += scoreData.HighScore.ToString();
                     scoreMsg += "sec \n";
+                    scoreMsg += "</color>";
                     
-                    if (scoreData.bNewHighScore) {
-                        string MakeMsg= string.Empty;
-                        for (int i = 0; i < scoreMsg.Length; ++i) {
-                            MakeMsg += "<color=#";
-                            MakeMsg += ColorUtility.ToHtmlStringRGB(new Color(Random.Range(0f,1f), Random.Range(0, 1f), Random.Range(0, 1f)));
-                            MakeMsg += ">";
-                            MakeMsg += scoreMsg[i];
-                            MakeMsg += "</color>";
-                        }
-                        scoreMsg = MakeMsg;
-                    }
-                    
+                    scoreMsg += scoreData.bNewHighScore ? "<color=orange>" : "<color=grey>";
                     scoreMsg += "Score : ";
-                    scoreMsg += "<color=#"+ColorUtility.ToHtmlStringRGB(scoreData.bNewHighScore ? Color.yellow : Color.white)+">";
                     scoreMsg += scoreData.lastScore.ToString();
-                    scoreMsg += " </color> sec";
+                    scoreMsg += "sec";
+                    scoreMsg += "</color>";
                 }
 
                 Text_Message.text = scoreMsg;
