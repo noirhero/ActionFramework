@@ -1,8 +1,11 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
+using Unity.Physics.Systems;
 using UnityEngine.InputSystem;
 
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateAfter(typeof(EndFramePhysicsSystem))]
 public class InputSystem : ComponentSystem, InputActions.ICharacterControlActions {
     public void OnLeft(InputAction.CallbackContext context) {
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);

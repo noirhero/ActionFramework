@@ -3,7 +3,10 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
+using CapsuleCollider = Unity.Physics.CapsuleCollider;
 
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateAfter(typeof(InputSystem))]
 public class InputSystemEX : ComponentSystem {
     private bool IsLocked() {
         if (Entity.Null == Utility.SystemEntity) {
@@ -36,7 +39,6 @@ public class InputSystemEX : ComponentSystem {
                 InputUtility.HasState(inputDataComp, InputUtility.jump)) {
                 moveComp.value.y += Utility.jumpForce;
 
-                // should be once play
                 inputDataComp.state ^= InputUtility.jump;
 
                 EntityManager.AddComponentData(entity, new JumpComponent());

@@ -6,6 +6,8 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateAfter(typeof(InputSystemEX))]
 public class MoveSystem : ComponentSystem {
     private BuildPhysicsWorld _buildPhysSystem;
     private bool _hasBeenInitialized = false;
@@ -29,6 +31,7 @@ public class MoveSystem : ComponentSystem {
 
             if (false == EntityManager.HasComponent<TargetIdFollowComponent>(entity)) {
 #region Run
+
                 var bMovingX = math.FLT_MIN_NORMAL < math.abs(moveComp.value.x);
                 var bRunning = ((0.0f < dir.x) && (Utility.stepOffset < dir.x)) ||
                                (0.0f > dir.x) && (-Utility.stepOffset > dir.x);
@@ -44,9 +47,11 @@ public class MoveSystem : ComponentSystem {
                         animComp.state ^= AnimUtility.run;
                     }
                 }
+
 #endregion
 
 #region Jump
+
                 var bMovingY = math.FLT_MIN_NORMAL < math.abs(Utility.terminalVelocity - moveComp.value.y);
                 var bFalling = (0.0f > dir.y) && (-Utility.stepOffset > dir.y);
                 var bJumping = (0.0f < dir.y) && (Utility.stepOffset < dir.y);
@@ -71,18 +76,22 @@ public class MoveSystem : ComponentSystem {
                         });
                     }
                 }
+
 #endregion
 
 #region Crouch
+
                 if (EntityManager.HasComponent<CrouchComponent>(entity)) {
                     animComp.state |= AnimUtility.crouch;
                 }
                 else if (AnimUtility.HasState(animComp, AnimUtility.crouch)) {
                     animComp.state ^= AnimUtility.crouch;
                 }
+
 #endregion
 
 #region FrameLock
+
                 // jump anim lock
                 if (EntityManager.HasComponent<CrouchComponent>(entity)) {
                     EntityManager.AddComponentData(entity, new AnimationLockComponent(1));
@@ -97,6 +106,7 @@ public class MoveSystem : ComponentSystem {
                         EntityManager.RemoveComponent<AnimationLockComponent>(entity);
                     }
                 }
+
 #endregion
             }
 
@@ -109,13 +119,13 @@ public class MoveSystem : ComponentSystem {
         var moveValue = moveComp.value;
 
         var velocity = float3.zero;
-        velocity.x = moveValue.x * Utility.speedX * Time.DeltaTime;
+        velocity.x = moveValue.x * Utility.speedX * Time.fixedDeltaTime;
 
         // add impulse
         if (0.0f < moveComp.impulseForce) {
-            velocity.x += moveComp.impulseForce * moveComp.impulseDir.x * Time.DeltaTime;
+            velocity.x += moveComp.impulseForce * moveComp.impulseDir.x * Time.fixedDeltaTime;
         }
-        
+
         CollisionTest(entity, velocity, ref inPos);
         return inPos.x;
     }
@@ -127,7 +137,7 @@ public class MoveSystem : ComponentSystem {
         }
 
         var velocity = float3.zero;
-        velocity.y = moveValue.y * Utility.speedY * Time.DeltaTime;
+        velocity.y = moveValue.y * Utility.speedY * Time.fixedDeltaTime;
 
         CollisionTest(entity, velocity, ref inPos);
         return inPos.y;
