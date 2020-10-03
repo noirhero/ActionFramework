@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.unity.device-simulator": "2.2.3-preview",
     "com.unity.dots.editor": "0.10.0-preview",
     "com.unity.entities": "0.14.0-preview.19",
     "com.unity.ide.rider": "1.2.1",
