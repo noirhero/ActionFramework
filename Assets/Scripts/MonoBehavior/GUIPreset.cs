@@ -100,14 +100,16 @@ public class GUIPreset : MonoBehaviour {
                 if (PlayerPrefs.HasKey(Utility.SaveDataName)) {
                     ScoreData scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString(Utility.SaveDataName));
 
-                    scoreMsg = scoreData.bNewHighScore ? "<color=orange>" : "<color=white>";
                     scoreMsg += "HighScore : ";
+                    scoreMsg += scoreData.bNewHighScore ? "<color=#63D46A>" : "<color=white>";
                     scoreMsg += scoreData.HighScore.ToString();
                     scoreMsg += "sec \n";
                     scoreMsg += "</color>";
                     
-                    scoreMsg += scoreData.bNewHighScore ? "<color=orange>" : "<color=grey>";
+                    scoreMsg += scoreData.bNewHighScore ? "<color=white>" : "<color=#B0B0B0>";
                     scoreMsg += "Score : ";
+                    scoreMsg += "</color>";
+                    scoreMsg += scoreData.bNewHighScore ? "<color=#63D46A>" : "<color=#B0B0B0>";
                     scoreMsg += scoreData.lastScore.ToString();
                     scoreMsg += "sec";
                     scoreMsg += "</color>";
