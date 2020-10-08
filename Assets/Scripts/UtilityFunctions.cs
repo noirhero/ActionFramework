@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using Unity.Entities;
+using UnityEngine;
 
 public static class Utility {
     public static int GetHashCode(in string path) {
@@ -11,15 +12,40 @@ public static class Utility {
 
     public static int INDEX_NONE = -1;
 
-    // TODO : temporary constant -> status 
-    public static float jumpForce = 65.0f;
-    public static float gravity = 2.0f;
-    public static float speedX = 2.0f;
-    public static float speedY = 0.1f;
     public static readonly float terminalVelocity = -30.0f;
     public static readonly float skinWidth = 0.01f;
     public static readonly float stepOffset = 0.01f;
+    
     public static readonly string SaveDataName = "Score";
+    public static readonly string StatJumpForceName = "jumpForce";
+    public static readonly string StatGravityName = "gravity";
+    public static readonly string StatSpeedXName = "speedX";
+    public static readonly string StatSpeedYName = "speedY";
+    
+    public static float jumpForce {
+        get {
+            return PlayerPrefs.HasKey(Utility.StatJumpForceName) ? PlayerPrefs.GetFloat(Utility.StatJumpForceName) : 65.0f;
+        }
+        private set{}
+    }
+    public static float gravity {
+        get {
+            return PlayerPrefs.HasKey(Utility.StatGravityName) ? PlayerPrefs.GetFloat(Utility.StatGravityName) : 2.0f;
+        }
+        private set{}
+    }
+    public static float speedX {
+        get {
+            return PlayerPrefs.HasKey(Utility.StatSpeedXName) ? PlayerPrefs.GetFloat(Utility.StatSpeedXName) : 2.0f;
+        }
+        private set{}
+    }
+    public static float speedY {
+        get {
+            return PlayerPrefs.HasKey(Utility.StatSpeedYName) ? PlayerPrefs.GetFloat(Utility.StatSpeedYName) : 0.1f;
+        }
+        private set{}
+    }
     
     public static Entity SystemEntity { get; private set; }
 
