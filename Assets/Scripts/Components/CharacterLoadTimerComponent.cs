@@ -10,6 +10,9 @@ using Unity.Mathematics;
 public struct CharacterLoadTimerComponent : IComponentData {
     public float tick;
     public bool loop;
+    public EffectUtility.Key effectId;
+    public float effectTick;
+    [HideInInspector] public bool effectPlayed;
     [HideInInspector] public float elapsedTick;
     [HideInInspector] public IdUtility.Id id;
     [HideInInspector] public float3 pos;

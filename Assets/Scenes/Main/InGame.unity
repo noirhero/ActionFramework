@@ -510,6 +510,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tick: 3
   loop: 1
+  effectId: 8
+  effectTick: 2.5
+  effectPlayed: 0
   elapsedTick: 0
   id: 0
   pos:
@@ -593,6 +596,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tick: 2
   loop: 1
+  effectId: 8
+  effectTick: 1.5
+  effectPlayed: 0
   elapsedTick: 0
   id: 0
   pos:

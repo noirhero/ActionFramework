@@ -121,9 +121,11 @@ public static class IdUtility {
 
 public static class EffectUtility {
     public enum Key {
+        None = 0,
         Hit = 1 << 0,
         FootStep = 1 << 1,
         Landing = 1 << 2,
+        Spawn = 1 << 3,
     }
 }
 
