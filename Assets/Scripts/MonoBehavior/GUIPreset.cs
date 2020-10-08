@@ -15,7 +15,10 @@ public class GUIPreset : MonoBehaviour {
     
     public Button Button_Attack;
     public Button Button_Jump;
-    
+    public ButtonEx Button_Left;
+    public ButtonEx Button_Right;
+    public ButtonEx Button_Crouch;
+
     private EntityManager _entManager;
 
     private long _playTime;
@@ -35,6 +38,21 @@ public class GUIPreset : MonoBehaviour {
             Button_Jump.onClick.AddListener(delegate { OnClickJump(); });
         }
 
+        if (null != Button_Left) {
+            Button_Left.OnPressEvent.AddListener(delegate { OnPressedLeft(true); });
+            Button_Left.OnReleaseEvent.AddListener(delegate { OnPressedLeft(false); });
+        }
+
+        if (null != Button_Right) {
+            Button_Right.OnPressEvent.AddListener(delegate { OnPressedRight(true); });
+            Button_Right.OnReleaseEvent.AddListener(delegate { OnPressedRight(false); });
+        }
+
+        if (null != Button_Crouch) {
+            Button_Crouch.OnPressEvent.AddListener(delegate { OnPressedCrouch(true); });
+            Button_Crouch.OnReleaseEvent.AddListener(delegate { OnPressedCrouch(false); });
+        }
+
         _entManager = World.DefaultGameObjectInjectionWorld.EntityManager;
     }
 
@@ -48,6 +66,13 @@ public class GUIPreset : MonoBehaviour {
         }
     }
 
+    private void ResetPressedButtonState() {
+        var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        dataComp.dir = 0.0f;
+        dataComp.state = 0;
+        _entManager.SetComponentData(Utility.SystemEntity, dataComp);
+    }
+
     public void GUIUpdate(IdUtility.GUIId inId) {
         gameObject.SetActive(true);
         switch (inId) {
@@ -57,7 +82,10 @@ public class GUIPreset : MonoBehaviour {
                 
                 Button_Attack.gameObject.SetActive(false);
                 Button_Jump.gameObject.SetActive(false);
-                
+                Button_Left.gameObject.SetActive(false);
+                Button_Right.gameObject.SetActive(false);
+                Button_Crouch.gameObject.SetActive(false);
+
                 Text_Message.gameObject.SetActive(true);
                 Text_Message.text = "LuisZuno";
             }
@@ -67,6 +95,9 @@ public class GUIPreset : MonoBehaviour {
                 
                 Button_Attack.gameObject.SetActive(true);
                 Button_Jump.gameObject.SetActive(true);
+                Button_Left.gameObject.SetActive(true);
+                Button_Right.gameObject.SetActive(true);
+                Button_Crouch.gameObject.SetActive(true);
                 
                 Text_Message.gameObject.SetActive(false);
                 _playTime = System.DateTime.Now.Ticks;
@@ -89,8 +120,12 @@ public class GUIPreset : MonoBehaviour {
                 Button_Start.gameObject.SetActive(false);
                 Button_Attack.gameObject.SetActive(false);
                 Button_Jump.gameObject.SetActive(false);
+                Button_Left.gameObject.SetActive(false);
+                Button_Right.gameObject.SetActive(false);
+                Button_Crouch.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(false);
-                
+
+                ResetPressedButtonState();
                 StartCoroutine(DelayEnableGUI());
 
             }
@@ -122,6 +157,9 @@ public class GUIPreset : MonoBehaviour {
                 Button_Start.gameObject.SetActive(true);
                 Button_Attack.gameObject.SetActive(false);
                 Button_Jump.gameObject.SetActive(false);
+                Button_Left.gameObject.SetActive(false);
+                Button_Right.gameObject.SetActive(false);
+                Button_Crouch.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(true);
             }
                 break;
@@ -148,5 +186,47 @@ public class GUIPreset : MonoBehaviour {
             dataComp.state |= InputUtility.jump;
             _entManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
+    }
+
+    public void OnPressedLeft(bool pressed) {
+        var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        var hasState = InputUtility.HasState(dataComp, InputUtility.left);
+        if (pressed && (false == hasState)) {
+            dataComp.state |= InputUtility.left;
+            dataComp.dir -= 1.0f;
+        }
+        else if (hasState) {
+            dataComp.state ^= InputUtility.left;
+            dataComp.dir += 1.0f;
+        }
+
+        _entManager.SetComponentData(Utility.SystemEntity, dataComp);
+    }
+
+    public void OnPressedRight(bool pressed) {
+        var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        var hasState = InputUtility.HasState(dataComp, InputUtility.right);
+        if (pressed && (false == hasState)) {
+            dataComp.state |= InputUtility.right;
+            dataComp.dir += 1.0f;
+        }
+        else if (hasState) {
+            dataComp.state ^= InputUtility.right;
+            dataComp.dir -= 1.0f;
+        }
+        _entManager.SetComponentData(Utility.SystemEntity, dataComp);
+    }
+
+    public void OnPressedCrouch(bool pressed) {
+        var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        var hasState = InputUtility.HasState(dataComp, InputUtility.crouch);
+
+        if (pressed && (false == hasState)) {
+            dataComp.state |= InputUtility.crouch;
+        }
+        else if (hasState) {
+            dataComp.state ^= InputUtility.crouch;
+        }
+        _entManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 }

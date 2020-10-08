@@ -108,17 +108,6 @@ public class @InputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""80583f76-abb7-4d11-b63d-f1c16c9e0d2a"",
-                    ""path"": ""<Touchscreen>/primaryTouch/indirectTouch"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Left"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""3a27bef1-8584-4bdd-a4c4-a36b8a7a9204"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
@@ -196,17 +185,6 @@ public class @InputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3617dcae-87f9-415c-aa45-0152a75b4e45"",
-                    ""path"": ""<Touchscreen>/delta/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LeftRightAxis"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""c584780c-14a0-4ad8-9656-0c1502b81d4e"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
@@ -231,17 +209,6 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""96ff6078-0673-4a3a-b3df-2f3264fb9901"",
                     ""path"": ""<Gamepad>/leftStick/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""CrouchAxis"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8def72a3-55a7-4593-ab16-eb824529f94a"",
-                    ""path"": ""<Touchscreen>/delta/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
