@@ -30,28 +30,35 @@ public class GUIPreset : MonoBehaviour {
             Button_Start.onClick.AddListener(delegate { OnClickStart(); });
         }
 
+#if MOBILE_DEVICE
         if (null != Button_Attack) {
+            Button_Attack.enabled = true;
             Button_Attack.onClick.AddListener(delegate { OnClickAttack(); });
         }
 
         if (null != Button_Jump) {
+            Button_Jump.enabled = true;
             Button_Jump.onClick.AddListener(delegate { OnClickJump(); });
         }
 
         if (null != Button_Left) {
+            Button_Left.enabled = true;
             Button_Left.OnPressEvent.AddListener(delegate { OnPressedLeft(true); });
             Button_Left.OnReleaseEvent.AddListener(delegate { OnPressedLeft(false); });
         }
 
         if (null != Button_Right) {
+            Button_Right.enabled = true;
             Button_Right.OnPressEvent.AddListener(delegate { OnPressedRight(true); });
             Button_Right.OnReleaseEvent.AddListener(delegate { OnPressedRight(false); });
         }
 
         if (null != Button_Crouch) {
+            Button_Crouch.enabled = true;
             Button_Crouch.OnPressEvent.AddListener(delegate { OnPressedCrouch(true); });
             Button_Crouch.OnReleaseEvent.AddListener(delegate { OnPressedCrouch(false); });
         }
+#endif
 
         _entManager = World.DefaultGameObjectInjectionWorld.EntityManager;
     }
