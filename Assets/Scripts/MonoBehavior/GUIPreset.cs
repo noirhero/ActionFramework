@@ -12,12 +12,22 @@ public class GUIPreset : MonoBehaviour {
 
     public Button Button_Start;
     public Text Text_Start;
-    
+
     public Button Button_Attack;
     public Button Button_Jump;
     public ButtonEx Button_Left;
     public ButtonEx Button_Right;
     public ButtonEx Button_Crouch;
+
+    private void OnEnabledButtons(bool isEnabled) {
+#if MOBILE_DEVICE
+        Button_Attack.gameObject.SetActive(isEnabled);
+        Button_Jump.gameObject.SetActive(isEnabled);
+        Button_Left.gameObject.SetActive(isEnabled);
+        Button_Right.gameObject.SetActive(isEnabled);
+        Button_Crouch.gameObject.SetActive(isEnabled);
+#endif
+    }
 
     private EntityManager _entManager;
 
@@ -86,12 +96,8 @@ public class GUIPreset : MonoBehaviour {
             case IdUtility.GUIId.Title: {
                 Button_Start.gameObject.SetActive(true);
                 Text_Start.text = "Start";
-                
-                Button_Attack.gameObject.SetActive(false);
-                Button_Jump.gameObject.SetActive(false);
-                Button_Left.gameObject.SetActive(false);
-                Button_Right.gameObject.SetActive(false);
-                Button_Crouch.gameObject.SetActive(false);
+
+                OnEnabledButtons(false);
 
                 Text_Message.gameObject.SetActive(true);
                 Text_Message.text = "LuisZuno";
@@ -99,13 +105,9 @@ public class GUIPreset : MonoBehaviour {
                 break;
             case IdUtility.GUIId.InGame: {
                 Button_Start.gameObject.SetActive(false);
-                
-                Button_Attack.gameObject.SetActive(true);
-                Button_Jump.gameObject.SetActive(true);
-                Button_Left.gameObject.SetActive(true);
-                Button_Right.gameObject.SetActive(true);
-                Button_Crouch.gameObject.SetActive(true);
-                
+
+                OnEnabledButtons(true);
+
                 Text_Message.gameObject.SetActive(false);
                 _playTime = System.DateTime.Now.Ticks;
             }
@@ -113,7 +115,7 @@ public class GUIPreset : MonoBehaviour {
             case IdUtility.GUIId.Over: {
                 var time = System.DateTime.Now.Ticks - _playTime;
                 var result = math.trunc(System.TimeSpan.FromTicks(time).TotalSeconds * 10) / 10;
-                
+
                 ScoreData scoreData;
                 if (PlayerPrefs.HasKey(Utility.SaveDataName)) {
                     scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString(Utility.SaveDataName));
@@ -122,19 +124,13 @@ public class GUIPreset : MonoBehaviour {
                 else {
                     scoreData = new ScoreData(result);
                 }
+
                 PlayerPrefs.SetString(Utility.SaveDataName, JsonUtility.ToJson(scoreData));
-                
-                Button_Start.gameObject.SetActive(false);
-                Button_Attack.gameObject.SetActive(false);
-                Button_Jump.gameObject.SetActive(false);
-                Button_Left.gameObject.SetActive(false);
-                Button_Right.gameObject.SetActive(false);
-                Button_Crouch.gameObject.SetActive(false);
-                Text_Message.gameObject.SetActive(false);
+
+                OnEnabledButtons(false);
 
                 ResetPressedButtonState();
                 StartCoroutine(DelayEnableGUI());
-
             }
                 break;
             case IdUtility.GUIId.Result: {
@@ -147,7 +143,7 @@ public class GUIPreset : MonoBehaviour {
                     scoreMsg += scoreData.HighScore.ToString();
                     scoreMsg += "sec \n";
                     scoreMsg += "</color>";
-                    
+
                     scoreMsg += scoreData.bNewHighScore ? "<color=white>" : "<color=#B0B0B0>";
                     scoreMsg += "Score : ";
                     scoreMsg += "</color>";
@@ -158,22 +154,18 @@ public class GUIPreset : MonoBehaviour {
                 }
 
                 Text_Message.text = scoreMsg;
-                    
                 Text_Start.text = "Restart";
-                
+
                 Button_Start.gameObject.SetActive(true);
-                Button_Attack.gameObject.SetActive(false);
-                Button_Jump.gameObject.SetActive(false);
-                Button_Left.gameObject.SetActive(false);
-                Button_Right.gameObject.SetActive(false);
-                Button_Crouch.gameObject.SetActive(false);
                 Text_Message.gameObject.SetActive(true);
+
+                OnEnabledButtons(false);
             }
                 break;
         }
     }
 
-    public void OnClickStart() {
+    private void OnClickStart() {
         if (false == _entManager.HasComponent<ConfirmComponent>(Utility.SystemEntity)) {
             _entManager.AddComponentData(Utility.SystemEntity, new ConfirmComponent());
         }
@@ -221,6 +213,7 @@ public class GUIPreset : MonoBehaviour {
             dataComp.state ^= InputUtility.right;
             dataComp.dir -= 1.0f;
         }
+
         _entManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
@@ -234,6 +227,7 @@ public class GUIPreset : MonoBehaviour {
         else if (hasState) {
             dataComp.state ^= InputUtility.crouch;
         }
+
         _entManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 }
