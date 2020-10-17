@@ -10,6 +10,7 @@ public class TAPUtilityEditor : EditorWindow {
     private static float gravity;
     private static float speedX;
     private static float speedY;
+    private static float touchDelta;
     
     [MenuItem("Window/---- TAP Utility Editor ----")]
     public static void ShowWindow() {
@@ -24,7 +25,8 @@ public class TAPUtilityEditor : EditorWindow {
         gravity = EditorGUILayout.Slider(Utility.StatGravityName, Utility.gravity, 0.0f, 100.0f);
         speedX = EditorGUILayout.Slider(Utility.StatSpeedXName, Utility.speedX, 0.0f, 10.0f);
         speedY = EditorGUILayout.Slider(Utility.StatSpeedYName, Utility.speedY, 0.0f, 10.0f);
-        
+        touchDelta = EditorGUILayout.Slider(Utility.StatTouchDeltaName, Utility.touchDelta, 0.0f, 10.0f);
+
         bClearSaveData = EditorGUILayout.Toggle("Clear Score", bClearSaveData);
         if (EditorGUI.EndChangeCheck()) {
             if (bClearSaveData) {
@@ -36,6 +38,7 @@ public class TAPUtilityEditor : EditorWindow {
             PlayerPrefs.SetFloat(Utility.StatGravityName, gravity);
             PlayerPrefs.SetFloat(Utility.StatSpeedXName, speedX);
             PlayerPrefs.SetFloat(Utility.StatSpeedYName, speedY);
+            PlayerPrefs.SetFloat(Utility.StatTouchDeltaName, touchDelta);
         }
     }
 }

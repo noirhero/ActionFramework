@@ -3,6 +3,7 @@
 using Unity.Entities;
 using Unity.Physics.Systems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateAfter(typeof(EndFramePhysicsSystem))]
@@ -120,6 +121,28 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
                 EntityManager.AddComponentData(Utility.SystemEntity, new ConfirmComponent());
             }
         }
+    }
+
+    public void OnTouch(InputAction.CallbackContext context) {
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        TouchState state = context.ReadValue<TouchState>();
+        
+        if (state.isPrimaryTouch) {
+            if (state.delta.x != 0.0f) {
+                dataComp.dir = state.delta.x * UnityEngine.Time.deltaTime * Utility.touchDelta;
+            }
+            if (state.delta.y < -50.0f &&
+                false == InputUtility.HasState(dataComp, InputUtility.crouch)) {
+                dataComp.state |= InputUtility.crouch;
+            }
+        }
+        else {
+            dataComp.dir = 0;
+            if (InputUtility.HasState(dataComp, InputUtility.crouch)) {
+                dataComp.state ^= InputUtility.crouch;
+            }
+        }
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     private InputActions _input;

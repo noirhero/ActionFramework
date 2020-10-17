@@ -68,6 +68,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Touch",
+                    "type": "Value",
+                    "id": "d6f965dd-3990-46ec-ab2b-d49f5cb0a14e",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -233,6 +241,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfd8ed64-781e-4264-9fea-dffe8dc8c482",
+                    "path": "<Touchscreen>/primaryTouch",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

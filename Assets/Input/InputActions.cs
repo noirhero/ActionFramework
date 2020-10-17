@@ -81,6 +81,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Touch"",
+                    ""type"": ""Value"",
+                    ""id"": ""d6f965dd-3990-46ec-ab2b-d49f5cb0a14e"",
+                    ""expectedControlType"": ""Touch"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -248,6 +256,17 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bfd8ed64-781e-4264-9fea-dffe8dc8c482"",
+                    ""path"": ""<Touchscreen>/primaryTouch"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Touch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -264,6 +283,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_CharacterControl_Crouch = m_CharacterControl.FindAction("Crouch", throwIfNotFound: true);
         m_CharacterControl_CrouchAxis = m_CharacterControl.FindAction("CrouchAxis", throwIfNotFound: true);
         m_CharacterControl_Confirm = m_CharacterControl.FindAction("Confirm", throwIfNotFound: true);
+        m_CharacterControl_Touch = m_CharacterControl.FindAction("Touch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -321,6 +341,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_CharacterControl_Crouch;
     private readonly InputAction m_CharacterControl_CrouchAxis;
     private readonly InputAction m_CharacterControl_Confirm;
+    private readonly InputAction m_CharacterControl_Touch;
     public struct CharacterControlActions
     {
         private @InputActions m_Wrapper;
@@ -333,6 +354,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @Crouch => m_Wrapper.m_CharacterControl_Crouch;
         public InputAction @CrouchAxis => m_Wrapper.m_CharacterControl_CrouchAxis;
         public InputAction @Confirm => m_Wrapper.m_CharacterControl_Confirm;
+        public InputAction @Touch => m_Wrapper.m_CharacterControl_Touch;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -366,6 +388,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Confirm.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnConfirm;
                 @Confirm.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnConfirm;
                 @Confirm.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnConfirm;
+                @Touch.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouch;
+                @Touch.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouch;
+                @Touch.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouch;
             }
             m_Wrapper.m_CharacterControlActionsCallbackInterface = instance;
             if (instance != null)
@@ -394,6 +419,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Confirm.started += instance.OnConfirm;
                 @Confirm.performed += instance.OnConfirm;
                 @Confirm.canceled += instance.OnConfirm;
+                @Touch.started += instance.OnTouch;
+                @Touch.performed += instance.OnTouch;
+                @Touch.canceled += instance.OnTouch;
             }
         }
     }
@@ -408,5 +436,6 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnCrouchAxis(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
+        void OnTouch(InputAction.CallbackContext context);
     }
 }

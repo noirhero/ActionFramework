@@ -21,6 +21,7 @@ public static class Utility {
     public static readonly string StatGravityName = "gravity";
     public static readonly string StatSpeedXName = "speedX";
     public static readonly string StatSpeedYName = "speedY";
+    public static readonly string StatTouchDeltaName = "touchDelta";
     
     public static float jumpForce {
         get {
@@ -43,6 +44,12 @@ public static class Utility {
     public static float speedY {
         get {
             return PlayerPrefs.HasKey(Utility.StatSpeedYName) ? PlayerPrefs.GetFloat(Utility.StatSpeedYName) : 0.1f;
+        }
+        private set{}
+    }
+    public static float touchDelta {
+        get {
+            return PlayerPrefs.HasKey(Utility.StatTouchDeltaName) ? PlayerPrefs.GetFloat(Utility.StatTouchDeltaName) : 1.0f;
         }
         private set{}
     }
