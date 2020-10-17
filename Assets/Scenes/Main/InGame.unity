@@ -508,10 +508,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53d2ceb756ba4d4ca33de724fe4f78e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tick: 3
+  tick: 5
   loop: 1
   effectId: 8
-  effectTick: 2.5
+  effectTick: 4.5
   effectPlayed: 0
   elapsedTick: 0
   id: 0
@@ -594,10 +594,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53d2ceb756ba4d4ca33de724fe4f78e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tick: 2
+  tick: 12
   loop: 1
   effectId: 8
-  effectTick: 1.5
+  effectTick: 11.5
   effectPlayed: 0
   elapsedTick: 0
   id: 0

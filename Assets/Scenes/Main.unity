@@ -1397,6 +1397,11 @@ PrefabInstance:
       propertyPath: m_ChunkCullingBounds.y
       value: 1.26
       objectReference: {fileID: 0}
+    - target: {fileID: -2313220780970538401, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_TileAnchor.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2158202068874971733, guid: 90a0f4926ece59a49a9025a032e7a64a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1501,6 +1506,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ChunkCullingBounds.y
       value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444794548758407450, guid: 90a0f4926ece59a49a9025a032e7a64a,
+        type: 3}
+      propertyPath: m_Mode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8660443845440314372, guid: 90a0f4926ece59a49a9025a032e7a64a,
         type: 3}

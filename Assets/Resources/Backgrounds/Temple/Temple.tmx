@@ -2,7 +2,7 @@
 <map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="48" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="1">
  <tileset firstgid="1" source="Images.tsx"/>
  <tileset firstgid="23" source="Tileset.tsx"/>
- <layer id="4" name="Sky" width="48" height="10">
+ <layer id="4" name="Sky" width="48" height="10" locked="1">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
@@ -33,10 +33,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,0
 </data>
  </layer>
- <layer id="5" name="Forest" width="48" height="10">
+ <layer id="5" name="Forest" width="48" height="10" locked="1">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
@@ -53,7 +53,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="2" name="Castle" width="48" height="10">
+ <layer id="2" name="Castle" width="48" height="10" locked="1">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
@@ -70,7 +70,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="11" name="Fog" width="48" height="10" opacity="0.7">
+ <layer id="11" name="Fog" width="48" height="10" locked="1" opacity="0.7">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
@@ -87,7 +87,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="7" name="ForeForest" width="48" height="10">
+ <layer id="7" name="ForeForest" width="48" height="10" locked="1">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
@@ -104,7 +104,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="8" name="Ground" width="48" height="10">
+ <layer id="8" name="Ground" width="48" height="10" locked="1">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
@@ -121,7 +121,7 @@
 63,64,66,67,66,67,66,67,69,70,66,67,66,67,66,67,69,70,66,67,66,67,66,67,66,67,66,67,66,67,69,70,66,67,66,67,69,70,66,67,66,67,66,67,69,70,72,73
 </data>
  </layer>
- <layer id="10" name="Objects" width="48" height="10">
+ <layer id="10" name="Objects" width="48" height="10" locked="1">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
