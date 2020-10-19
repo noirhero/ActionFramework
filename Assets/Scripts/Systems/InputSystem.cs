@@ -1,9 +1,9 @@
 ﻿// Copyright 2018-2020 TAP, Inc. All Rights Reserved.
 
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics.Systems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateAfter(typeof(EndFramePhysicsSystem))]
@@ -123,26 +123,40 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         }
     }
 
-    public void OnTouch(InputAction.CallbackContext context) {
+    private float _touchDeltaX = 0.0f;
+    public void OnTouchLeftRightAxis(InputAction.CallbackContext context) {
+        var deltaX = context.ReadValue<float>();
+        _touchDeltaX += deltaX * Utility.touchDelta;
+        _touchDeltaX = math.clamp(_touchDeltaX, -1.0f, 1.0f);
+
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-        TouchState state = context.ReadValue<TouchState>();
-        
-        if (state.isPrimaryTouch) {
-            if (state.delta.x != 0.0f) {
-                dataComp.dir = state.delta.x * UnityEngine.Time.deltaTime * Utility.touchDelta;
-            }
-            if (state.delta.y < -50.0f &&
-                false == InputUtility.HasState(dataComp, InputUtility.crouch)) {
-                dataComp.state |= InputUtility.crouch;
-            }
+        dataComp.dir = _touchDeltaX;
+
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
+    }
+
+    public void OnTouchCrouchAxis(InputAction.CallbackContext context) {
+        var deltaY = context.ReadValue<float>();
+
+        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        if (false == InputUtility.HasState(dataComp, InputUtility.crouch) && -10.0f > deltaY) { 
+            dataComp.state |= InputUtility.crouch; 
         }
-        else {
+        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
+    }
+
+    public void OnTouch(InputAction.CallbackContext context) {
+        if (context.canceled) {
+            _touchDeltaX = 0.0f;
+
+            var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
             dataComp.dir = 0;
+
             if (InputUtility.HasState(dataComp, InputUtility.crouch)) {
                 dataComp.state ^= InputUtility.crouch;
             }
+            EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
-        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     private InputActions _input;
