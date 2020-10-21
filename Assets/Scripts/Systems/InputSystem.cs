@@ -142,11 +142,11 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         var isCrouch = InputUtility.HasState(dataComp, InputUtility.crouch);
-        if (isCrouch && 5.0f < deltaY) {
+        if (isCrouch && 10.0f < deltaY) {
             dataComp.state ^= InputUtility.crouch;
         }
 
-        if (false == isCrouch && -5.0f > deltaY) {
+        if (false == isCrouch && -10.0f > deltaY) {
             dataComp.state |= InputUtility.crouch;
         }
 

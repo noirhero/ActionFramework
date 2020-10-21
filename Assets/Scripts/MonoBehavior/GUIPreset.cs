@@ -23,9 +23,9 @@ public class GUIPreset : MonoBehaviour {
 #if MOBILE_DEVICE
         Button_Attack.gameObject.SetActive(isEnabled);
         Button_Jump.gameObject.SetActive(isEnabled);
-        Button_Left.gameObject.SetActive(isEnabled);
-        Button_Right.gameObject.SetActive(isEnabled);
-        Button_Crouch.gameObject.SetActive(isEnabled);
+        // Button_Left.gameObject.SetActive(isEnabled);
+        // Button_Right.gameObject.SetActive(isEnabled);
+        // Button_Crouch.gameObject.SetActive(isEnabled);
 #endif
     }
 
@@ -51,23 +51,23 @@ public class GUIPreset : MonoBehaviour {
             Button_Jump.onClick.AddListener(delegate { OnClickJump(); });
         }
 
-        if (null != Button_Left) {
-            Button_Left.enabled = true;
-            Button_Left.OnPressEvent.AddListener(delegate { OnPressedLeft(true); });
-            Button_Left.OnReleaseEvent.AddListener(delegate { OnPressedLeft(false); });
-        }
-
-        if (null != Button_Right) {
-            Button_Right.enabled = true;
-            Button_Right.OnPressEvent.AddListener(delegate { OnPressedRight(true); });
-            Button_Right.OnReleaseEvent.AddListener(delegate { OnPressedRight(false); });
-        }
-
-        if (null != Button_Crouch) {
-            Button_Crouch.enabled = true;
-            Button_Crouch.OnPressEvent.AddListener(delegate { OnPressedCrouch(true); });
-            Button_Crouch.OnReleaseEvent.AddListener(delegate { OnPressedCrouch(false); });
-        }
+        // if (null != Button_Left) {
+        //     Button_Left.enabled = true;
+        //     Button_Left.OnPressEvent.AddListener(delegate { OnPressedLeft(true); });
+        //     Button_Left.OnReleaseEvent.AddListener(delegate { OnPressedLeft(false); });
+        // }
+        //
+        // if (null != Button_Right) {
+        //     Button_Right.enabled = true;
+        //     Button_Right.OnPressEvent.AddListener(delegate { OnPressedRight(true); });
+        //     Button_Right.OnReleaseEvent.AddListener(delegate { OnPressedRight(false); });
+        // }
+        //
+        // if (null != Button_Crouch) {
+        //     Button_Crouch.enabled = true;
+        //     Button_Crouch.OnPressEvent.AddListener(delegate { OnPressedCrouch(true); });
+        //     Button_Crouch.OnReleaseEvent.AddListener(delegate { OnPressedCrouch(false); });
+        // }
 #endif
 
         _entManager = World.DefaultGameObjectInjectionWorld.EntityManager;
