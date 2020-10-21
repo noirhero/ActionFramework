@@ -123,38 +123,41 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         }
     }
 
-    private float _touchDeltaX = 0.0f;
     public void OnTouchLeftRightAxis(InputAction.CallbackContext context) {
         var deltaX = context.ReadValue<float>();
-        _touchDeltaX += deltaX * Utility.touchDelta;
-        _touchDeltaX = math.clamp(_touchDeltaX, -1.0f, 1.0f);
+        if (math.FLT_MIN_NORMAL > math.abs(deltaX)) {
+            return;
+        }
 
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-        dataComp.dir = _touchDeltaX;
-
+        dataComp.dir = math.rsqrt(deltaX * deltaX) * deltaX;
         EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnTouchCrouchAxis(InputAction.CallbackContext context) {
         var deltaY = context.ReadValue<float>();
+        if (math.FLT_MIN_NORMAL > math.abs(deltaY)) {
+            return;
+        }
 
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-        if (false == InputUtility.HasState(dataComp, InputUtility.crouch) && -10.0f > deltaY) { 
-            dataComp.state |= InputUtility.crouch; 
+        var isCrouch = InputUtility.HasState(dataComp, InputUtility.crouch);
+        if (isCrouch && 5.0f < deltaY) {
+            dataComp.state ^= InputUtility.crouch;
         }
+
+        if (false == isCrouch && -5.0f > deltaY) {
+            dataComp.state |= InputUtility.crouch;
+        }
+
         EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnTouch(InputAction.CallbackContext context) {
         if (context.canceled) {
-            _touchDeltaX = 0.0f;
-
             var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
             dataComp.dir = 0;
-
-            if (InputUtility.HasState(dataComp, InputUtility.crouch)) {
-                dataComp.state ^= InputUtility.crouch;
-            }
+            dataComp.state &= ~InputUtility.crouch;
             EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
     }
