@@ -5,7 +5,6 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Mathematics;
-using Random = UnityEngine.Random;
 
 public class GUIPreset : MonoBehaviour {
     public Text Text_Message;
@@ -13,16 +12,15 @@ public class GUIPreset : MonoBehaviour {
     public Button Button_Start;
     public Text Text_Start;
 
-    public Button Button_Attack;
-    public Button Button_Jump;
+    public ButtonEx Button_Attack;
+    public ButtonEx Button_Jump;
     public ButtonEx Button_Left;
     public ButtonEx Button_Right;
     public ButtonEx Button_Crouch;
-
     private void OnEnabledButtons(bool isEnabled) {
-#if MOBILE_DEVICE
         Button_Attack.gameObject.SetActive(isEnabled);
         Button_Jump.gameObject.SetActive(isEnabled);
+#if MOBILE_DEVICE
         // Button_Left.gameObject.SetActive(isEnabled);
         // Button_Right.gameObject.SetActive(isEnabled);
         // Button_Crouch.gameObject.SetActive(isEnabled);
@@ -40,17 +38,19 @@ public class GUIPreset : MonoBehaviour {
             Button_Start.onClick.AddListener(delegate { OnClickStart(); });
         }
 
-#if MOBILE_DEVICE
         if (null != Button_Attack) {
             Button_Attack.enabled = true;
-            Button_Attack.onClick.AddListener(delegate { OnClickAttack(); });
+            Button_Attack.OnPressEvent.AddListener(delegate { OnPressedAttack(); });
+            Button_Attack.OnReleaseEvent.AddListener(delegate { OnRelease(); });
         }
 
         if (null != Button_Jump) {
             Button_Jump.enabled = true;
-            Button_Jump.onClick.AddListener(delegate { OnClickJump(); });
+            Button_Jump.OnPressEvent.AddListener(delegate { OnPressedJump(); });
+            Button_Jump.OnReleaseEvent.AddListener(delegate { OnRelease(); });
         }
 
+#if MOBILE_DEVICE
         // if (null != Button_Left) {
         //     Button_Left.enabled = true;
         //     Button_Left.OnPressEvent.AddListener(delegate { OnPressedLeft(true); });
@@ -171,7 +171,7 @@ public class GUIPreset : MonoBehaviour {
         }
     }
 
-    public void OnClickAttack() {
+    public void OnPressedAttack() {
         var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         if (false == InputUtility.HasState(dataComp, InputUtility.attack)) {
             dataComp.state |= InputUtility.attack;
@@ -179,12 +179,23 @@ public class GUIPreset : MonoBehaviour {
         }
     }
 
-    public void OnClickJump() {
+    public void OnPressedJump() {
         var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         if (false == InputUtility.HasState(dataComp, InputUtility.jump)) {
             dataComp.state |= InputUtility.jump;
             _entManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
+    }
+
+    private void OnRelease() {
+        var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+        if (InputUtility.HasState(dataComp, InputUtility.jump)) {
+            dataComp.state ^= InputUtility.jump;
+        }
+        if (InputUtility.HasState(dataComp, InputUtility.attack)) {
+            dataComp.state ^= InputUtility.attack;
+        }
+        _entManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnPressedLeft(bool pressed) {
