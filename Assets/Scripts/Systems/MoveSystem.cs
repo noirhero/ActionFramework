@@ -126,7 +126,15 @@ public class MoveSystem : ComponentSystem {
             velocity.x += moveComp.impulseForce * moveComp.impulseDir.x * Time.fixedDeltaTime;
         }
 
-        CollisionTest(entity, velocity, ref inPos);
+        if (EntityManager.HasComponent<TargetIdComponent>(entity)) {
+            var targetId = EntityManager.GetComponentData<TargetIdComponent>(entity).value;
+            if (IdUtility.Id.Enemy == targetId) {
+                inPos += velocity;
+            }
+            else {
+                CollisionTest(entity, velocity, ref inPos);
+            }
+        }
         return inPos.x;
     }
 
