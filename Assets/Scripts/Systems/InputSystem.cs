@@ -123,38 +123,51 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
         }
     }
 
+    private bool _isTouch = false;
+    private const float LIMIT_DELTA_X = 3.0f;
     public void OnTouchLeftRightAxis(InputAction.CallbackContext context) {
         var deltaX = context.ReadValue<float>();
-        if (math.FLT_MIN_NORMAL > math.abs(deltaX)) {
+        if (false == _isTouch || LIMIT_DELTA_X > math.abs(deltaX)) {
             return;
         }
 
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-        dataComp.dir = math.rsqrt(deltaX * deltaX) * deltaX;
+        if (InputUtility.HasState(dataComp, InputUtility.crouch)) {
+            return;
+        }
+
+        dataComp.dir = math.clamp(deltaX, -1.0f, 1.0f);
         EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
+    private const float LIMIT_DELTA_Y = 4.0f;
     public void OnTouchCrouchAxis(InputAction.CallbackContext context) {
         var deltaY = context.ReadValue<float>();
-        if (math.FLT_MIN_NORMAL > math.abs(deltaY)) {
+        if (false == _isTouch || LIMIT_DELTA_Y > math.abs(deltaY)) {
             return;
         }
 
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         var isCrouch = InputUtility.HasState(dataComp, InputUtility.crouch);
-        if (isCrouch && 10.0f < deltaY) {
-            dataComp.state ^= InputUtility.crouch;
-        }
+        // if (isCrouch && LIMIT_DELTA_Y < deltaY) {
+        //     dataComp.state ^= InputUtility.crouch;
+        // }
 
-        if (false == isCrouch && -10.0f > deltaY) {
+        if (false == isCrouch && -LIMIT_DELTA_Y > deltaY) {
+            dataComp.dir = 0.0f;
             dataComp.state |= InputUtility.crouch;
+            EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
-
-        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
     public void OnTouch(InputAction.CallbackContext context) {
+        if (context.started) {
+            _isTouch = true;
+        }
+
         if (context.canceled) {
+            _isTouch = false;
+
             var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
             dataComp.dir = 0;
             dataComp.state &= ~InputUtility.crouch;
