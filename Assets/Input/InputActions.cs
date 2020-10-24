@@ -84,25 +84,17 @@ public class @InputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Touch"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""d6f965dd-3990-46ec-ab2b-d49f5cb0a14e"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Touch"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""TouchLeftRightAxis"",
+                    ""name"": ""TouchAxis"",
                     ""type"": ""Value"",
                     ""id"": ""7dbe8a00-0ecb-46a0-89b8-8be0b374eb8b"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""TouchCrouchAxis"",
-                    ""type"": ""Value"",
-                    ""id"": ""0e924e5e-25a2-4438-b4ac-e17836b278e7"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": ""Touch"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -276,7 +268,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bfd8ed64-781e-4264-9fea-dffe8dc8c482"",
-                    ""path"": ""<Touchscreen>/primaryTouch/press"",
+                    ""path"": ""<Touchscreen>/primaryTouch"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -287,22 +279,11 @@ public class @InputActions : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""edd898cb-3dba-4aeb-b5ac-57c50d860ae2"",
-                    ""path"": ""<Touchscreen>/primaryTouch/delta/x"",
+                    ""path"": ""<Touchscreen>/primaryTouch"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""TouchLeftRightAxis"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""79e72901-01a3-4545-99df-6bd120555940"",
-                    ""path"": ""<Touchscreen>/primaryTouch/delta/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TouchCrouchAxis"",
+                    ""action"": ""TouchAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -322,8 +303,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_CharacterControl_CrouchAxis = m_CharacterControl.FindAction("CrouchAxis", throwIfNotFound: true);
         m_CharacterControl_Confirm = m_CharacterControl.FindAction("Confirm", throwIfNotFound: true);
         m_CharacterControl_Touch = m_CharacterControl.FindAction("Touch", throwIfNotFound: true);
-        m_CharacterControl_TouchLeftRightAxis = m_CharacterControl.FindAction("TouchLeftRightAxis", throwIfNotFound: true);
-        m_CharacterControl_TouchCrouchAxis = m_CharacterControl.FindAction("TouchCrouchAxis", throwIfNotFound: true);
+        m_CharacterControl_TouchAxis = m_CharacterControl.FindAction("TouchAxis", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -382,8 +362,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_CharacterControl_CrouchAxis;
     private readonly InputAction m_CharacterControl_Confirm;
     private readonly InputAction m_CharacterControl_Touch;
-    private readonly InputAction m_CharacterControl_TouchLeftRightAxis;
-    private readonly InputAction m_CharacterControl_TouchCrouchAxis;
+    private readonly InputAction m_CharacterControl_TouchAxis;
     public struct CharacterControlActions
     {
         private @InputActions m_Wrapper;
@@ -397,8 +376,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @CrouchAxis => m_Wrapper.m_CharacterControl_CrouchAxis;
         public InputAction @Confirm => m_Wrapper.m_CharacterControl_Confirm;
         public InputAction @Touch => m_Wrapper.m_CharacterControl_Touch;
-        public InputAction @TouchLeftRightAxis => m_Wrapper.m_CharacterControl_TouchLeftRightAxis;
-        public InputAction @TouchCrouchAxis => m_Wrapper.m_CharacterControl_TouchCrouchAxis;
+        public InputAction @TouchAxis => m_Wrapper.m_CharacterControl_TouchAxis;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -435,12 +413,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Touch.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouch;
                 @Touch.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouch;
                 @Touch.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouch;
-                @TouchLeftRightAxis.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchLeftRightAxis;
-                @TouchLeftRightAxis.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchLeftRightAxis;
-                @TouchLeftRightAxis.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchLeftRightAxis;
-                @TouchCrouchAxis.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchCrouchAxis;
-                @TouchCrouchAxis.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchCrouchAxis;
-                @TouchCrouchAxis.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchCrouchAxis;
+                @TouchAxis.started -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchAxis;
+                @TouchAxis.performed -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchAxis;
+                @TouchAxis.canceled -= m_Wrapper.m_CharacterControlActionsCallbackInterface.OnTouchAxis;
             }
             m_Wrapper.m_CharacterControlActionsCallbackInterface = instance;
             if (instance != null)
@@ -472,12 +447,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Touch.started += instance.OnTouch;
                 @Touch.performed += instance.OnTouch;
                 @Touch.canceled += instance.OnTouch;
-                @TouchLeftRightAxis.started += instance.OnTouchLeftRightAxis;
-                @TouchLeftRightAxis.performed += instance.OnTouchLeftRightAxis;
-                @TouchLeftRightAxis.canceled += instance.OnTouchLeftRightAxis;
-                @TouchCrouchAxis.started += instance.OnTouchCrouchAxis;
-                @TouchCrouchAxis.performed += instance.OnTouchCrouchAxis;
-                @TouchCrouchAxis.canceled += instance.OnTouchCrouchAxis;
+                @TouchAxis.started += instance.OnTouchAxis;
+                @TouchAxis.performed += instance.OnTouchAxis;
+                @TouchAxis.canceled += instance.OnTouchAxis;
             }
         }
     }
@@ -493,7 +465,6 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnCrouchAxis(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
         void OnTouch(InputAction.CallbackContext context);
-        void OnTouchLeftRightAxis(InputAction.CallbackContext context);
-        void OnTouchCrouchAxis(InputAction.CallbackContext context);
+        void OnTouchAxis(InputAction.CallbackContext context);
     }
 }

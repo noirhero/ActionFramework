@@ -71,25 +71,17 @@
                 },
                 {
                     "name": "Touch",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "d6f965dd-3990-46ec-ab2b-d49f5cb0a14e",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Touch",
                     "processors": "",
                     "interactions": ""
                 },
                 {
-                    "name": "TouchLeftRightAxis",
+                    "name": "TouchAxis",
                     "type": "Value",
                     "id": "7dbe8a00-0ecb-46a0-89b8-8be0b374eb8b",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "TouchCrouchAxis",
-                    "type": "Value",
-                    "id": "0e924e5e-25a2-4438-b4ac-e17836b278e7",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Touch",
                     "processors": "",
                     "interactions": ""
                 }
@@ -263,7 +255,7 @@
                 {
                     "name": "",
                     "id": "bfd8ed64-781e-4264-9fea-dffe8dc8c482",
-                    "path": "<Touchscreen>/primaryTouch/press",
+                    "path": "<Touchscreen>/primaryTouch",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -274,22 +266,11 @@
                 {
                     "name": "",
                     "id": "edd898cb-3dba-4aeb-b5ac-57c50d860ae2",
-                    "path": "<Touchscreen>/primaryTouch/delta/x",
+                    "path": "<Touchscreen>/primaryTouch",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TouchLeftRightAxis",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "79e72901-01a3-4545-99df-6bd120555940",
-                    "path": "<Touchscreen>/primaryTouch/delta/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TouchCrouchAxis",
+                    "action": "TouchAxis",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

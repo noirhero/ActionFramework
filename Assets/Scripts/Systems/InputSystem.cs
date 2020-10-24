@@ -3,7 +3,10 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics.Systems;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateAfter(typeof(EndFramePhysicsSystem))]
@@ -124,53 +127,47 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
     }
 
     private bool _isTouch = false;
-    private const float LIMIT_DELTA_X = 3.0f;
-    public void OnTouchLeftRightAxis(InputAction.CallbackContext context) {
-        var deltaX = context.ReadValue<float>();
-        if (false == _isTouch || LIMIT_DELTA_X > math.abs(deltaX)) {
-            return;
-        }
+    private float2 _touchPos = new float2();
+    private const float LIMIT_DELTA_Y = 6.0f;
+    public void OnTouch(InputAction.CallbackContext context) {
+        var touchState = context.ReadValue<TouchState>();
+        switch (touchState.phase) {
+            case TouchPhase.Began:
+                _isTouch = true;
+                _touchPos = touchState.position;
+                break;
+            case TouchPhase.Ended: {
+                _isTouch = false;
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-        if (InputUtility.HasState(dataComp, InputUtility.crouch)) {
-            return;
+                var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+                dataComp.dir = 0;
+                dataComp.state &= ~InputUtility.crouch;
+                EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
+                break;
+            }
         }
-
-        dataComp.dir = math.clamp(deltaX, -1.0f, 1.0f);
-        EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
-    private const float LIMIT_DELTA_Y = 4.0f;
-    public void OnTouchCrouchAxis(InputAction.CallbackContext context) {
-        var deltaY = context.ReadValue<float>();
-        if (false == _isTouch || LIMIT_DELTA_Y > math.abs(deltaY)) {
+    public void OnTouchAxis(InputAction.CallbackContext context) {
+        if (false == _isTouch) {
             return;
         }
 
-        var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-        var isCrouch = InputUtility.HasState(dataComp, InputUtility.crouch);
-        // if (isCrouch && LIMIT_DELTA_Y < deltaY) {
-        //     dataComp.state ^= InputUtility.crouch;
-        // }
+        var touchState = context.ReadValue<TouchState>();
+        var delta = new float2(touchState.position) - _touchPos;
+        _touchPos = touchState.position;
 
-        if (false == isCrouch && -LIMIT_DELTA_Y > deltaY) {
-            dataComp.dir = 0.0f;
-            dataComp.state |= InputUtility.crouch;
+        var deltaX = math.abs(delta.x);
+        var deltaY = math.abs(delta.y);
+        if (deltaX > deltaY) {
+            var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
+            dataComp.dir = math.normalizesafe(new float2(delta.x, 0.0f)).x;
+            dataComp.state &= ~InputUtility.crouch;
             EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
-    }
-
-    public void OnTouch(InputAction.CallbackContext context) {
-        if (context.started) {
-            _isTouch = true;
-        }
-
-        if (context.canceled) {
-            _isTouch = false;
-
+        else if (deltaX < deltaY && LIMIT_DELTA_Y > delta.y) {
             var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-            dataComp.dir = 0;
-            dataComp.state &= ~InputUtility.crouch;
+            dataComp.state |= InputUtility.crouch;
             EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
     }
