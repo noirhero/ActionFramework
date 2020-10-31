@@ -17,6 +17,8 @@ public class GUIPreset : MonoBehaviour {
     public ButtonEx Button_Left;
     public ButtonEx Button_Right;
     public ButtonEx Button_Crouch;
+    public Animator TtileAnim;
+    public GameObject TtileAnimObject;
 
     private void OnEnabledButtons(bool isEnabled) {
 #if MOBILE_DEVICE
@@ -93,6 +95,9 @@ public class GUIPreset : MonoBehaviour {
         gameObject.SetActive(true);
         switch (inId) {
             case IdUtility.GUIId.Title: {
+                TtileAnim.enabled = true;
+                TtileAnimObject.SetActive(true);
+                
                 Button_Start.gameObject.SetActive(true);
                 Text_Start.text = "Start";
 
@@ -103,6 +108,9 @@ public class GUIPreset : MonoBehaviour {
             }
                 break;
             case IdUtility.GUIId.InGame: {
+                TtileAnim.enabled = false;
+                TtileAnimObject.SetActive(false);
+                
                 Button_Start.gameObject.SetActive(false);
 
                 OnEnabledButtons(true);
