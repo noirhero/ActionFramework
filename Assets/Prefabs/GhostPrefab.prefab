@@ -107,10 +107,10 @@ MonoBehaviour:
           type: 3}
         attackCollision:
           serializedVersion: 2
-          x: 4
-          y: 3
-          width: 33
-          height: 33
+          x: 3
+          y: 8
+          width: 21
+          height: 23
         bUseMultiCollision: 0
         soundClipKey: 0
         effectKey: 0
@@ -121,9 +121,9 @@ MonoBehaviour:
         attackCollision:
           serializedVersion: 2
           x: 3
-          y: 3
-          width: 30
-          height: 33
+          y: 8
+          width: 21
+          height: 23
         bUseMultiCollision: 0
         soundClipKey: 0
         effectKey: 0
@@ -133,10 +133,10 @@ MonoBehaviour:
           type: 3}
         attackCollision:
           serializedVersion: 2
-          x: 1
-          y: 1
-          width: 27
-          height: 35
+          x: 3
+          y: 8
+          width: 21
+          height: 23
         bUseMultiCollision: 0
         soundClipKey: 0
         effectKey: 0
@@ -147,9 +147,9 @@ MonoBehaviour:
         attackCollision:
           serializedVersion: 2
           x: 3
-          y: 4
-          width: 30
-          height: 33
+          y: 8
+          width: 21
+          height: 23
         bUseMultiCollision: 0
         soundClipKey: 0
         effectKey: 0

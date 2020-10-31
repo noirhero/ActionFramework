@@ -6,7 +6,7 @@ using Unity.Physics;
 using CapsuleCollider = Unity.Physics.CapsuleCollider;
 
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateAfter(typeof(InputSystem))]
+//[UpdateAfter(typeof(InputSystem))]
 public class InputSystemEX : ComponentSystem {
     private bool IsLocked() {
         if (Entity.Null == Utility.SystemEntity) {

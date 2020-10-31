@@ -2,14 +2,11 @@
 
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Physics.Systems;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
-using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateAfter(typeof(EndFramePhysicsSystem))]
+// [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+// [UpdateAfter(typeof(EndFramePhysicsSystem))]
 public class InputSystem : ComponentSystem, InputActions.ICharacterControlActions {
     public void OnLeft(InputAction.CallbackContext context) {
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
