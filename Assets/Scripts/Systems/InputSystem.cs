@@ -149,7 +149,6 @@ public class InputSystem : ComponentSystem, InputActions.ICharacterControlAction
 
         var dataComp = EntityManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
         dataComp.dir = math.normalizesafe(new float2(delta.x, 0.0f)).x;
-        dataComp.state &= ~InputUtility.crouch;
         EntityManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
