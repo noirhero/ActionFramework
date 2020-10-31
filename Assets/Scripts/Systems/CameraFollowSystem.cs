@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class CameraFollowSystem : SystemBase {
     private Transform _cameraTransform;
+
     protected override void OnStartRunning() {
         if (false == ReferenceEquals(null, Camera.main)) {
             _cameraTransform = Camera.main.transform;

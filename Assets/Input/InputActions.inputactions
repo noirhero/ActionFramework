@@ -70,18 +70,18 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Touch",
+                    "name": "TouchAxis",
                     "type": "Value",
-                    "id": "d6f965dd-3990-46ec-ab2b-d49f5cb0a14e",
-                    "expectedControlType": "Touch",
+                    "id": "7dbe8a00-0ecb-46a0-89b8-8be0b374eb8b",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
                 },
                 {
-                    "name": "TouchAxis",
-                    "type": "Value",
-                    "id": "7dbe8a00-0ecb-46a0-89b8-8be0b374eb8b",
-                    "expectedControlType": "Touch",
+                    "name": "Tap",
+                    "type": "Button",
+                    "id": "0167bb20-ffd0-4ea8-afa7-a9ce903f072b",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -254,23 +254,23 @@
                 },
                 {
                     "name": "",
-                    "id": "bfd8ed64-781e-4264-9fea-dffe8dc8c482",
-                    "path": "<Touchscreen>/primaryTouch",
+                    "id": "edd898cb-3dba-4aeb-b5ac-57c50d860ae2",
+                    "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Touch",
+                    "action": "TouchAxis",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "edd898cb-3dba-4aeb-b5ac-57c50d860ae2",
-                    "path": "<Touchscreen>/primaryTouch",
+                    "id": "f07fc7ff-c57b-4ee1-ab1f-16f95af25695",
+                    "path": "<Touchscreen>/primaryTouch/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TouchAxis",
+                    "action": "Tap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
