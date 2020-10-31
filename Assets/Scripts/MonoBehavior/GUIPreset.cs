@@ -34,12 +34,11 @@ public class GUIPreset : MonoBehaviour {
 
     public void Awake() {
         gameObject.SetActive(false);
-
+#if MOBILE_DEVICE
         if (null != Button_Start) {
             Button_Start.onClick.AddListener(delegate { OnClickStart(); });
         }
         
-#if MOBILE_DEVICE
         if (null != Button_Attack) {
             Button_Attack.enabled = true;
             Button_Attack.OnPressEvent.AddListener(delegate { OnPressedAttack(); });
@@ -54,10 +53,9 @@ public class GUIPreset : MonoBehaviour {
         
         if (null != Button_Crouch) {
             Button_Crouch.enabled = true;
-            Button_Crouch.OnPressEvent.AddListener(delegate { OnPressedCrouch(true); });
-            Button_Crouch.OnReleaseEvent.AddListener(delegate { OnPressedCrouch(false); });
+            Button_Crouch.OnPressEvent.AddListener(delegate { OnPressedCrouch(); });
+            Button_Crouch.OnReleaseEvent.AddListener(delegate { OnRelease(); });
         }
-
         // if (null != Button_Left) {
         //     Button_Left.enabled = true;
         //     Button_Left.OnPressEvent.AddListener(delegate { OnPressedLeft(true); });
@@ -196,6 +194,9 @@ public class GUIPreset : MonoBehaviour {
         if (InputUtility.HasState(dataComp, InputUtility.attack)) {
             dataComp.state ^= InputUtility.attack;
         }
+        if (InputUtility.HasState(dataComp, InputUtility.crouch)) {
+            dataComp.state ^= InputUtility.crouch;
+        }
         
         _entManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
@@ -230,17 +231,11 @@ public class GUIPreset : MonoBehaviour {
         _entManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
-    public void OnPressedCrouch(bool pressed) {
+    public void OnPressedCrouch() {
         var dataComp = _entManager.GetComponentData<InputDataComponent>(Utility.SystemEntity);
-        var hasState = InputUtility.HasState(dataComp, InputUtility.crouch);
-
-        if (pressed && (false == hasState)) {
+        if (false == InputUtility.HasState(dataComp, InputUtility.crouch)) {
             dataComp.state |= InputUtility.crouch;
+            _entManager.SetComponentData(Utility.SystemEntity, dataComp);
         }
-        else if (hasState) {
-            dataComp.state ^= InputUtility.crouch;
-        }
-
-        _entManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 }
