@@ -228,7 +228,8 @@ public static class AnimUtility {
         }
         else if (0 != (jump & inState)) {
             if (AnimKey.Crouch == inAnimComp.currentAnim ||
-                AnimKey.Attack == inAnimComp.currentAnim) {
+                AnimKey.Attack == inAnimComp.currentAnim ||
+                AnimKey.Jump == inAnimComp.currentAnim) {
                 return false;
             }
         }
