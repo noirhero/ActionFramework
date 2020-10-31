@@ -216,13 +216,19 @@ public static class AnimUtility {
         // 조건 정리
         if (0 != (run & inState)) {
             if (AnimKey.Attack == inAnimComp.currentAnim ||
-                AnimKey.Hit == inAnimComp.currentAnim ||
                 AnimKey.Crouch == inAnimComp.currentAnim) {
                 return false;
             }
         }
         else if (0 != (crouch & inState)) {
-            if (AnimKey.Jump == inAnimComp.currentAnim) {
+            if (AnimKey.Jump == inAnimComp.currentAnim ||
+                AnimKey.Attack == inAnimComp.currentAnim ) {
+                return false;
+            }
+        }
+        else if (0 != (jump & inState)) {
+            if (AnimKey.Crouch == inAnimComp.currentAnim ||
+                AnimKey.Attack == inAnimComp.currentAnim) {
                 return false;
             }
         }
