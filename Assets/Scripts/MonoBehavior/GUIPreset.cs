@@ -17,13 +17,14 @@ public class GUIPreset : MonoBehaviour {
     public ButtonEx Button_Left;
     public ButtonEx Button_Right;
     public ButtonEx Button_Crouch;
+
     private void OnEnabledButtons(bool isEnabled) {
+#if MOBILE_DEVICE
         Button_Attack.gameObject.SetActive(isEnabled);
         Button_Jump.gameObject.SetActive(isEnabled);
-#if MOBILE_DEVICE
+        Button_Crouch.gameObject.SetActive(isEnabled);
         // Button_Left.gameObject.SetActive(isEnabled);
         // Button_Right.gameObject.SetActive(isEnabled);
-        // Button_Crouch.gameObject.SetActive(isEnabled);
 #endif
     }
 
@@ -37,7 +38,8 @@ public class GUIPreset : MonoBehaviour {
         if (null != Button_Start) {
             Button_Start.onClick.AddListener(delegate { OnClickStart(); });
         }
-
+        
+#if MOBILE_DEVICE
         if (null != Button_Attack) {
             Button_Attack.enabled = true;
             Button_Attack.OnPressEvent.AddListener(delegate { OnPressedAttack(); });
@@ -49,8 +51,13 @@ public class GUIPreset : MonoBehaviour {
             Button_Jump.OnPressEvent.AddListener(delegate { OnPressedJump(); });
             Button_Jump.OnReleaseEvent.AddListener(delegate { OnRelease(); });
         }
+        
+        if (null != Button_Crouch) {
+            Button_Crouch.enabled = true;
+            Button_Crouch.OnPressEvent.AddListener(delegate { OnPressedCrouch(true); });
+            Button_Crouch.OnReleaseEvent.AddListener(delegate { OnPressedCrouch(false); });
+        }
 
-#if MOBILE_DEVICE
         // if (null != Button_Left) {
         //     Button_Left.enabled = true;
         //     Button_Left.OnPressEvent.AddListener(delegate { OnPressedLeft(true); });
@@ -61,12 +68,6 @@ public class GUIPreset : MonoBehaviour {
         //     Button_Right.enabled = true;
         //     Button_Right.OnPressEvent.AddListener(delegate { OnPressedRight(true); });
         //     Button_Right.OnReleaseEvent.AddListener(delegate { OnPressedRight(false); });
-        // }
-        //
-        // if (null != Button_Crouch) {
-        //     Button_Crouch.enabled = true;
-        //     Button_Crouch.OnPressEvent.AddListener(delegate { OnPressedCrouch(true); });
-        //     Button_Crouch.OnReleaseEvent.AddListener(delegate { OnPressedCrouch(false); });
         // }
 #endif
 
@@ -195,6 +196,7 @@ public class GUIPreset : MonoBehaviour {
         if (InputUtility.HasState(dataComp, InputUtility.attack)) {
             dataComp.state ^= InputUtility.attack;
         }
+        
         _entManager.SetComponentData(Utility.SystemEntity, dataComp);
     }
 
