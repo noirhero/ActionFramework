@@ -19,6 +19,7 @@ public class GUIPreset : MonoBehaviour {
     public ButtonEx Button_Crouch;
     public Animator TtileAnim;
     public GameObject TtileAnimObject;
+    public GameObject NewScoreAnimObject;
 
     private void OnEnabledButtons(bool isEnabled) {
 #if MOBILE_DEVICE
@@ -97,6 +98,7 @@ public class GUIPreset : MonoBehaviour {
             case IdUtility.GUIId.Title: {
                 TtileAnim.enabled = true;
                 TtileAnimObject.SetActive(true);
+                NewScoreAnimObject.SetActive(false);
                 
                 Button_Start.gameObject.SetActive(true);
                 Text_Start.text = "Start";
@@ -110,6 +112,7 @@ public class GUIPreset : MonoBehaviour {
             case IdUtility.GUIId.InGame: {
                 TtileAnim.enabled = false;
                 TtileAnimObject.SetActive(false);
+                NewScoreAnimObject.SetActive(false);
                 
                 Button_Start.gameObject.SetActive(false);
 
@@ -141,6 +144,9 @@ public class GUIPreset : MonoBehaviour {
             }
                 break;
             case IdUtility.GUIId.Result: {
+                TtileAnim.enabled = true;
+                TtileAnimObject.SetActive(false);
+                
                 string scoreMsg = string.Empty;
                 if (PlayerPrefs.HasKey(Utility.SaveDataName)) {
                     ScoreData scoreData = JsonUtility.FromJson<ScoreData>(PlayerPrefs.GetString(Utility.SaveDataName));
@@ -158,6 +164,9 @@ public class GUIPreset : MonoBehaviour {
                     scoreMsg += scoreData.lastScore.ToString();
                     scoreMsg += "sec";
                     scoreMsg += "</color>";
+                    
+                    TtileAnim.SetBool("NewScore", scoreData.bNewHighScore);
+                    NewScoreAnimObject.SetActive(scoreData.bNewHighScore);
                 }
 
                 Text_Message.text = scoreMsg;
